@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.afd.product.dao.BcSpecValueMapper" >
+  <resultMap id="BaseResultMap" type="com.afd.model.product.BcSpecValue" >
+    <id column="bc_sv_id" property="bcSvId" jdbcType="INTEGER" />
+    <result column="bc_spec_id" property="bcSpecId" jdbcType="INTEGER" />
+    <result column="spec_value_id" property="specValueId" jdbcType="INTEGER" />
+    <result column="spec_value_name" property="specValueName" jdbcType="VARCHAR" />
+    <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="display_order" property="displayOrder" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="bc_id" property="bcId" jdbcType="SMALLINT" />
+    <result column="is_filter" property="isFilter" jdbcType="CHAR" />
+    <result column="is_mobile_display" property="isMobileDisplay" jdbcType="CHAR" />
+    <result column="m_display_position" property="mDisplayPosition" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    bc_sv_id, bc_spec_id, spec_value_id, spec_value_name, img_url, display_order, status, 
+    bc_id, is_filter, is_mobile_display, m_display_position
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_bc_spec_value
+    where bc_sv_id = #{bcSvId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_bc_spec_value
+    where bc_sv_id = #{bcSvId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.afd.model.product.BcSpecValue" >
+    insert into t_bc_spec_value (bc_sv_id, bc_spec_id, spec_value_id, 
+      spec_value_name, img_url, display_order, 
+      status, bc_id, is_filter, 
+      is_mobile_display, m_display_position)
+    values (#{bcSvId,jdbcType=INTEGER}, #{bcSpecId,jdbcType=INTEGER}, #{specValueId,jdbcType=INTEGER}, 
+      #{specValueName,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, #{displayOrder,jdbcType=TINYINT}, 
+      #{status,jdbcType=CHAR}, #{bcId,jdbcType=SMALLINT}, #{isFilter,jdbcType=CHAR}, 
+      #{isMobileDisplay,jdbcType=CHAR}, #{mDisplayPosition,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.afd.model.product.BcSpecValue" >
+    insert into t_bc_spec_value
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bcSvId != null" >
+        bc_sv_id,
+      </if>
+      <if test="bcSpecId != null" >
+        bc_spec_id,
+      </if>
+      <if test="specValueId != null" >
+        spec_value_id,
+      </if>
+      <if test="specValueName != null" >
+        spec_value_name,
+      </if>
+      <if test="imgUrl != null" >
+        img_url,
+      </if>
+      <if test="displayOrder != null" >
+        display_order,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="bcId != null" >
+        bc_id,
+      </if>
+      <if test="isFilter != null" >
+        is_filter,
+      </if>
+      <if test="isMobileDisplay != null" >
+        is_mobile_display,
+      </if>
+      <if test="mDisplayPosition != null" >
+        m_display_position,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bcSvId != null" >
+        #{bcSvId,jdbcType=INTEGER},
+      </if>
+      <if test="bcSpecId != null" >
+        #{bcSpecId,jdbcType=INTEGER},
+      </if>
+      <if test="specValueId != null" >
+        #{specValueId,jdbcType=INTEGER},
+      </if>
+      <if test="specValueName != null" >
+        #{specValueName,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null" >
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="displayOrder != null" >
+        #{displayOrder,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="bcId != null" >
+        #{bcId,jdbcType=SMALLINT},
+      </if>
+      <if test="isFilter != null" >
+        #{isFilter,jdbcType=CHAR},
+      </if>
+      <if test="isMobileDisplay != null" >
+        #{isMobileDisplay,jdbcType=CHAR},
+      </if>
+      <if test="mDisplayPosition != null" >
+        #{mDisplayPosition,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.BcSpecValue" >
+    update t_bc_spec_value
+    <set >
+      <if test="bcSpecId != null" >
+        bc_spec_id = #{bcSpecId,jdbcType=INTEGER},
+      </if>
+      <if test="specValueId != null" >
+        spec_value_id = #{specValueId,jdbcType=INTEGER},
+      </if>
+      <if test="specValueName != null" >
+        spec_value_name = #{specValueName,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null" >
+        img_url = #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="displayOrder != null" >
+        display_order = #{displayOrder,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="bcId != null" >
+        bc_id = #{bcId,jdbcType=SMALLINT},
+      </if>
+      <if test="isFilter != null" >
+        is_filter = #{isFilter,jdbcType=CHAR},
+      </if>
+      <if test="isMobileDisplay != null" >
+        is_mobile_display = #{isMobileDisplay,jdbcType=CHAR},
+      </if>
+      <if test="mDisplayPosition != null" >
+        m_display_position = #{mDisplayPosition,jdbcType=INTEGER},
+      </if>
+    </set>
+    where bc_sv_id = #{bcSvId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.afd.model.product.BcSpecValue" >
+    update t_bc_spec_value
+    set bc_spec_id = #{bcSpecId,jdbcType=INTEGER},
+      spec_value_id = #{specValueId,jdbcType=INTEGER},
+      spec_value_name = #{specValueName,jdbcType=VARCHAR},
+      img_url = #{imgUrl,jdbcType=VARCHAR},
+      display_order = #{displayOrder,jdbcType=TINYINT},
+      status = #{status,jdbcType=CHAR},
+      bc_id = #{bcId,jdbcType=SMALLINT},
+      is_filter = #{isFilter,jdbcType=CHAR},
+      is_mobile_display = #{isMobileDisplay,jdbcType=CHAR},
+      m_display_position = #{mDisplayPosition,jdbcType=INTEGER}
+    where bc_sv_id = #{bcSvId,jdbcType=INTEGER}
+  </update>
+</mapper>

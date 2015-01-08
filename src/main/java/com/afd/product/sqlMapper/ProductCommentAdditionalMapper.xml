@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.afd.product.dao.ProductCommentAdditionalMapper" >
+  <resultMap id="BaseResultMap" type="com.afd.model.product.ProductCommentAdditional" >
+    <id column="p_c_a_id" property="pCAId" jdbcType="INTEGER" />
+    <result column="p_comment_id" property="pCommentId" jdbcType="INTEGER" />
+    <result column="prod_id" property="prodId" jdbcType="INTEGER" />
+    <result column="sku_id" property="skuId" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="create_by_ip" property="createByIp" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    p_c_a_id, p_comment_id, prod_id, sku_id, content, create_date, create_by_ip, user_id, 
+    nickname, status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_product_comment_additional
+    where p_c_a_id = #{pCAId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_product_comment_additional
+    where p_c_a_id = #{pCAId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.afd.model.product.ProductCommentAdditional" >
+    insert into t_product_comment_additional (p_c_a_id, p_comment_id, prod_id, 
+      sku_id, content, create_date, 
+      create_by_ip, user_id, nickname, 
+      status)
+    values (#{pCAId,jdbcType=INTEGER}, #{pCommentId,jdbcType=INTEGER}, #{prodId,jdbcType=INTEGER}, 
+      #{skuId,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{createByIp,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR}, 
+      #{status,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.afd.model.product.ProductCommentAdditional" >
+    insert into t_product_comment_additional
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pCAId != null" >
+        p_c_a_id,
+      </if>
+      <if test="pCommentId != null" >
+        p_comment_id,
+      </if>
+      <if test="prodId != null" >
+        prod_id,
+      </if>
+      <if test="skuId != null" >
+        sku_id,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="createByIp != null" >
+        create_by_ip,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="nickname != null" >
+        nickname,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pCAId != null" >
+        #{pCAId,jdbcType=INTEGER},
+      </if>
+      <if test="pCommentId != null" >
+        #{pCommentId,jdbcType=INTEGER},
+      </if>
+      <if test="prodId != null" >
+        #{prodId,jdbcType=INTEGER},
+      </if>
+      <if test="skuId != null" >
+        #{skuId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createByIp != null" >
+        #{createByIp,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="nickname != null" >
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.ProductCommentAdditional" >
+    update t_product_comment_additional
+    <set >
+      <if test="pCommentId != null" >
+        p_comment_id = #{pCommentId,jdbcType=INTEGER},
+      </if>
+      <if test="prodId != null" >
+        prod_id = #{prodId,jdbcType=INTEGER},
+      </if>
+      <if test="skuId != null" >
+        sku_id = #{skuId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createByIp != null" >
+        create_by_ip = #{createByIp,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="nickname != null" >
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+    </set>
+    where p_c_a_id = #{pCAId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.afd.model.product.ProductCommentAdditional" >
+    update t_product_comment_additional
+    set p_comment_id = #{pCommentId,jdbcType=INTEGER},
+      prod_id = #{prodId,jdbcType=INTEGER},
+      sku_id = #{skuId,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_by_ip = #{createByIp,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=INTEGER},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      status = #{status,jdbcType=CHAR}
+    where p_c_a_id = #{pCAId,jdbcType=INTEGER}
+  </update>
+</mapper>

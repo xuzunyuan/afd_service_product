@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.afd.product.dao.AttributeValueMapper" >
+  <resultMap id="BaseResultMap" type="com.afd.model.product.AttributeValue" >
+    <id column="attr_value_id" property="attrValueId" jdbcType="INTEGER" />
+    <result column="attr_value_name" property="attrValueName" jdbcType="VARCHAR" />
+    <result column="pinyin" property="pinyin" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="create_by_name" property="createByName" jdbcType="VARCHAR" />
+    <result column="create_by_date" property="createByDate" jdbcType="TIMESTAMP" />
+    <result column="last_update_by_name" property="lastUpdateByName" jdbcType="VARCHAR" />
+    <result column="last_update_by_date" property="lastUpdateByDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    attr_value_id, attr_value_name, pinyin, status, create_by_name, create_by_date, last_update_by_name, 
+    last_update_by_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_attribute_value
+    where attr_value_id = #{attrValueId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_attribute_value
+    where attr_value_id = #{attrValueId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.afd.model.product.AttributeValue" >
+    insert into t_attribute_value (attr_value_id, attr_value_name, pinyin, 
+      status, create_by_name, create_by_date, 
+      last_update_by_name, last_update_by_date)
+    values (#{attrValueId,jdbcType=INTEGER}, #{attrValueName,jdbcType=VARCHAR}, #{pinyin,jdbcType=VARCHAR}, 
+      #{status,jdbcType=CHAR}, #{createByName,jdbcType=VARCHAR}, #{createByDate,jdbcType=TIMESTAMP}, 
+      #{lastUpdateByName,jdbcType=VARCHAR}, #{lastUpdateByDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.afd.model.product.AttributeValue" >
+    insert into t_attribute_value
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="attrValueId != null" >
+        attr_value_id,
+      </if>
+      <if test="attrValueName != null" >
+        attr_value_name,
+      </if>
+      <if test="pinyin != null" >
+        pinyin,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createByName != null" >
+        create_by_name,
+      </if>
+      <if test="createByDate != null" >
+        create_by_date,
+      </if>
+      <if test="lastUpdateByName != null" >
+        last_update_by_name,
+      </if>
+      <if test="lastUpdateByDate != null" >
+        last_update_by_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="attrValueId != null" >
+        #{attrValueId,jdbcType=INTEGER},
+      </if>
+      <if test="attrValueName != null" >
+        #{attrValueName,jdbcType=VARCHAR},
+      </if>
+      <if test="pinyin != null" >
+        #{pinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="createByName != null" >
+        #{createByName,jdbcType=VARCHAR},
+      </if>
+      <if test="createByDate != null" >
+        #{createByDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateByName != null" >
+        #{lastUpdateByName,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdateByDate != null" >
+        #{lastUpdateByDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.AttributeValue" >
+    update t_attribute_value
+    <set >
+      <if test="attrValueName != null" >
+        attr_value_name = #{attrValueName,jdbcType=VARCHAR},
+      </if>
+      <if test="pinyin != null" >
+        pinyin = #{pinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="createByName != null" >
+        create_by_name = #{createByName,jdbcType=VARCHAR},
+      </if>
+      <if test="createByDate != null" >
+        create_by_date = #{createByDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateByName != null" >
+        last_update_by_name = #{lastUpdateByName,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdateByDate != null" >
+        last_update_by_date = #{lastUpdateByDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where attr_value_id = #{attrValueId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.afd.model.product.AttributeValue" >
+    update t_attribute_value
+    set attr_value_name = #{attrValueName,jdbcType=VARCHAR},
+      pinyin = #{pinyin,jdbcType=VARCHAR},
+      status = #{status,jdbcType=CHAR},
+      create_by_name = #{createByName,jdbcType=VARCHAR},
+      create_by_date = #{createByDate,jdbcType=TIMESTAMP},
+      last_update_by_name = #{lastUpdateByName,jdbcType=VARCHAR},
+      last_update_by_date = #{lastUpdateByDate,jdbcType=TIMESTAMP}
+    where attr_value_id = #{attrValueId,jdbcType=INTEGER}
+  </update>
+</mapper>

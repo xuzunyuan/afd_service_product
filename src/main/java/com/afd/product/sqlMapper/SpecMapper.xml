@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.afd.product.dao.SpecMapper" >
+  <resultMap id="BaseResultMap" type="com.afd.model.product.Spec" >
+    <id column="spec_id" property="specId" jdbcType="INTEGER" />
+    <result column="spec_name" property="specName" jdbcType="VARCHAR" />
+    <result column="pingyin" property="pingyin" jdbcType="VARCHAR" />
+    <result column="show_mode" property="showMode" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="create_by_name" property="createByName" jdbcType="VARCHAR" />
+    <result column="create_by_date" property="createByDate" jdbcType="TIMESTAMP" />
+    <result column="last_update_by_name" property="lastUpdateByName" jdbcType="VARCHAR" />
+    <result column="last_update_by_date" property="lastUpdateByDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    spec_id, spec_name, pingyin, show_mode, status, create_by_name, create_by_date, last_update_by_name, 
+    last_update_by_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_spec
+    where spec_id = #{specId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_spec
+    where spec_id = #{specId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.afd.model.product.Spec" >
+    insert into t_spec (spec_id, spec_name, pingyin, 
+      show_mode, status, create_by_name, 
+      create_by_date, last_update_by_name, last_update_by_date
+      )
+    values (#{specId,jdbcType=INTEGER}, #{specName,jdbcType=VARCHAR}, #{pingyin,jdbcType=VARCHAR}, 
+      #{showMode,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{createByName,jdbcType=VARCHAR}, 
+      #{createByDate,jdbcType=TIMESTAMP}, #{lastUpdateByName,jdbcType=VARCHAR}, #{lastUpdateByDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.afd.model.product.Spec" >
+    insert into t_spec
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="specId != null" >
+        spec_id,
+      </if>
+      <if test="specName != null" >
+        spec_name,
+      </if>
+      <if test="pingyin != null" >
+        pingyin,
+      </if>
+      <if test="showMode != null" >
+        show_mode,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="createByName != null" >
+        create_by_name,
+      </if>
+      <if test="createByDate != null" >
+        create_by_date,
+      </if>
+      <if test="lastUpdateByName != null" >
+        last_update_by_name,
+      </if>
+      <if test="lastUpdateByDate != null" >
+        last_update_by_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="specId != null" >
+        #{specId,jdbcType=INTEGER},
+      </if>
+      <if test="specName != null" >
+        #{specName,jdbcType=VARCHAR},
+      </if>
+      <if test="pingyin != null" >
+        #{pingyin,jdbcType=VARCHAR},
+      </if>
+      <if test="showMode != null" >
+        #{showMode,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="createByName != null" >
+        #{createByName,jdbcType=VARCHAR},
+      </if>
+      <if test="createByDate != null" >
+        #{createByDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateByName != null" >
+        #{lastUpdateByName,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdateByDate != null" >
+        #{lastUpdateByDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.Spec" >
+    update t_spec
+    <set >
+      <if test="specName != null" >
+        spec_name = #{specName,jdbcType=VARCHAR},
+      </if>
+      <if test="pingyin != null" >
+        pingyin = #{pingyin,jdbcType=VARCHAR},
+      </if>
+      <if test="showMode != null" >
+        show_mode = #{showMode,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="createByName != null" >
+        create_by_name = #{createByName,jdbcType=VARCHAR},
+      </if>
+      <if test="createByDate != null" >
+        create_by_date = #{createByDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateByName != null" >
+        last_update_by_name = #{lastUpdateByName,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdateByDate != null" >
+        last_update_by_date = #{lastUpdateByDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where spec_id = #{specId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.afd.model.product.Spec" >
+    update t_spec
+    set spec_name = #{specName,jdbcType=VARCHAR},
+      pingyin = #{pingyin,jdbcType=VARCHAR},
+      show_mode = #{showMode,jdbcType=CHAR},
+      status = #{status,jdbcType=CHAR},
+      create_by_name = #{createByName,jdbcType=VARCHAR},
+      create_by_date = #{createByDate,jdbcType=TIMESTAMP},
+      last_update_by_name = #{lastUpdateByName,jdbcType=VARCHAR},
+      last_update_by_date = #{lastUpdateByDate,jdbcType=TIMESTAMP}
+    where spec_id = #{specId,jdbcType=INTEGER}
+  </update>
+</mapper>

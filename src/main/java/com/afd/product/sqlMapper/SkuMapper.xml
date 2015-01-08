@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.afd.product.dao.SkuMapper" >
+  <resultMap id="BaseResultMap" type="com.afd.model.product.Sku" >
+    <id column="sku_id" property="skuId" jdbcType="INTEGER" />
+    <result column="prod_id" property="prodId" jdbcType="INTEGER" />
+    <result column="sku_spec_id" property="skuSpecId" jdbcType="VARCHAR" />
+    <result column="sku_spec_name" property="skuSpecName" jdbcType="VARCHAR" />
+    <result column="prod_code" property="prodCode" jdbcType="VARCHAR" />
+    <result column="sku_code" property="skuCode" jdbcType="VARCHAR" />
+    <result column="sku_img_url" property="skuImgUrl" jdbcType="VARCHAR" />
+    <result column="stock_balance" property="stockBalance" jdbcType="INTEGER" />
+    <result column="market_price" property="marketPrice" jdbcType="DECIMAL" />
+    <result column="sale_price" property="salePrice" jdbcType="DECIMAL" />
+    <result column="sku_type" property="skuType" jdbcType="CHAR" />
+    <result column="sku_status" property="skuStatus" jdbcType="CHAR" />
+    <result column="sort_rank" property="sortRank" jdbcType="TINYINT" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="create_by_name" property="createByName" jdbcType="VARCHAR" />
+    <result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP" />
+    <result column="update_by_name" property="updateByName" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    sku_id, prod_id, sku_spec_id, sku_spec_name, prod_code, sku_code, sku_img_url, stock_balance, 
+    market_price, sale_price, sku_type, sku_status, sort_rank, create_date, create_by_name, 
+    last_update_date, update_by_name
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sku
+    where sku_id = #{skuId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_sku
+    where sku_id = #{skuId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.afd.model.product.Sku" >
+    insert into t_sku (sku_id, prod_id, sku_spec_id, 
+      sku_spec_name, prod_code, sku_code, 
+      sku_img_url, stock_balance, market_price, 
+      sale_price, sku_type, sku_status, 
+      sort_rank, create_date, create_by_name, 
+      last_update_date, update_by_name)
+    values (#{skuId,jdbcType=INTEGER}, #{prodId,jdbcType=INTEGER}, #{skuSpecId,jdbcType=VARCHAR}, 
+      #{skuSpecName,jdbcType=VARCHAR}, #{prodCode,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, 
+      #{skuImgUrl,jdbcType=VARCHAR}, #{stockBalance,jdbcType=INTEGER}, #{marketPrice,jdbcType=DECIMAL}, 
+      #{salePrice,jdbcType=DECIMAL}, #{skuType,jdbcType=CHAR}, #{skuStatus,jdbcType=CHAR}, 
+      #{sortRank,jdbcType=TINYINT}, #{createDate,jdbcType=TIMESTAMP}, #{createByName,jdbcType=VARCHAR}, 
+      #{lastUpdateDate,jdbcType=TIMESTAMP}, #{updateByName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.afd.model.product.Sku" >
+    insert into t_sku
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="skuId != null" >
+        sku_id,
+      </if>
+      <if test="prodId != null" >
+        prod_id,
+      </if>
+      <if test="skuSpecId != null" >
+        sku_spec_id,
+      </if>
+      <if test="skuSpecName != null" >
+        sku_spec_name,
+      </if>
+      <if test="prodCode != null" >
+        prod_code,
+      </if>
+      <if test="skuCode != null" >
+        sku_code,
+      </if>
+      <if test="skuImgUrl != null" >
+        sku_img_url,
+      </if>
+      <if test="stockBalance != null" >
+        stock_balance,
+      </if>
+      <if test="marketPrice != null" >
+        market_price,
+      </if>
+      <if test="salePrice != null" >
+        sale_price,
+      </if>
+      <if test="skuType != null" >
+        sku_type,
+      </if>
+      <if test="skuStatus != null" >
+        sku_status,
+      </if>
+      <if test="sortRank != null" >
+        sort_rank,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="createByName != null" >
+        create_by_name,
+      </if>
+      <if test="lastUpdateDate != null" >
+        last_update_date,
+      </if>
+      <if test="updateByName != null" >
+        update_by_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="skuId != null" >
+        #{skuId,jdbcType=INTEGER},
+      </if>
+      <if test="prodId != null" >
+        #{prodId,jdbcType=INTEGER},
+      </if>
+      <if test="skuSpecId != null" >
+        #{skuSpecId,jdbcType=VARCHAR},
+      </if>
+      <if test="skuSpecName != null" >
+        #{skuSpecName,jdbcType=VARCHAR},
+      </if>
+      <if test="prodCode != null" >
+        #{prodCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null" >
+        #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuImgUrl != null" >
+        #{skuImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="stockBalance != null" >
+        #{stockBalance,jdbcType=INTEGER},
+      </if>
+      <if test="marketPrice != null" >
+        #{marketPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="salePrice != null" >
+        #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="skuType != null" >
+        #{skuType,jdbcType=CHAR},
+      </if>
+      <if test="skuStatus != null" >
+        #{skuStatus,jdbcType=CHAR},
+      </if>
+      <if test="sortRank != null" >
+        #{sortRank,jdbcType=TINYINT},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createByName != null" >
+        #{createByName,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdateDate != null" >
+        #{lastUpdateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateByName != null" >
+        #{updateByName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.Sku" >
+    update t_sku
+    <set >
+      <if test="prodId != null" >
+        prod_id = #{prodId,jdbcType=INTEGER},
+      </if>
+      <if test="skuSpecId != null" >
+        sku_spec_id = #{skuSpecId,jdbcType=VARCHAR},
+      </if>
+      <if test="skuSpecName != null" >
+        sku_spec_name = #{skuSpecName,jdbcType=VARCHAR},
+      </if>
+      <if test="prodCode != null" >
+        prod_code = #{prodCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuCode != null" >
+        sku_code = #{skuCode,jdbcType=VARCHAR},
+      </if>
+      <if test="skuImgUrl != null" >
+        sku_img_url = #{skuImgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="stockBalance != null" >
+        stock_balance = #{stockBalance,jdbcType=INTEGER},
+      </if>
+      <if test="marketPrice != null" >
+        market_price = #{marketPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="salePrice != null" >
+        sale_price = #{salePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="skuType != null" >
+        sku_type = #{skuType,jdbcType=CHAR},
+      </if>
+      <if test="skuStatus != null" >
+        sku_status = #{skuStatus,jdbcType=CHAR},
+      </if>
+      <if test="sortRank != null" >
+        sort_rank = #{sortRank,jdbcType=TINYINT},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createByName != null" >
+        create_by_name = #{createByName,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdateDate != null" >
+        last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateByName != null" >
+        update_by_name = #{updateByName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sku_id = #{skuId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.afd.model.product.Sku" >
+    update t_sku
+    set prod_id = #{prodId,jdbcType=INTEGER},
+      sku_spec_id = #{skuSpecId,jdbcType=VARCHAR},
+      sku_spec_name = #{skuSpecName,jdbcType=VARCHAR},
+      prod_code = #{prodCode,jdbcType=VARCHAR},
+      sku_code = #{skuCode,jdbcType=VARCHAR},
+      sku_img_url = #{skuImgUrl,jdbcType=VARCHAR},
+      stock_balance = #{stockBalance,jdbcType=INTEGER},
+      market_price = #{marketPrice,jdbcType=DECIMAL},
+      sale_price = #{salePrice,jdbcType=DECIMAL},
+      sku_type = #{skuType,jdbcType=CHAR},
+      sku_status = #{skuStatus,jdbcType=CHAR},
+      sort_rank = #{sortRank,jdbcType=TINYINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_by_name = #{createByName,jdbcType=VARCHAR},
+      last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+      update_by_name = #{updateByName,jdbcType=VARCHAR}
+    where sku_id = #{skuId,jdbcType=INTEGER}
+  </update>
+</mapper>

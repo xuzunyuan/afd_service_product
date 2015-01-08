@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.afd.product.dao.ProductMapper" >
+  <resultMap id="BaseResultMap" type="com.afd.model.product.Product" >
+    <id column="prod_id" property="prodId" jdbcType="INTEGER" />
+    <result column="prod_code" property="prodCode" jdbcType="VARCHAR" />
+    <result column="bc_code" property="bcCode" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="subtitle" property="subtitle" jdbcType="VARCHAR" />
+    <result column="bc_id" property="bcId" jdbcType="INTEGER" />
+    <result column="seller_id" property="sellerId" jdbcType="INTEGER" />
+    <result column="art_no" property="artNo" jdbcType="VARCHAR" />
+    <result column="brand_id" property="brandId" jdbcType="INTEGER" />
+    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="brief" property="brief" jdbcType="VARCHAR" />
+    <result column="weight" property="weight" jdbcType="DECIMAL" />
+    <result column="volume" property="volume" jdbcType="VARCHAR" />
+    <result column="attr_value_id" property="attrValueId" jdbcType="VARCHAR" />
+    <result column="attr_value_name" property="attrValueName" jdbcType="VARCHAR" />
+    <result column="expire_date" property="expireDate" jdbcType="TIMESTAMP" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="last_update_date" property="lastUpdateDate" jdbcType="TIMESTAMP" />
+    <result column="audit_status" property="auditStatus" jdbcType="CHAR" />
+    <result column="last_audit_name" property="lastAuditName" jdbcType="VARCHAR" />
+    <result column="last_audit_date" property="lastAuditDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.afd.model.product.Product" extends="BaseResultMap" >
+    <result column="detail" property="detail" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    prod_id, prod_code, bc_code, name, title, subtitle, bc_id, seller_id, art_no, brand_id, 
+    brand_name, type, status, brief, weight, volume, attr_value_id, attr_value_name, 
+    expire_date, create_date, last_update_date, audit_status, last_audit_name, last_audit_date
+  </sql>
+  <sql id="Blob_Column_List" >
+    detail
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_product
+    where prod_id = #{prodId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_product
+    where prod_id = #{prodId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.afd.model.product.Product" >
+    insert into t_product (prod_id, prod_code, bc_code, 
+      name, title, subtitle, 
+      bc_id, seller_id, art_no, 
+      brand_id, brand_name, type, 
+      status, brief, weight, 
+      volume, attr_value_id, attr_value_name, 
+      expire_date, create_date, last_update_date, 
+      audit_status, last_audit_name, last_audit_date, 
+      detail)
+    values (#{prodId,jdbcType=INTEGER}, #{prodCode,jdbcType=VARCHAR}, #{bcCode,jdbcType=VARCHAR}, 
+      #{name,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{subtitle,jdbcType=VARCHAR}, 
+      #{bcId,jdbcType=INTEGER}, #{sellerId,jdbcType=INTEGER}, #{artNo,jdbcType=VARCHAR}, 
+      #{brandId,jdbcType=INTEGER}, #{brandName,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
+      #{status,jdbcType=CHAR}, #{brief,jdbcType=VARCHAR}, #{weight,jdbcType=DECIMAL}, 
+      #{volume,jdbcType=VARCHAR}, #{attrValueId,jdbcType=VARCHAR}, #{attrValueName,jdbcType=VARCHAR}, 
+      #{expireDate,jdbcType=TIMESTAMP}, #{createDate,jdbcType=TIMESTAMP}, #{lastUpdateDate,jdbcType=TIMESTAMP}, 
+      #{auditStatus,jdbcType=CHAR}, #{lastAuditName,jdbcType=VARCHAR}, #{lastAuditDate,jdbcType=TIMESTAMP}, 
+      #{detail,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.afd.model.product.Product" >
+    insert into t_product
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="prodId != null" >
+        prod_id,
+      </if>
+      <if test="prodCode != null" >
+        prod_code,
+      </if>
+      <if test="bcCode != null" >
+        bc_code,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="subtitle != null" >
+        subtitle,
+      </if>
+      <if test="bcId != null" >
+        bc_id,
+      </if>
+      <if test="sellerId != null" >
+        seller_id,
+      </if>
+      <if test="artNo != null" >
+        art_no,
+      </if>
+      <if test="brandId != null" >
+        brand_id,
+      </if>
+      <if test="brandName != null" >
+        brand_name,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="brief != null" >
+        brief,
+      </if>
+      <if test="weight != null" >
+        weight,
+      </if>
+      <if test="volume != null" >
+        volume,
+      </if>
+      <if test="attrValueId != null" >
+        attr_value_id,
+      </if>
+      <if test="attrValueName != null" >
+        attr_value_name,
+      </if>
+      <if test="expireDate != null" >
+        expire_date,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="lastUpdateDate != null" >
+        last_update_date,
+      </if>
+      <if test="auditStatus != null" >
+        audit_status,
+      </if>
+      <if test="lastAuditName != null" >
+        last_audit_name,
+      </if>
+      <if test="lastAuditDate != null" >
+        last_audit_date,
+      </if>
+      <if test="detail != null" >
+        detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="prodId != null" >
+        #{prodId,jdbcType=INTEGER},
+      </if>
+      <if test="prodCode != null" >
+        #{prodCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bcCode != null" >
+        #{bcCode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="subtitle != null" >
+        #{subtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="bcId != null" >
+        #{bcId,jdbcType=INTEGER},
+      </if>
+      <if test="sellerId != null" >
+        #{sellerId,jdbcType=INTEGER},
+      </if>
+      <if test="artNo != null" >
+        #{artNo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandId != null" >
+        #{brandId,jdbcType=INTEGER},
+      </if>
+      <if test="brandName != null" >
+        #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="brief != null" >
+        #{brief,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="volume != null" >
+        #{volume,jdbcType=VARCHAR},
+      </if>
+      <if test="attrValueId != null" >
+        #{attrValueId,jdbcType=VARCHAR},
+      </if>
+      <if test="attrValueName != null" >
+        #{attrValueName,jdbcType=VARCHAR},
+      </if>
+      <if test="expireDate != null" >
+        #{expireDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateDate != null" >
+        #{lastUpdateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditStatus != null" >
+        #{auditStatus,jdbcType=CHAR},
+      </if>
+      <if test="lastAuditName != null" >
+        #{lastAuditName,jdbcType=VARCHAR},
+      </if>
+      <if test="lastAuditDate != null" >
+        #{lastAuditDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="detail != null" >
+        #{detail,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.Product" >
+    update t_product
+    <set >
+      <if test="prodCode != null" >
+        prod_code = #{prodCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bcCode != null" >
+        bc_code = #{bcCode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="subtitle != null" >
+        subtitle = #{subtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="bcId != null" >
+        bc_id = #{bcId,jdbcType=INTEGER},
+      </if>
+      <if test="sellerId != null" >
+        seller_id = #{sellerId,jdbcType=INTEGER},
+      </if>
+      <if test="artNo != null" >
+        art_no = #{artNo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandId != null" >
+        brand_id = #{brandId,jdbcType=INTEGER},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="brief != null" >
+        brief = #{brief,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        weight = #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="volume != null" >
+        volume = #{volume,jdbcType=VARCHAR},
+      </if>
+      <if test="attrValueId != null" >
+        attr_value_id = #{attrValueId,jdbcType=VARCHAR},
+      </if>
+      <if test="attrValueName != null" >
+        attr_value_name = #{attrValueName,jdbcType=VARCHAR},
+      </if>
+      <if test="expireDate != null" >
+        expire_date = #{expireDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateDate != null" >
+        last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditStatus != null" >
+        audit_status = #{auditStatus,jdbcType=CHAR},
+      </if>
+      <if test="lastAuditName != null" >
+        last_audit_name = #{lastAuditName,jdbcType=VARCHAR},
+      </if>
+      <if test="lastAuditDate != null" >
+        last_audit_date = #{lastAuditDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="detail != null" >
+        detail = #{detail,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where prod_id = #{prodId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.afd.model.product.Product" >
+    update t_product
+    set prod_code = #{prodCode,jdbcType=VARCHAR},
+      bc_code = #{bcCode,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      subtitle = #{subtitle,jdbcType=VARCHAR},
+      bc_id = #{bcId,jdbcType=INTEGER},
+      seller_id = #{sellerId,jdbcType=INTEGER},
+      art_no = #{artNo,jdbcType=VARCHAR},
+      brand_id = #{brandId,jdbcType=INTEGER},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
+      status = #{status,jdbcType=CHAR},
+      brief = #{brief,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=DECIMAL},
+      volume = #{volume,jdbcType=VARCHAR},
+      attr_value_id = #{attrValueId,jdbcType=VARCHAR},
+      attr_value_name = #{attrValueName,jdbcType=VARCHAR},
+      expire_date = #{expireDate,jdbcType=TIMESTAMP},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+      audit_status = #{auditStatus,jdbcType=CHAR},
+      last_audit_name = #{lastAuditName,jdbcType=VARCHAR},
+      last_audit_date = #{lastAuditDate,jdbcType=TIMESTAMP},
+      detail = #{detail,jdbcType=LONGVARCHAR}
+    where prod_id = #{prodId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.afd.model.product.Product" >
+    update t_product
+    set prod_code = #{prodCode,jdbcType=VARCHAR},
+      bc_code = #{bcCode,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      subtitle = #{subtitle,jdbcType=VARCHAR},
+      bc_id = #{bcId,jdbcType=INTEGER},
+      seller_id = #{sellerId,jdbcType=INTEGER},
+      art_no = #{artNo,jdbcType=VARCHAR},
+      brand_id = #{brandId,jdbcType=INTEGER},
+      brand_name = #{brandName,jdbcType=VARCHAR},
+      type = #{type,jdbcType=CHAR},
+      status = #{status,jdbcType=CHAR},
+      brief = #{brief,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=DECIMAL},
+      volume = #{volume,jdbcType=VARCHAR},
+      attr_value_id = #{attrValueId,jdbcType=VARCHAR},
+      attr_value_name = #{attrValueName,jdbcType=VARCHAR},
+      expire_date = #{expireDate,jdbcType=TIMESTAMP},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+      audit_status = #{auditStatus,jdbcType=CHAR},
+      last_audit_name = #{lastAuditName,jdbcType=VARCHAR},
+      last_audit_date = #{lastAuditDate,jdbcType=TIMESTAMP}
+    where prod_id = #{prodId,jdbcType=INTEGER}
+  </update>
+</mapper>

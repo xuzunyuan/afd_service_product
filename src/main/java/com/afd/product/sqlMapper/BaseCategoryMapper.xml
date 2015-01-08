@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.afd.product.dao.BaseCategoryMapper" >
+  <resultMap id="BaseResultMap" type="com.afd.model.product.BaseCategory" >
+    <id column="bc_id" property="bcId" jdbcType="SMALLINT" />
+    <result column="bc_name" property="bcName" jdbcType="VARCHAR" />
+    <result column="bc_code" property="bcCode" jdbcType="VARCHAR" />
+    <result column="bc_level" property="bcLevel" jdbcType="CHAR" />
+    <result column="p_bc_id" property="pBcId" jdbcType="DECIMAL" />
+    <result column="path_id" property="pathId" jdbcType="VARCHAR" />
+    <result column="path_name" property="pathName" jdbcType="VARCHAR" />
+    <result column="is_leaf" property="isLeaf" jdbcType="CHAR" />
+    <result column="display_order" property="displayOrder" jdbcType="DECIMAL" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="update_data" property="updateData" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    bc_id, bc_name, bc_code, bc_level, p_bc_id, path_id, path_name, is_leaf, display_order, 
+    create_date, update_data, status
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Short" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_base_category
+    where bc_id = #{bcId,jdbcType=SMALLINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short" >
+    delete from t_base_category
+    where bc_id = #{bcId,jdbcType=SMALLINT}
+  </delete>
+  <insert id="insert" parameterType="com.afd.model.product.BaseCategory" >
+    insert into t_base_category (bc_id, bc_name, bc_code, 
+      bc_level, p_bc_id, path_id, 
+      path_name, is_leaf, display_order, 
+      create_date, update_data, status
+      )
+    values (#{bcId,jdbcType=SMALLINT}, #{bcName,jdbcType=VARCHAR}, #{bcCode,jdbcType=VARCHAR}, 
+      #{bcLevel,jdbcType=CHAR}, #{pBcId,jdbcType=DECIMAL}, #{pathId,jdbcType=VARCHAR}, 
+      #{pathName,jdbcType=VARCHAR}, #{isLeaf,jdbcType=CHAR}, #{displayOrder,jdbcType=DECIMAL}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{updateData,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.afd.model.product.BaseCategory" >
+    insert into t_base_category
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bcId != null" >
+        bc_id,
+      </if>
+      <if test="bcName != null" >
+        bc_name,
+      </if>
+      <if test="bcCode != null" >
+        bc_code,
+      </if>
+      <if test="bcLevel != null" >
+        bc_level,
+      </if>
+      <if test="pBcId != null" >
+        p_bc_id,
+      </if>
+      <if test="pathId != null" >
+        path_id,
+      </if>
+      <if test="pathName != null" >
+        path_name,
+      </if>
+      <if test="isLeaf != null" >
+        is_leaf,
+      </if>
+      <if test="displayOrder != null" >
+        display_order,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="updateData != null" >
+        update_data,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bcId != null" >
+        #{bcId,jdbcType=SMALLINT},
+      </if>
+      <if test="bcName != null" >
+        #{bcName,jdbcType=VARCHAR},
+      </if>
+      <if test="bcCode != null" >
+        #{bcCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bcLevel != null" >
+        #{bcLevel,jdbcType=CHAR},
+      </if>
+      <if test="pBcId != null" >
+        #{pBcId,jdbcType=DECIMAL},
+      </if>
+      <if test="pathId != null" >
+        #{pathId,jdbcType=VARCHAR},
+      </if>
+      <if test="pathName != null" >
+        #{pathName,jdbcType=VARCHAR},
+      </if>
+      <if test="isLeaf != null" >
+        #{isLeaf,jdbcType=CHAR},
+      </if>
+      <if test="displayOrder != null" >
+        #{displayOrder,jdbcType=DECIMAL},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateData != null" >
+        #{updateData,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.BaseCategory" >
+    update t_base_category
+    <set >
+      <if test="bcName != null" >
+        bc_name = #{bcName,jdbcType=VARCHAR},
+      </if>
+      <if test="bcCode != null" >
+        bc_code = #{bcCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bcLevel != null" >
+        bc_level = #{bcLevel,jdbcType=CHAR},
+      </if>
+      <if test="pBcId != null" >
+        p_bc_id = #{pBcId,jdbcType=DECIMAL},
+      </if>
+      <if test="pathId != null" >
+        path_id = #{pathId,jdbcType=VARCHAR},
+      </if>
+      <if test="pathName != null" >
+        path_name = #{pathName,jdbcType=VARCHAR},
+      </if>
+      <if test="isLeaf != null" >
+        is_leaf = #{isLeaf,jdbcType=CHAR},
+      </if>
+      <if test="displayOrder != null" >
+        display_order = #{displayOrder,jdbcType=DECIMAL},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateData != null" >
+        update_data = #{updateData,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+    </set>
+    where bc_id = #{bcId,jdbcType=SMALLINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.afd.model.product.BaseCategory" >
+    update t_base_category
+    set bc_name = #{bcName,jdbcType=VARCHAR},
+      bc_code = #{bcCode,jdbcType=VARCHAR},
+      bc_level = #{bcLevel,jdbcType=CHAR},
+      p_bc_id = #{pBcId,jdbcType=DECIMAL},
+      path_id = #{pathId,jdbcType=VARCHAR},
+      path_name = #{pathName,jdbcType=VARCHAR},
+      is_leaf = #{isLeaf,jdbcType=CHAR},
+      display_order = #{displayOrder,jdbcType=DECIMAL},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_data = #{updateData,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=CHAR}
+    where bc_id = #{bcId,jdbcType=SMALLINT}
+  </update>
+</mapper>

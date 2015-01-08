@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.afd.product.dao.ProductCommentStatMapper" >
+  <resultMap id="BaseResultMap" type="com.afd.model.product.ProductCommentStat" >
+    <id column="p_c_s_id" property="pCSId" jdbcType="INTEGER" />
+    <result column="prod_id" property="prodId" jdbcType="INTEGER" />
+    <result column="total_number" property="totalNumber" jdbcType="INTEGER" />
+    <result column="system_number" property="systemNumber" jdbcType="INTEGER" />
+    <result column="prod_score" property="prodScore" jdbcType="DECIMAL" />
+    <result column="best_number" property="bestNumber" jdbcType="INTEGER" />
+    <result column="mid_number" property="midNumber" jdbcType="INTEGER" />
+    <result column="bad_number" property="badNumber" jdbcType="INTEGER" />
+    <result column="additional_number" property="additionalNumber" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    p_c_s_id, prod_id, total_number, system_number, prod_score, best_number, mid_number, 
+    bad_number, additional_number
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_product_comment_stat
+    where p_c_s_id = #{pCSId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_product_comment_stat
+    where p_c_s_id = #{pCSId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.afd.model.product.ProductCommentStat" >
+    insert into t_product_comment_stat (p_c_s_id, prod_id, total_number, 
+      system_number, prod_score, best_number, 
+      mid_number, bad_number, additional_number
+      )
+    values (#{pCSId,jdbcType=INTEGER}, #{prodId,jdbcType=INTEGER}, #{totalNumber,jdbcType=INTEGER}, 
+      #{systemNumber,jdbcType=INTEGER}, #{prodScore,jdbcType=DECIMAL}, #{bestNumber,jdbcType=INTEGER}, 
+      #{midNumber,jdbcType=INTEGER}, #{badNumber,jdbcType=INTEGER}, #{additionalNumber,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.afd.model.product.ProductCommentStat" >
+    insert into t_product_comment_stat
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pCSId != null" >
+        p_c_s_id,
+      </if>
+      <if test="prodId != null" >
+        prod_id,
+      </if>
+      <if test="totalNumber != null" >
+        total_number,
+      </if>
+      <if test="systemNumber != null" >
+        system_number,
+      </if>
+      <if test="prodScore != null" >
+        prod_score,
+      </if>
+      <if test="bestNumber != null" >
+        best_number,
+      </if>
+      <if test="midNumber != null" >
+        mid_number,
+      </if>
+      <if test="badNumber != null" >
+        bad_number,
+      </if>
+      <if test="additionalNumber != null" >
+        additional_number,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pCSId != null" >
+        #{pCSId,jdbcType=INTEGER},
+      </if>
+      <if test="prodId != null" >
+        #{prodId,jdbcType=INTEGER},
+      </if>
+      <if test="totalNumber != null" >
+        #{totalNumber,jdbcType=INTEGER},
+      </if>
+      <if test="systemNumber != null" >
+        #{systemNumber,jdbcType=INTEGER},
+      </if>
+      <if test="prodScore != null" >
+        #{prodScore,jdbcType=DECIMAL},
+      </if>
+      <if test="bestNumber != null" >
+        #{bestNumber,jdbcType=INTEGER},
+      </if>
+      <if test="midNumber != null" >
+        #{midNumber,jdbcType=INTEGER},
+      </if>
+      <if test="badNumber != null" >
+        #{badNumber,jdbcType=INTEGER},
+      </if>
+      <if test="additionalNumber != null" >
+        #{additionalNumber,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.ProductCommentStat" >
+    update t_product_comment_stat
+    <set >
+      <if test="prodId != null" >
+        prod_id = #{prodId,jdbcType=INTEGER},
+      </if>
+      <if test="totalNumber != null" >
+        total_number = #{totalNumber,jdbcType=INTEGER},
+      </if>
+      <if test="systemNumber != null" >
+        system_number = #{systemNumber,jdbcType=INTEGER},
+      </if>
+      <if test="prodScore != null" >
+        prod_score = #{prodScore,jdbcType=DECIMAL},
+      </if>
+      <if test="bestNumber != null" >
+        best_number = #{bestNumber,jdbcType=INTEGER},
+      </if>
+      <if test="midNumber != null" >
+        mid_number = #{midNumber,jdbcType=INTEGER},
+      </if>
+      <if test="badNumber != null" >
+        bad_number = #{badNumber,jdbcType=INTEGER},
+      </if>
+      <if test="additionalNumber != null" >
+        additional_number = #{additionalNumber,jdbcType=INTEGER},
+      </if>
+    </set>
+    where p_c_s_id = #{pCSId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.afd.model.product.ProductCommentStat" >
+    update t_product_comment_stat
+    set prod_id = #{prodId,jdbcType=INTEGER},
+      total_number = #{totalNumber,jdbcType=INTEGER},
+      system_number = #{systemNumber,jdbcType=INTEGER},
+      prod_score = #{prodScore,jdbcType=DECIMAL},
+      best_number = #{bestNumber,jdbcType=INTEGER},
+      mid_number = #{midNumber,jdbcType=INTEGER},
+      bad_number = #{badNumber,jdbcType=INTEGER},
+      additional_number = #{additionalNumber,jdbcType=INTEGER}
+    where p_c_s_id = #{pCSId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.afd.product.dao.ProductCommentMapper" >
+  <resultMap id="BaseResultMap" type="com.afd.model.product.ProductComment" >
+    <id column="p_comment_id" property="pCommentId" jdbcType="INTEGER" />
+    <result column="prod_id" property="prodId" jdbcType="INTEGER" />
+    <result column="sku_id" property="skuId" jdbcType="INTEGER" />
+    <result column="item_id" property="itemId" jdbcType="INTEGER" />
+    <result column="order_id" property="orderId" jdbcType="INTEGER" />
+    <result column="order_code" property="orderCode" jdbcType="VARCHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="create_by_ip" property="createByIp" jdbcType="VARCHAR" />
+    <result column="seller_id" property="sellerId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="nickname" property="nickname" jdbcType="VARCHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="buy_date" property="buyDate" jdbcType="TIMESTAMP" />
+    <result column="score" property="score" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="is_reply" property="isReply" jdbcType="CHAR" />
+    <result column="reply_content" property="replyContent" jdbcType="VARCHAR" />
+    <result column="reply_score" property="replyScore" jdbcType="DECIMAL" />
+    <result column="reply_status" property="replyStatus" jdbcType="CHAR" />
+    <result column="reply_by_id" property="replyById" jdbcType="INTEGER" />
+    <result column="reply_by_name" property="replyByName" jdbcType="VARCHAR" />
+    <result column="reply_date" property="replyDate" jdbcType="TIMESTAMP" />
+    <result column="is_have_additional" property="isHaveAdditional" jdbcType="CHAR" />
+    <result column="is_have_Content" property="isHaveContent" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    p_comment_id, prod_id, sku_id, item_id, order_id, order_code, create_date, create_by_ip, 
+    seller_id, user_id, nickname, title, content, buy_date, score, status, type, is_reply, 
+    reply_content, reply_score, reply_status, reply_by_id, reply_by_name, reply_date, 
+    is_have_additional, is_have_Content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_product_comment
+    where p_comment_id = #{pCommentId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_product_comment
+    where p_comment_id = #{pCommentId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.afd.model.product.ProductComment" >
+    insert into t_product_comment (p_comment_id, prod_id, sku_id, 
+      item_id, order_id, order_code, 
+      create_date, create_by_ip, seller_id, 
+      user_id, nickname, title, 
+      content, buy_date, score, 
+      status, type, is_reply, reply_content, 
+      reply_score, reply_status, reply_by_id, 
+      reply_by_name, reply_date, is_have_additional, 
+      is_have_Content)
+    values (#{pCommentId,jdbcType=INTEGER}, #{prodId,jdbcType=INTEGER}, #{skuId,jdbcType=INTEGER}, 
+      #{itemId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{orderCode,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{createByIp,jdbcType=VARCHAR}, #{sellerId,jdbcType=INTEGER}, 
+      #{userId,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
+      #{content,jdbcType=VARCHAR}, #{buyDate,jdbcType=TIMESTAMP}, #{score,jdbcType=DECIMAL}, 
+      #{status,jdbcType=CHAR}, #{type,jdbcType=CHAR}, #{isReply,jdbcType=CHAR}, #{replyContent,jdbcType=VARCHAR}, 
+      #{replyScore,jdbcType=DECIMAL}, #{replyStatus,jdbcType=CHAR}, #{replyById,jdbcType=INTEGER}, 
+      #{replyByName,jdbcType=VARCHAR}, #{replyDate,jdbcType=TIMESTAMP}, #{isHaveAdditional,jdbcType=CHAR}, 
+      #{isHaveContent,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.afd.model.product.ProductComment" >
+    insert into t_product_comment
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pCommentId != null" >
+        p_comment_id,
+      </if>
+      <if test="prodId != null" >
+        prod_id,
+      </if>
+      <if test="skuId != null" >
+        sku_id,
+      </if>
+      <if test="itemId != null" >
+        item_id,
+      </if>
+      <if test="orderId != null" >
+        order_id,
+      </if>
+      <if test="orderCode != null" >
+        order_code,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="createByIp != null" >
+        create_by_ip,
+      </if>
+      <if test="sellerId != null" >
+        seller_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="nickname != null" >
+        nickname,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="buyDate != null" >
+        buy_date,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="isReply != null" >
+        is_reply,
+      </if>
+      <if test="replyContent != null" >
+        reply_content,
+      </if>
+      <if test="replyScore != null" >
+        reply_score,
+      </if>
+      <if test="replyStatus != null" >
+        reply_status,
+      </if>
+      <if test="replyById != null" >
+        reply_by_id,
+      </if>
+      <if test="replyByName != null" >
+        reply_by_name,
+      </if>
+      <if test="replyDate != null" >
+        reply_date,
+      </if>
+      <if test="isHaveAdditional != null" >
+        is_have_additional,
+      </if>
+      <if test="isHaveContent != null" >
+        is_have_Content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pCommentId != null" >
+        #{pCommentId,jdbcType=INTEGER},
+      </if>
+      <if test="prodId != null" >
+        #{prodId,jdbcType=INTEGER},
+      </if>
+      <if test="skuId != null" >
+        #{skuId,jdbcType=INTEGER},
+      </if>
+      <if test="itemId != null" >
+        #{itemId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderCode != null" >
+        #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createByIp != null" >
+        #{createByIp,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerId != null" >
+        #{sellerId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="nickname != null" >
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="buyDate != null" >
+        #{buyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="isReply != null" >
+        #{isReply,jdbcType=CHAR},
+      </if>
+      <if test="replyContent != null" >
+        #{replyContent,jdbcType=VARCHAR},
+      </if>
+      <if test="replyScore != null" >
+        #{replyScore,jdbcType=DECIMAL},
+      </if>
+      <if test="replyStatus != null" >
+        #{replyStatus,jdbcType=CHAR},
+      </if>
+      <if test="replyById != null" >
+        #{replyById,jdbcType=INTEGER},
+      </if>
+      <if test="replyByName != null" >
+        #{replyByName,jdbcType=VARCHAR},
+      </if>
+      <if test="replyDate != null" >
+        #{replyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isHaveAdditional != null" >
+        #{isHaveAdditional,jdbcType=CHAR},
+      </if>
+      <if test="isHaveContent != null" >
+        #{isHaveContent,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.ProductComment" >
+    update t_product_comment
+    <set >
+      <if test="prodId != null" >
+        prod_id = #{prodId,jdbcType=INTEGER},
+      </if>
+      <if test="skuId != null" >
+        sku_id = #{skuId,jdbcType=INTEGER},
+      </if>
+      <if test="itemId != null" >
+        item_id = #{itemId,jdbcType=INTEGER},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=INTEGER},
+      </if>
+      <if test="orderCode != null" >
+        order_code = #{orderCode,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createByIp != null" >
+        create_by_ip = #{createByIp,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerId != null" >
+        seller_id = #{sellerId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="nickname != null" >
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="buyDate != null" >
+        buy_date = #{buyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="score != null" >
+        score = #{score,jdbcType=DECIMAL},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="isReply != null" >
+        is_reply = #{isReply,jdbcType=CHAR},
+      </if>
+      <if test="replyContent != null" >
+        reply_content = #{replyContent,jdbcType=VARCHAR},
+      </if>
+      <if test="replyScore != null" >
+        reply_score = #{replyScore,jdbcType=DECIMAL},
+      </if>
+      <if test="replyStatus != null" >
+        reply_status = #{replyStatus,jdbcType=CHAR},
+      </if>
+      <if test="replyById != null" >
+        reply_by_id = #{replyById,jdbcType=INTEGER},
+      </if>
+      <if test="replyByName != null" >
+        reply_by_name = #{replyByName,jdbcType=VARCHAR},
+      </if>
+      <if test="replyDate != null" >
+        reply_date = #{replyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isHaveAdditional != null" >
+        is_have_additional = #{isHaveAdditional,jdbcType=CHAR},
+      </if>
+      <if test="isHaveContent != null" >
+        is_have_Content = #{isHaveContent,jdbcType=CHAR},
+      </if>
+    </set>
+    where p_comment_id = #{pCommentId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.afd.model.product.ProductComment" >
+    update t_product_comment
+    set prod_id = #{prodId,jdbcType=INTEGER},
+      sku_id = #{skuId,jdbcType=INTEGER},
+      item_id = #{itemId,jdbcType=INTEGER},
+      order_id = #{orderId,jdbcType=INTEGER},
+      order_code = #{orderCode,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      create_by_ip = #{createByIp,jdbcType=VARCHAR},
+      seller_id = #{sellerId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      buy_date = #{buyDate,jdbcType=TIMESTAMP},
+      score = #{score,jdbcType=DECIMAL},
+      status = #{status,jdbcType=CHAR},
+      type = #{type,jdbcType=CHAR},
+      is_reply = #{isReply,jdbcType=CHAR},
+      reply_content = #{replyContent,jdbcType=VARCHAR},
+      reply_score = #{replyScore,jdbcType=DECIMAL},
+      reply_status = #{replyStatus,jdbcType=CHAR},
+      reply_by_id = #{replyById,jdbcType=INTEGER},
+      reply_by_name = #{replyByName,jdbcType=VARCHAR},
+      reply_date = #{replyDate,jdbcType=TIMESTAMP},
+      is_have_additional = #{isHaveAdditional,jdbcType=CHAR},
+      is_have_Content = #{isHaveContent,jdbcType=CHAR}
+    where p_comment_id = #{pCommentId,jdbcType=INTEGER}
+  </update>
+</mapper>

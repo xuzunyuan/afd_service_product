@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.afd.product.dao.ProductImgMapper" >
+  <resultMap id="BaseResultMap" type="com.afd.model.product.ProductImg" >
+    <id column="prod_img_id" property="prodImgId" jdbcType="INTEGER" />
+    <result column="prod_id" property="prodId" jdbcType="INTEGER" />
+    <result column="img_title" property="imgTitle" jdbcType="VARCHAR" />
+    <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="img_desc" property="imgDesc" jdbcType="VARCHAR" />
+    <result column="sort_rank" property="sortRank" jdbcType="TINYINT" />
+    <result column="img_type" property="imgType" jdbcType="CHAR" />
+    <result column="img_status" property="imgStatus" jdbcType="CHAR" />
+    <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    prod_img_id, prod_id, img_title, img_url, img_desc, sort_rank, img_type, img_status, 
+    create_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_product_img
+    where prod_img_id = #{prodImgId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_product_img
+    where prod_img_id = #{prodImgId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.afd.model.product.ProductImg" >
+    insert into t_product_img (prod_img_id, prod_id, img_title, 
+      img_url, img_desc, sort_rank, 
+      img_type, img_status, create_date
+      )
+    values (#{prodImgId,jdbcType=INTEGER}, #{prodId,jdbcType=INTEGER}, #{imgTitle,jdbcType=VARCHAR}, 
+      #{imgUrl,jdbcType=VARCHAR}, #{imgDesc,jdbcType=VARCHAR}, #{sortRank,jdbcType=TINYINT}, 
+      #{imgType,jdbcType=CHAR}, #{imgStatus,jdbcType=CHAR}, #{createDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.afd.model.product.ProductImg" >
+    insert into t_product_img
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="prodImgId != null" >
+        prod_img_id,
+      </if>
+      <if test="prodId != null" >
+        prod_id,
+      </if>
+      <if test="imgTitle != null" >
+        img_title,
+      </if>
+      <if test="imgUrl != null" >
+        img_url,
+      </if>
+      <if test="imgDesc != null" >
+        img_desc,
+      </if>
+      <if test="sortRank != null" >
+        sort_rank,
+      </if>
+      <if test="imgType != null" >
+        img_type,
+      </if>
+      <if test="imgStatus != null" >
+        img_status,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="prodImgId != null" >
+        #{prodImgId,jdbcType=INTEGER},
+      </if>
+      <if test="prodId != null" >
+        #{prodId,jdbcType=INTEGER},
+      </if>
+      <if test="imgTitle != null" >
+        #{imgTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null" >
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imgDesc != null" >
+        #{imgDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="sortRank != null" >
+        #{sortRank,jdbcType=TINYINT},
+      </if>
+      <if test="imgType != null" >
+        #{imgType,jdbcType=CHAR},
+      </if>
+      <if test="imgStatus != null" >
+        #{imgStatus,jdbcType=CHAR},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.ProductImg" >
+    update t_product_img
+    <set >
+      <if test="prodId != null" >
+        prod_id = #{prodId,jdbcType=INTEGER},
+      </if>
+      <if test="imgTitle != null" >
+        img_title = #{imgTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null" >
+        img_url = #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="imgDesc != null" >
+        img_desc = #{imgDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="sortRank != null" >
+        sort_rank = #{sortRank,jdbcType=TINYINT},
+      </if>
+      <if test="imgType != null" >
+        img_type = #{imgType,jdbcType=CHAR},
+      </if>
+      <if test="imgStatus != null" >
+        img_status = #{imgStatus,jdbcType=CHAR},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where prod_img_id = #{prodImgId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.afd.model.product.ProductImg" >
+    update t_product_img
+    set prod_id = #{prodId,jdbcType=INTEGER},
+      img_title = #{imgTitle,jdbcType=VARCHAR},
+      img_url = #{imgUrl,jdbcType=VARCHAR},
+      img_desc = #{imgDesc,jdbcType=VARCHAR},
+      sort_rank = #{sortRank,jdbcType=TINYINT},
+      img_type = #{imgType,jdbcType=CHAR},
+      img_status = #{imgStatus,jdbcType=CHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP}
+    where prod_img_id = #{prodImgId,jdbcType=INTEGER}
+  </update>
+</mapper>

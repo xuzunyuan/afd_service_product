@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.afd.product.dao.SellerBrandMapper" >
+  <resultMap id="BaseResultMap" type="com.afd.model.product.SellerBrand" >
+    <id column="seller_brand_id" property="sellerBrandId" jdbcType="INTEGER" />
+    <result column="seller_id" property="sellerId" jdbcType="INTEGER" />
+    <result column="brand_id" property="brandId" jdbcType="INTEGER" />
+    <result column="submit_date" property="submitDate" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="audit_status" property="auditStatus" jdbcType="CHAR" />
+    <result column="audit_date" property="auditDate" jdbcType="TIMESTAMP" />
+    <result column="audit_by_name" property="auditByName" jdbcType="VARCHAR" />
+    <result column="audit_content" property="auditContent" jdbcType="VARCHAR" />
+    <result column="auth_start_date" property="authStartDate" jdbcType="TIMESTAMP" />
+    <result column="auth_end_date" property="authEndDate" jdbcType="TIMESTAMP" />
+    <result column="bc_ids" property="bcIds" jdbcType="VARCHAR" />
+    <result column="trademark_cert" property="trademarkCert" jdbcType="VARCHAR" />
+    <result column="other_cert" property="otherCert" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    seller_brand_id, seller_id, brand_id, submit_date, status, audit_status, audit_date, 
+    audit_by_name, audit_content, auth_start_date, auth_end_date, bc_ids, trademark_cert, 
+    other_cert
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_seller_brand
+    where seller_brand_id = #{sellerBrandId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_seller_brand
+    where seller_brand_id = #{sellerBrandId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.afd.model.product.SellerBrand" >
+    insert into t_seller_brand (seller_brand_id, seller_id, brand_id, 
+      submit_date, status, audit_status, 
+      audit_date, audit_by_name, audit_content, 
+      auth_start_date, auth_end_date, bc_ids, 
+      trademark_cert, other_cert)
+    values (#{sellerBrandId,jdbcType=INTEGER}, #{sellerId,jdbcType=INTEGER}, #{brandId,jdbcType=INTEGER}, 
+      #{submitDate,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR}, #{auditStatus,jdbcType=CHAR}, 
+      #{auditDate,jdbcType=TIMESTAMP}, #{auditByName,jdbcType=VARCHAR}, #{auditContent,jdbcType=VARCHAR}, 
+      #{authStartDate,jdbcType=TIMESTAMP}, #{authEndDate,jdbcType=TIMESTAMP}, #{bcIds,jdbcType=VARCHAR}, 
+      #{trademarkCert,jdbcType=VARCHAR}, #{otherCert,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.afd.model.product.SellerBrand" >
+    insert into t_seller_brand
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sellerBrandId != null" >
+        seller_brand_id,
+      </if>
+      <if test="sellerId != null" >
+        seller_id,
+      </if>
+      <if test="brandId != null" >
+        brand_id,
+      </if>
+      <if test="submitDate != null" >
+        submit_date,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="auditStatus != null" >
+        audit_status,
+      </if>
+      <if test="auditDate != null" >
+        audit_date,
+      </if>
+      <if test="auditByName != null" >
+        audit_by_name,
+      </if>
+      <if test="auditContent != null" >
+        audit_content,
+      </if>
+      <if test="authStartDate != null" >
+        auth_start_date,
+      </if>
+      <if test="authEndDate != null" >
+        auth_end_date,
+      </if>
+      <if test="bcIds != null" >
+        bc_ids,
+      </if>
+      <if test="trademarkCert != null" >
+        trademark_cert,
+      </if>
+      <if test="otherCert != null" >
+        other_cert,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sellerBrandId != null" >
+        #{sellerBrandId,jdbcType=INTEGER},
+      </if>
+      <if test="sellerId != null" >
+        #{sellerId,jdbcType=INTEGER},
+      </if>
+      <if test="brandId != null" >
+        #{brandId,jdbcType=INTEGER},
+      </if>
+      <if test="submitDate != null" >
+        #{submitDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="auditStatus != null" >
+        #{auditStatus,jdbcType=CHAR},
+      </if>
+      <if test="auditDate != null" >
+        #{auditDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditByName != null" >
+        #{auditByName,jdbcType=VARCHAR},
+      </if>
+      <if test="auditContent != null" >
+        #{auditContent,jdbcType=VARCHAR},
+      </if>
+      <if test="authStartDate != null" >
+        #{authStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="authEndDate != null" >
+        #{authEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bcIds != null" >
+        #{bcIds,jdbcType=VARCHAR},
+      </if>
+      <if test="trademarkCert != null" >
+        #{trademarkCert,jdbcType=VARCHAR},
+      </if>
+      <if test="otherCert != null" >
+        #{otherCert,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.SellerBrand" >
+    update t_seller_brand
+    <set >
+      <if test="sellerId != null" >
+        seller_id = #{sellerId,jdbcType=INTEGER},
+      </if>
+      <if test="brandId != null" >
+        brand_id = #{brandId,jdbcType=INTEGER},
+      </if>
+      <if test="submitDate != null" >
+        submit_date = #{submitDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="auditStatus != null" >
+        audit_status = #{auditStatus,jdbcType=CHAR},
+      </if>
+      <if test="auditDate != null" >
+        audit_date = #{auditDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditByName != null" >
+        audit_by_name = #{auditByName,jdbcType=VARCHAR},
+      </if>
+      <if test="auditContent != null" >
+        audit_content = #{auditContent,jdbcType=VARCHAR},
+      </if>
+      <if test="authStartDate != null" >
+        auth_start_date = #{authStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="authEndDate != null" >
+        auth_end_date = #{authEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="bcIds != null" >
+        bc_ids = #{bcIds,jdbcType=VARCHAR},
+      </if>
+      <if test="trademarkCert != null" >
+        trademark_cert = #{trademarkCert,jdbcType=VARCHAR},
+      </if>
+      <if test="otherCert != null" >
+        other_cert = #{otherCert,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where seller_brand_id = #{sellerBrandId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.afd.model.product.SellerBrand" >
+    update t_seller_brand
+    set seller_id = #{sellerId,jdbcType=INTEGER},
+      brand_id = #{brandId,jdbcType=INTEGER},
+      submit_date = #{submitDate,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=CHAR},
+      audit_status = #{auditStatus,jdbcType=CHAR},
+      audit_date = #{auditDate,jdbcType=TIMESTAMP},
+      audit_by_name = #{auditByName,jdbcType=VARCHAR},
+      audit_content = #{auditContent,jdbcType=VARCHAR},
+      auth_start_date = #{authStartDate,jdbcType=TIMESTAMP},
+      auth_end_date = #{authEndDate,jdbcType=TIMESTAMP},
+      bc_ids = #{bcIds,jdbcType=VARCHAR},
+      trademark_cert = #{trademarkCert,jdbcType=VARCHAR},
+      other_cert = #{otherCert,jdbcType=VARCHAR}
+    where seller_brand_id = #{sellerBrandId,jdbcType=INTEGER}
+  </update>
+</mapper>

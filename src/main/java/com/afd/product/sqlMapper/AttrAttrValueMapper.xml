@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.afd.product.dao.AttrAttrValueMapper" >
+  <resultMap id="BaseResultMap" type="com.afd.model.product.AttrAttrValue" >
+    <id column="a_av_id" property="aAvId" jdbcType="INTEGER" />
+    <result column="attr_id" property="attrId" jdbcType="INTEGER" />
+    <result column="attr_value_id" property="attrValueId" jdbcType="INTEGER" />
+    <result column="display_order" property="displayOrder" jdbcType="SMALLINT" />
+    <result column="p_a_av_id" property="pAAvId" jdbcType="INTEGER" />
+    <result column="has_sub" property="hasSub" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    a_av_id, attr_id, attr_value_id, display_order, p_a_av_id, has_sub
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_attr_attr_value
+    where a_av_id = #{aAvId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_attr_attr_value
+    where a_av_id = #{aAvId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.afd.model.product.AttrAttrValue" >
+    insert into t_attr_attr_value (a_av_id, attr_id, attr_value_id, 
+      display_order, p_a_av_id, has_sub
+      )
+    values (#{aAvId,jdbcType=INTEGER}, #{attrId,jdbcType=INTEGER}, #{attrValueId,jdbcType=INTEGER}, 
+      #{displayOrder,jdbcType=SMALLINT}, #{pAAvId,jdbcType=INTEGER}, #{hasSub,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.afd.model.product.AttrAttrValue" >
+    insert into t_attr_attr_value
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="aAvId != null" >
+        a_av_id,
+      </if>
+      <if test="attrId != null" >
+        attr_id,
+      </if>
+      <if test="attrValueId != null" >
+        attr_value_id,
+      </if>
+      <if test="displayOrder != null" >
+        display_order,
+      </if>
+      <if test="pAAvId != null" >
+        p_a_av_id,
+      </if>
+      <if test="hasSub != null" >
+        has_sub,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="aAvId != null" >
+        #{aAvId,jdbcType=INTEGER},
+      </if>
+      <if test="attrId != null" >
+        #{attrId,jdbcType=INTEGER},
+      </if>
+      <if test="attrValueId != null" >
+        #{attrValueId,jdbcType=INTEGER},
+      </if>
+      <if test="displayOrder != null" >
+        #{displayOrder,jdbcType=SMALLINT},
+      </if>
+      <if test="pAAvId != null" >
+        #{pAAvId,jdbcType=INTEGER},
+      </if>
+      <if test="hasSub != null" >
+        #{hasSub,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.AttrAttrValue" >
+    update t_attr_attr_value
+    <set >
+      <if test="attrId != null" >
+        attr_id = #{attrId,jdbcType=INTEGER},
+      </if>
+      <if test="attrValueId != null" >
+        attr_value_id = #{attrValueId,jdbcType=INTEGER},
+      </if>
+      <if test="displayOrder != null" >
+        display_order = #{displayOrder,jdbcType=SMALLINT},
+      </if>
+      <if test="pAAvId != null" >
+        p_a_av_id = #{pAAvId,jdbcType=INTEGER},
+      </if>
+      <if test="hasSub != null" >
+        has_sub = #{hasSub,jdbcType=CHAR},
+      </if>
+    </set>
+    where a_av_id = #{aAvId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.afd.model.product.AttrAttrValue" >
+    update t_attr_attr_value
+    set attr_id = #{attrId,jdbcType=INTEGER},
+      attr_value_id = #{attrValueId,jdbcType=INTEGER},
+      display_order = #{displayOrder,jdbcType=SMALLINT},
+      p_a_av_id = #{pAAvId,jdbcType=INTEGER},
+      has_sub = #{hasSub,jdbcType=CHAR}
+    where a_av_id = #{aAvId,jdbcType=INTEGER}
+  </update>
+</mapper>

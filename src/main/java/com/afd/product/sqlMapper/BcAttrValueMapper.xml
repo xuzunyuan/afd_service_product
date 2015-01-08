@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.afd.product.dao.BcAttrValueMapper" >
+  <resultMap id="BaseResultMap" type="com.afd.model.product.BcAttrValue" >
+    <id column="bc_av_id" property="bcAvId" jdbcType="INTEGER" />
+    <result column="bc_attr_id" property="bcAttrId" jdbcType="INTEGER" />
+    <result column="attr_value_id" property="attrValueId" jdbcType="INTEGER" />
+    <result column="p_bc_av_id" property="pBcAvId" jdbcType="INTEGER" />
+    <result column="is_sub_attr" property="isSubAttr" jdbcType="CHAR" />
+    <result column="icon" property="icon" jdbcType="VARCHAR" />
+    <result column="display_order" property="displayOrder" jdbcType="TINYINT" />
+    <result column="status" property="status" jdbcType="CHAR" />
+    <result column="bc_id" property="bcId" jdbcType="SMALLINT" />
+    <result column="is_filter" property="isFilter" jdbcType="CHAR" />
+    <result column="is_mobile_display" property="isMobileDisplay" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    bc_av_id, bc_attr_id, attr_value_id, p_bc_av_id, is_sub_attr, icon, display_order, 
+    status, bc_id, is_filter, is_mobile_display
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_bc_attr_value
+    where bc_av_id = #{bcAvId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_bc_attr_value
+    where bc_av_id = #{bcAvId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.afd.model.product.BcAttrValue" >
+    insert into t_bc_attr_value (bc_av_id, bc_attr_id, attr_value_id, 
+      p_bc_av_id, is_sub_attr, icon, 
+      display_order, status, bc_id, 
+      is_filter, is_mobile_display)
+    values (#{bcAvId,jdbcType=INTEGER}, #{bcAttrId,jdbcType=INTEGER}, #{attrValueId,jdbcType=INTEGER}, 
+      #{pBcAvId,jdbcType=INTEGER}, #{isSubAttr,jdbcType=CHAR}, #{icon,jdbcType=VARCHAR}, 
+      #{displayOrder,jdbcType=TINYINT}, #{status,jdbcType=CHAR}, #{bcId,jdbcType=SMALLINT}, 
+      #{isFilter,jdbcType=CHAR}, #{isMobileDisplay,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.afd.model.product.BcAttrValue" >
+    insert into t_bc_attr_value
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="bcAvId != null" >
+        bc_av_id,
+      </if>
+      <if test="bcAttrId != null" >
+        bc_attr_id,
+      </if>
+      <if test="attrValueId != null" >
+        attr_value_id,
+      </if>
+      <if test="pBcAvId != null" >
+        p_bc_av_id,
+      </if>
+      <if test="isSubAttr != null" >
+        is_sub_attr,
+      </if>
+      <if test="icon != null" >
+        icon,
+      </if>
+      <if test="displayOrder != null" >
+        display_order,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="bcId != null" >
+        bc_id,
+      </if>
+      <if test="isFilter != null" >
+        is_filter,
+      </if>
+      <if test="isMobileDisplay != null" >
+        is_mobile_display,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="bcAvId != null" >
+        #{bcAvId,jdbcType=INTEGER},
+      </if>
+      <if test="bcAttrId != null" >
+        #{bcAttrId,jdbcType=INTEGER},
+      </if>
+      <if test="attrValueId != null" >
+        #{attrValueId,jdbcType=INTEGER},
+      </if>
+      <if test="pBcAvId != null" >
+        #{pBcAvId,jdbcType=INTEGER},
+      </if>
+      <if test="isSubAttr != null" >
+        #{isSubAttr,jdbcType=CHAR},
+      </if>
+      <if test="icon != null" >
+        #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="displayOrder != null" >
+        #{displayOrder,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=CHAR},
+      </if>
+      <if test="bcId != null" >
+        #{bcId,jdbcType=SMALLINT},
+      </if>
+      <if test="isFilter != null" >
+        #{isFilter,jdbcType=CHAR},
+      </if>
+      <if test="isMobileDisplay != null" >
+        #{isMobileDisplay,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.BcAttrValue" >
+    update t_bc_attr_value
+    <set >
+      <if test="bcAttrId != null" >
+        bc_attr_id = #{bcAttrId,jdbcType=INTEGER},
+      </if>
+      <if test="attrValueId != null" >
+        attr_value_id = #{attrValueId,jdbcType=INTEGER},
+      </if>
+      <if test="pBcAvId != null" >
+        p_bc_av_id = #{pBcAvId,jdbcType=INTEGER},
+      </if>
+      <if test="isSubAttr != null" >
+        is_sub_attr = #{isSubAttr,jdbcType=CHAR},
+      </if>
+      <if test="icon != null" >
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="displayOrder != null" >
+        display_order = #{displayOrder,jdbcType=TINYINT},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="bcId != null" >
+        bc_id = #{bcId,jdbcType=SMALLINT},
+      </if>
+      <if test="isFilter != null" >
+        is_filter = #{isFilter,jdbcType=CHAR},
+      </if>
+      <if test="isMobileDisplay != null" >
+        is_mobile_display = #{isMobileDisplay,jdbcType=CHAR},
+      </if>
+    </set>
+    where bc_av_id = #{bcAvId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.afd.model.product.BcAttrValue" >
+    update t_bc_attr_value
+    set bc_attr_id = #{bcAttrId,jdbcType=INTEGER},
+      attr_value_id = #{attrValueId,jdbcType=INTEGER},
+      p_bc_av_id = #{pBcAvId,jdbcType=INTEGER},
+      is_sub_attr = #{isSubAttr,jdbcType=CHAR},
+      icon = #{icon,jdbcType=VARCHAR},
+      display_order = #{displayOrder,jdbcType=TINYINT},
+      status = #{status,jdbcType=CHAR},
+      bc_id = #{bcId,jdbcType=SMALLINT},
+      is_filter = #{isFilter,jdbcType=CHAR},
+      is_mobile_display = #{isMobileDisplay,jdbcType=CHAR}
+    where bc_av_id = #{bcAvId,jdbcType=INTEGER}
+  </update>
+</mapper>

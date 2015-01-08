@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.afd.product.dao.SpecSpecValueMapper" >
+  <resultMap id="BaseResultMap" type="com.afd.model.product.SpecSpecValue" >
+    <id column="s_s_v_id" property="sSVId" jdbcType="INTEGER" />
+    <result column="spec_id" property="specId" jdbcType="INTEGER" />
+    <result column="spec_value_id" property="specValueId" jdbcType="INTEGER" />
+    <result column="display_order" property="displayOrder" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    s_s_v_id, spec_id, spec_value_id, display_order
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_spec_spec_value
+    where s_s_v_id = #{sSVId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_spec_spec_value
+    where s_s_v_id = #{sSVId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.afd.model.product.SpecSpecValue" >
+    insert into t_spec_spec_value (s_s_v_id, spec_id, spec_value_id, 
+      display_order)
+    values (#{sSVId,jdbcType=INTEGER}, #{specId,jdbcType=INTEGER}, #{specValueId,jdbcType=INTEGER}, 
+      #{displayOrder,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.afd.model.product.SpecSpecValue" >
+    insert into t_spec_spec_value
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sSVId != null" >
+        s_s_v_id,
+      </if>
+      <if test="specId != null" >
+        spec_id,
+      </if>
+      <if test="specValueId != null" >
+        spec_value_id,
+      </if>
+      <if test="displayOrder != null" >
+        display_order,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sSVId != null" >
+        #{sSVId,jdbcType=INTEGER},
+      </if>
+      <if test="specId != null" >
+        #{specId,jdbcType=INTEGER},
+      </if>
+      <if test="specValueId != null" >
+        #{specValueId,jdbcType=INTEGER},
+      </if>
+      <if test="displayOrder != null" >
+        #{displayOrder,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.SpecSpecValue" >
+    update t_spec_spec_value
+    <set >
+      <if test="specId != null" >
+        spec_id = #{specId,jdbcType=INTEGER},
+      </if>
+      <if test="specValueId != null" >
+        spec_value_id = #{specValueId,jdbcType=INTEGER},
+      </if>
+      <if test="displayOrder != null" >
+        display_order = #{displayOrder,jdbcType=TINYINT},
+      </if>
+    </set>
+    where s_s_v_id = #{sSVId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.afd.model.product.SpecSpecValue" >
+    update t_spec_spec_value
+    set spec_id = #{specId,jdbcType=INTEGER},
+      spec_value_id = #{specValueId,jdbcType=INTEGER},
+      display_order = #{displayOrder,jdbcType=TINYINT}
+    where s_s_v_id = #{sSVId,jdbcType=INTEGER}
+  </update>
+</mapper>
