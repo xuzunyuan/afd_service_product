@@ -14,20 +14,29 @@
     <result column="is_filter" property="isFilter" jdbcType="CHAR" />
     <result column="is_mobile_display" property="isMobileDisplay" jdbcType="CHAR" />
   </resultMap>
+  
+  <resultMap id="ExtResultMap" type="com.yiwang.model.product.vo.BcAttrValueVO" extends="BaseResultMap">
+    <id column="ATTR_VALUE_NAME" jdbcType="VARCHAR" property="attrValueName" />
+    <id column="PINYIN" jdbcType="VARCHAR" property="pinyin" />
+  </resultMap>
+  
   <sql id="Base_Column_List" >
     bc_av_id, bc_attr_id, attr_value_id, p_bc_av_id, is_sub_attr, icon, display_order, 
     status, bc_id, is_filter, is_mobile_display
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  
+  <select id="getBcAttrValueById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from t_bc_attr_value
     where bc_av_id = #{bcAvId,jdbcType=INTEGER}
   </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from t_bc_attr_value
     where bc_av_id = #{bcAvId,jdbcType=INTEGER}
   </delete>
+  
   <insert id="insert" parameterType="com.afd.model.product.BcAttrValue" >
     insert into t_bc_attr_value (bc_av_id, bc_attr_id, attr_value_id, 
       p_bc_av_id, is_sub_attr, icon, 
@@ -38,6 +47,7 @@
       #{displayOrder,jdbcType=TINYINT}, #{status,jdbcType=CHAR}, #{bcId,jdbcType=SMALLINT}, 
       #{isFilter,jdbcType=CHAR}, #{isMobileDisplay,jdbcType=CHAR})
   </insert>
+  
   <insert id="insertSelective" parameterType="com.afd.model.product.BcAttrValue" >
     insert into t_bc_attr_value
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -111,6 +121,7 @@
       </if>
     </trim>
   </insert>
+  
   <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.BcAttrValue" >
     update t_bc_attr_value
     <set >
@@ -147,6 +158,7 @@
     </set>
     where bc_av_id = #{bcAvId,jdbcType=INTEGER}
   </update>
+  
   <update id="updateByPrimaryKey" parameterType="com.afd.model.product.BcAttrValue" >
     update t_bc_attr_value
     set bc_attr_id = #{bcAttrId,jdbcType=INTEGER},
@@ -161,4 +173,37 @@
       is_mobile_display = #{isMobileDisplay,jdbcType=CHAR}
     where bc_av_id = #{bcAvId,jdbcType=INTEGER}
   </update>
+  
+  <delete id="deleteBcAttrValueByPId" parameterType="java.lang.Long" >
+  	update t_bc_attr_value
+    set status = '0'
+    where p_bc_av_id = #{pBcAvId,jdbctype=decimal}
+  </delete>
+  
+  <delete id="deleteBcAttrValueByBcAttrId" parameterType="java.lang.Long" >
+  	update t_bc_attr_value
+    set status = '0'
+    where bc_attr_id = #{bcAttrId,jdbcType=DECIMAL}
+  </delete>
+  
+  <select id="getBcAttrValueByBcAttrId" resultMap="ExtResultMap" >
+    select bca.bc_av_id, bca.bc_attr_id, bca.attr_value_id, bca.p_bc_av_id, 
+    bca.is_sub_attr, bca.icon, bca.display_order, bca.status,
+    bca.bc_id, bca.is_filter, bca.is_mobile_display, av.attr_value_name, av.pinyin
+    from t_bc_attr_value bca, t_attribute_value av
+    <where>
+	    <if test="bcAttrId !=null">  
+			bca.BC_ATTR_ID = #{bcAttrId,jdbcType=DECIMAL} and bca.P_BC_AV_ID=0  
+		</if>
+		<if test="status != null">
+			and bca.STATUS = #{status,jdbcType=CHAR}
+		</if>
+		<if test="true">
+			and bca.ATTR_VALUE_ID=av.ATTR_VALUE_ID
+		</if>
+    </where>
+    
+	order by bca.DISPLAY_ORDER ASC
+  </select>
+  
 </mapper>

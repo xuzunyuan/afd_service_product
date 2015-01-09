@@ -9,27 +9,31 @@
     <result column="p_bc_id" property="pBcId" jdbcType="DECIMAL" />
     <result column="path_id" property="pathId" jdbcType="VARCHAR" />
     <result column="path_name" property="pathName" jdbcType="VARCHAR" />
-    <result column="is_leaf" property="isLeaf" jdbcType="CHAR" />
+    <result column="is_leaf" property="isLeaf" jdbcType="BOOLEAN" />
     <result column="display_order" property="displayOrder" jdbcType="DECIMAL" />
     <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
     <result column="update_data" property="updateData" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="CHAR" />
   </resultMap>
+  
   <sql id="Base_Column_List" >
     bc_id, bc_name, bc_code, bc_level, p_bc_id, path_id, path_name, is_leaf, display_order, 
     create_date, update_data, status
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Short" >
+  
+  <select id="getByBcId" resultMap="BaseResultMap" parameterType="java.lang.Short" >
     select 
     <include refid="Base_Column_List" />
     from t_base_category
     where bc_id = #{bcId,jdbcType=SMALLINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Short" >
+  
+  <delete id="deleteByBcId" parameterType="java.lang.Short" >
     delete from t_base_category
     where bc_id = #{bcId,jdbcType=SMALLINT}
   </delete>
-  <insert id="insert" parameterType="com.afd.model.product.BaseCategory" >
+  
+  <insert id="insertBaseCategory" parameterType="com.afd.model.product.BaseCategory" >
     insert into t_base_category (bc_id, bc_name, bc_code, 
       bc_level, p_bc_id, path_id, 
       path_name, is_leaf, display_order, 
@@ -37,10 +41,11 @@
       )
     values (#{bcId,jdbcType=SMALLINT}, #{bcName,jdbcType=VARCHAR}, #{bcCode,jdbcType=VARCHAR}, 
       #{bcLevel,jdbcType=CHAR}, #{pBcId,jdbcType=DECIMAL}, #{pathId,jdbcType=VARCHAR}, 
-      #{pathName,jdbcType=VARCHAR}, #{isLeaf,jdbcType=CHAR}, #{displayOrder,jdbcType=DECIMAL}, 
+      #{pathName,jdbcType=VARCHAR}, #{isLeaf,jdbcType=BOOLEAN}, #{displayOrder,jdbcType=DECIMAL}, 
       #{createDate,jdbcType=TIMESTAMP}, #{updateData,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR}
       )
   </insert>
+  
   <insert id="insertSelective" parameterType="com.afd.model.product.BaseCategory" >
     insert into t_base_category
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -104,7 +109,7 @@
         #{pathName,jdbcType=VARCHAR},
       </if>
       <if test="isLeaf != null" >
-        #{isLeaf,jdbcType=CHAR},
+        #{isLeaf,jdbcType=BOOLEAN},
       </if>
       <if test="displayOrder != null" >
         #{displayOrder,jdbcType=DECIMAL},
@@ -120,6 +125,7 @@
       </if>
     </trim>
   </insert>
+  
   <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.BaseCategory" >
     update t_base_category
     <set >
@@ -142,7 +148,7 @@
         path_name = #{pathName,jdbcType=VARCHAR},
       </if>
       <if test="isLeaf != null" >
-        is_leaf = #{isLeaf,jdbcType=CHAR},
+        is_leaf = #{isLeaf,jdbcType=BOOLEAN},
       </if>
       <if test="displayOrder != null" >
         display_order = #{displayOrder,jdbcType=DECIMAL},
@@ -159,7 +165,8 @@
     </set>
     where bc_id = #{bcId,jdbcType=SMALLINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.afd.model.product.BaseCategory" >
+  
+  <update id="updateBaseCategory" parameterType="com.afd.model.product.BaseCategory" >
     update t_base_category
     set bc_name = #{bcName,jdbcType=VARCHAR},
       bc_code = #{bcCode,jdbcType=VARCHAR},
@@ -167,11 +174,75 @@
       p_bc_id = #{pBcId,jdbcType=DECIMAL},
       path_id = #{pathId,jdbcType=VARCHAR},
       path_name = #{pathName,jdbcType=VARCHAR},
-      is_leaf = #{isLeaf,jdbcType=CHAR},
+      is_leaf = #{isLeaf,jdbcType=BOOLEAN},
       display_order = #{displayOrder,jdbcType=DECIMAL},
       create_date = #{createDate,jdbcType=TIMESTAMP},
       update_data = #{updateData,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=CHAR}
     where bc_id = #{bcId,jdbcType=SMALLINT}
   </update>
+  
+  <select id="getBaseCategorysByPId" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_BASE_CATEGORY
+    <where>
+    	<if test="pId != null">
+			P_BC_ID = #{pId,jdbcType=DECIMAL}
+		</if>
+		<if test="status != null">
+			and STATUS = #{status,jdbcType=CHAR}
+		</if>
+    </where>
+    
+    order by DISPLAY_ORDER 
+  </select>
+  
+  <select id="getBaseCategoryByNameAndPid" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_BASE_CATEGORY
+    <where>
+    	<if test="name != null">
+			BC_NAME = #{name,jdbcType=VARCHAR}
+		</if>
+		<if test="pId != null">
+			and P_BC_ID = #{pId,jdbcType=DECIMAL}
+		</if>
+		<if test="status != null">
+			and STATUS = #{status,jdbcType=CHAR}
+		</if>
+    </where>
+  </select>
+  
+  <update id="updateBaseOrder" >
+    update T_BASE_CATEGORY
+    set DISPLAY_ORDER = DISPLAY_ORDER + #{value}
+    where P_BC_ID = #{pId,jdbcType=DECIMAL} and 
+    <choose>
+		<when test="value &gt; 0">
+			DISPLAY_ORDER &lt; #{order} 
+		</when>
+		<when test="value &lt; 0">
+			DISPLAY_ORDER &gt; #{order} 
+		</when>
+	</choose>
+	 and STATUS=1
+  </update>
+  
+  <select id="getBCOrderIds"  resultType="java.lang.Integer">
+    select BC_ID
+    from T_BASE_CATEGORY
+    where P_BC_ID = #{pId,jdbcType=DECIMAL} and 
+    <choose>
+		<when test="value &gt; 0">
+			DISPLAY_ORDER &lt; #{order} 
+		</when>
+		<when test="value &lt; 0">
+			DISPLAY_ORDER &gt; #{order} 
+		</when>
+	</choose>
+	 and STATUS=1
+  </select>
+  
 </mapper>
