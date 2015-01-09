@@ -32,12 +32,13 @@
     where bc_av_id = #{bcAvId,jdbcType=INTEGER}
   </select>
   
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from t_bc_attr_value
-    where bc_av_id = #{bcAvId,jdbcType=INTEGER}
+  <delete id="deleteBcAttrValueById" parameterType="java.lang.Long" >
+  	update T_BC_ATTR_VALUE
+    set STATUS = '0'
+    where BC_AV_ID = #{bcAvId,jdbcType=DECIMAL}
   </delete>
   
-  <insert id="insert" parameterType="com.afd.model.product.BcAttrValue" >
+  <insert id="insertBcAttrValue" parameterType="com.afd.model.product.BcAttrValue" >
     insert into t_bc_attr_value (bc_av_id, bc_attr_id, attr_value_id, 
       p_bc_av_id, is_sub_attr, icon, 
       display_order, status, bc_id, 
@@ -122,7 +123,7 @@
     </trim>
   </insert>
   
-  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.BcAttrValue" >
+  <update id="updateBcAttrValueById" parameterType="com.afd.model.product.BcAttrValue" >
     update t_bc_attr_value
     <set >
       <if test="bcAttrId != null" >
@@ -193,17 +194,102 @@
     from t_bc_attr_value bca, t_attribute_value av
     <where>
 	    <if test="bcAttrId !=null">  
-			bca.BC_ATTR_ID = #{bcAttrId,jdbcType=DECIMAL} and bca.P_BC_AV_ID=0  
+			bca.bc_attr_id = #{bcAttrId,jdbcType=DECIMAL} and bca.P_BC_AV_ID=0  
 		</if>
 		<if test="status != null">
-			and bca.STATUS = #{status,jdbcType=CHAR}
+			and bca.status = #{status,jdbcType=CHAR}
 		</if>
 		<if test="true">
-			and bca.ATTR_VALUE_ID=av.ATTR_VALUE_ID
+			and bca.attr_value_id=av.attr_value_id
 		</if>
     </where>
     
 	order by bca.DISPLAY_ORDER ASC
   </select>
+  
+  <select id="getBcAttrValueByPBcAvId" resultMap="ExtResultMap" >
+    select bca.bc_av_id, bca.bc_attr_id, bca.attr_value_id, bca.p_bc_av_id, 
+    bca.is_sub_attr, bca.icon, bca.display_order, bca.status, 
+    bca.bc_id, bca.is_filter, bca.is_mobile_display, bca.m_display_position, av.attr_value_name, av.pinyin
+    from t_bc_attr_value bca, t_attribute_value av
+    <where> 
+		<if test="pBcAvId !=null">  
+			bca.p_bc_av_id = #{pBcAvId,jdbcType=DECIMAL}
+		</if>
+		<if test="status != null">
+			and bca.status = #{status,jdbcType=CHAR}
+		</if>
+		<if test="true">
+			and bca.attr_value_id=av.ATTR_VALUE_ID
+		</if>
+	</where>
+	order by bca.display_order ASC
+  </select>
+  
+  <select id="getBcAttrValueByAttrValueId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+	<include refid="Base_Column_List" />
+    from T_BC_ATTR_VALUE
+    where ATTR_VALUE_ID = #{attrValueId,jdbcType=DECIMAL} and STATUS = 1
+  </select>
+  
+  <select id="getBcAttrValue" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_BC_ATTR_VALUE
+    <where>
+	    <if test="bcAttrId!= null and bcAttrId >0">  
+			BC_ATTR_ID = #{bcAttrId,jdbcType=DECIMAL}
+		</if>
+		<if test="attrValueId!= null and attrValueId >0">
+			and ATTR_VALUE_ID = #{attrValueId,jdbcType=DECIMAL}
+		</if>
+		<if test="pBcAvId != null and pBcAvId >0">
+			and P_BC_AV_ID = #{pBcAvId,jdbcType=DECIMAL}
+		</if>
+		<if test="true">
+			and STATUS = '1'
+		</if>
+    </where>
+  </select>
+  
+  <select id="getMaxDisplayOrder" resultType="java.lang.Integer" parameterType="java.lang.Long" >
+    select max(display_order) 
+    from T_BC_ATTR_VALUE
+    <where>
+	    <if test="bcAttrId!= null and bcAttrId >0">  
+			BC_ATTR_ID = #{bcAttrId,jdbcType=DECIMAL}
+		</if>
+		<if test="pBcAvId != null and pBcAvId >0">
+			and P_BC_AV_ID = #{pBcAvId,jdbcType=DECIMAL}
+		</if>
+		<if test="true">
+			and STATUS = '1'
+		</if>
+    </where>
+  </select>
+  
+  <update id="updateBcAttrValueOrders" >
+    update T_BC_ATTR_VALUE
+    set DISPLAY_ORDER = DISPLAY_ORDER + #{value}
+    where 
+    <choose>
+		<when test="flag == 0">
+			BC_ATTR_ID = #{id} and 
+		</when>
+		<when test="flag == 1">
+			P_BC_AV_ID = #{id} and 
+		</when>
+	</choose>
+    <choose>
+		<when test="value &gt; 0">
+			DISPLAY_ORDER &lt; #{order} 
+		</when>
+		<when test="value &lt; 0">
+			DISPLAY_ORDER &gt; #{order} 
+		</when>
+	</choose>
+	 and STATUS=1
+  </update>
   
 </mapper>

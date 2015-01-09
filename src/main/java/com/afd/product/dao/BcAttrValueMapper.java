@@ -8,9 +8,20 @@ import com.afd.model.product.BcAttrValue;
 import com.afd.model.product.vo.BcAttrValueVO;
 
 public interface BcAttrValueMapper {
-    int deleteByPrimaryKey(Integer bcAvId);
+	
+	/**
+     * 删除指定ID的属性值
+     * @param bcAvId
+     * @return
+     */
+    boolean deleteBcAttrValueById(Long bcAvId);
 
-    int insert(BcAttrValue record);
+    /**
+     * 插入属性值信息
+     * @param bcAttrValue
+     * @return
+     */
+    boolean insertBcAttrValue(BcAttrValue bcAttrValue);
 
     int insertSelective(BcAttrValue record);
 
@@ -20,8 +31,22 @@ public interface BcAttrValueMapper {
 	 * @return
 	 */
 	BcAttrValue getBcAttrValueById(Long bcAvId);
+	
+	BcAttrValue getBcAttrValue(@Param(value = "bcAttrId")Long bcAttrId, @Param(value = "attrValueId")Long attrValueId, @Param(value = "pBcAvId")Long pBcAvId);
+	
+	/**
+	 * @param bcAttrId 类目属性关系ID
+	 * @param pBcAvId 一级目属性值关系ID
+	 * @return
+	 */
+	Integer getMaxDisplayOrder(@Param(value = "bcAttrId")Long bcAttrId, @Param(value = "pBcAvId")Long pBcAvId);
 
-    int updateByPrimaryKeySelective(BcAttrValue record);
+	/**
+     * 更新属性值信息
+     * @param bcAttrValue
+     * @return
+     */
+    boolean updateBcAttrValueById(BcAttrValue bcAttrValue);
 
     int updateByPrimaryKey(BcAttrValue record);
     
@@ -39,6 +64,13 @@ public interface BcAttrValueMapper {
     boolean deleteBcAttrValueByBcAttrId(Long bcAttrId);
     
     /**
+	 * 根据属性值ID获取关联的类目属性关系ID列表
+	 * @param attrValueId 属性值ID
+	 * @return 
+	 */
+	List<BcAttrValue> getBcAttrValueByAttrValueId(Long attrValueId);
+    
+    /**
 	 * 获取类目属性的所有一级值
 	 * @param bcAttrId 类目属性关系ID
 	 * @return
@@ -52,4 +84,13 @@ public interface BcAttrValueMapper {
 	 * @return
 	 */
 	List<BcAttrValueVO> getBcAttrValueByPBcAvId(@Param(value = "pBcAvId") Long pBcAvId, @Param(value = "status") String status);
+	
+	/**
+	 * @param flag 0:按类目属性关系,1:按父类目属性关系值ID
+	 * @param id flag＝0时:类目属性关系ID,flag＝1时:类目属性关系值ID,
+	 * @param order 显示位置
+	 * @param value －1:置底,1置顶
+	 * @return
+	 */
+	boolean updateBcAttrValueOrders(@Param("flag") Integer flag, @Param("id") Long id, @Param("order") Integer order, @Param("value") Integer value);
 }

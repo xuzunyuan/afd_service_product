@@ -9,20 +9,23 @@
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="is_filter" property="isFilter" jdbcType="CHAR" />
   </resultMap>
+  
   <sql id="Base_Column_List" >
     bc_spec_id, bc_id, spec_id, display_order, status, is_filter
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="getBcSpecById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from t_bc_spec
-    where bc_spec_id = #{bcSpecId,jdbcType=INTEGER}
+    where bc_spec_id = #{bcSpecId,jdbcType=Long}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  
+  <delete id="deleteBcSpecById" parameterType="java.lang.Integer" >
     delete from t_bc_spec
     where bc_spec_id = #{bcSpecId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.afd.model.product.BcSpec" >
+  
+  <insert id="insertBcSpec" parameterType="com.afd.model.product.BcSpec" >
     insert into t_bc_spec (bc_spec_id, bc_id, spec_id, 
       display_order, status, is_filter
       )
@@ -30,6 +33,7 @@
       #{displayOrder,jdbcType=TINYINT}, #{status,jdbcType=CHAR}, #{isFilter,jdbcType=CHAR}
       )
   </insert>
+  
   <insert id="insertSelective" parameterType="com.afd.model.product.BcSpec" >
     insert into t_bc_spec
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -73,7 +77,8 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.BcSpec" >
+  
+  <update id="updateBcSpecById" parameterType="com.afd.model.product.BcSpec" >
     update t_bc_spec
     <set >
       <if test="bcId != null" >
@@ -94,6 +99,7 @@
     </set>
     where bc_spec_id = #{bcSpecId,jdbcType=INTEGER}
   </update>
+  
   <update id="updateByPrimaryKey" parameterType="com.afd.model.product.BcSpec" >
     update t_bc_spec
     set bc_id = #{bcId,jdbcType=SMALLINT},
@@ -103,4 +109,38 @@
       is_filter = #{isFilter,jdbcType=CHAR}
     where bc_spec_id = #{bcSpecId,jdbcType=INTEGER}
   </update>
+  
+  <update id="updateBcSpecOrders" >
+    update T_BC_SPEC
+    set DISPLAY_ORDER = DISPLAY_ORDER + #{value}
+    where BC_ID = #{bcId,jdbcType=DECIMAL} and 
+    <choose>
+		<when test="value &gt; 0">
+			DISPLAY_ORDER &lt; #{order} 
+		</when>
+		<when test="value &lt; 0">
+			DISPLAY_ORDER &gt; #{order} 
+		</when>
+	</choose>
+	 and STATUS=1
+  </update>
+  
+  <select id="getBcSpecByBcId" resultMap="ExtResultMap"> 
+	SELECT bcs.BC_SPEC_ID, bcs.BC_ID, bcs.SPEC_ID, bcs.DISPLAY_ORDER, bcs.STATUS,
+	bcs.IS_FILTER, s.SPEC_NAME
+	FROM T_BC_SPEC bcs, T_SPEC s
+	<where> 
+		<if test="bcId != null">
+			bcs.BC_ID = #{bcId,jdbcType=DECIMAL}
+		</if>
+		<if test="status != null">
+			and bcs.STATUS = #{status,jdbcType=CHAR}
+		</if>
+		<if test="true">
+			and bcs.SPEC_ID = s.SPEC_ID
+		</if>
+	</where>
+	ORDER BY bcs.DISPLAY_ORDER ASC
+  </select> 
+  
 </mapper>

@@ -245,4 +245,21 @@
 	 and STATUS=1
   </select>
   
+  <select id="getBaseCategoryByName" resultMap="BaseResultMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_BASE_CATEGORY
+    <where>
+    	<if test="bcName != null">
+			BC_NAME = #{bcName,jdbcType=VARCHAR}
+		</if>
+    	<if test="pathName != null">
+			and PATH_NAME = #{pathName,jdbcType=VARCHAR}
+		</if>
+		<if test="status != null">
+			and STATUS = #{status,jdbcType=CHAR}
+		</if>
+    </where>
+  </select>
+  
 </mapper>

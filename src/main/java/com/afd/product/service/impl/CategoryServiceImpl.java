@@ -4,11 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,29 +17,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import com.afd.common.mybatis.Page;
 import com.afd.constants.SystemConstants;
 import com.afd.constants.product.ProductConstants;
-import com.afd.model.product.AttrAttrValue;
-import com.afd.model.product.Attribute;
-import com.afd.model.product.AttributeValue;
 import com.afd.model.product.BaseCategory;
 import com.afd.model.product.BcAttrValue;
 import com.afd.model.product.BcAttribute;
 import com.afd.model.product.BcSpec;
 import com.afd.model.product.BcSpecValue;
-import com.afd.model.product.Brand;
-import com.afd.model.product.Spec;
-import com.afd.model.product.SpecSpecValue;
-import com.afd.model.product.SpecValue;
-import com.afd.model.product.vo.AttrAttrValueVO;
 import com.afd.model.product.vo.BaseCategoryInfoVO;
 import com.afd.model.product.vo.BaseCategoryInfoVO.Attr;
 import com.afd.model.product.vo.BaseCategoryInfoVO.Attr.AttrValue;
 import com.afd.model.product.vo.BcAttrValueVO;
 import com.afd.model.product.vo.BcAttributeVO;
 import com.afd.model.product.vo.BcSpecVO;
-import com.afd.model.product.vo.SpecSpecValueVO;
 import com.afd.product.dao.AttrAttrValueMapper;
 import com.afd.product.dao.AttributeMapper;
 import com.afd.product.dao.AttributeValueMapper;
@@ -662,18 +648,6 @@ public class CategoryServiceImpl implements ICategoryService {
 		return bcAttrValues;
 	}
 	@Override
-	public Page<BcAttrValueVO> getBcAttrValueByBcAttrIdPage(Long bcAttrId,
-			String status, Page<BcAttrValueVO> page) {
-		page.setResult(this.bcAttrValueMapper.getBcAttrValueByBcAttrIdPage(bcAttrId, status, page));;
-		return page;
-	}
-	@Override
-	public Page<BcAttrValueVO> getBcAttrValueByPBcAvIdPage(Long pBcAvId,
-			String status, Page<BcAttrValueVO> page) {
-		page.setResult(this.bcAttrValueMapper.getBcAttrValueByPBcAvIdPage(pBcAvId, status, page));
-		return page;
-	}
-	@Override
 	public List<BcAttrValue> getBcAttrValueByAttrValueId(Long attrValueId) {
 		return this.bcAttrValueMapper.getBcAttrValueByAttrValueId(attrValueId);
 	}
@@ -988,7 +962,7 @@ public class CategoryServiceImpl implements ICategoryService {
 		if(Math.abs(sbcs.getDisplayOrder()-dbcs.getDisplayOrder()) == 1){
 			int order = sbcs.getDisplayOrder();
 			sbcs.setDisplayOrder(dbcs.getDisplayOrder());
-			dbcs.setDisplayOrder((short)order);
+			dbcs.setDisplayOrder(order);
 			
 			if(this.updateBcSpecById(sbcs) && this.updateBcSpecById(dbcs)){
 				result = true;
@@ -1020,23 +994,13 @@ public class CategoryServiceImpl implements ICategoryService {
 
 	@Override
 	public List<BcSpecVO> getBcSpecByBcId(Integer bcId, String status) {
-		RWPlugin.setUseWriteDbOnly(Boolean.TRUE);
-		List<BcSpecVO> bcSpecList = this.bcSpecMapper.getBcSpecByBcId(bcId, status);
-		RWPlugin.setUseWriteDbOnly(Boolean.FALSE);
-		return bcSpecList;
+		return this.bcSpecMapper.getBcSpecByBcId(bcId, status);
 	}
 
 	@Override
 	public BcSpec getBcSpecById(Long bcSpecId) {
 		return this.bcSpecMapper.getBcSpecById(bcSpecId);
 	}
-	@Override
-	public Page<BcSpecVO> getBcSpecByBcIdPage(Integer bcId, String status, Page<BcSpecVO> page) {
-		page.setResult(this.bcSpecMapper.getBcSpecByBcIdPage(bcId, status, page));
-		
-		return page;
-	}
-	
 	
 	
 	@Override
@@ -1048,9 +1012,7 @@ public class CategoryServiceImpl implements ICategoryService {
 			
 			try {
 				//清除缓存中的类目相关信息
-				RWPlugin.setUseWriteDbOnly(Boolean.TRUE);
 				this.redisTemplate.opsForHash().delete(ProductConstants.BASB, ProductConstants.BC_ATTR_SPEC_BRAND+this.getBcSpecById(bcSpecValue.getBcSpecId()).getBcId());
-				RWPlugin.setUseWriteDbOnly(Boolean.FALSE);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -1119,7 +1081,7 @@ public class CategoryServiceImpl implements ICategoryService {
 		
 		//向上或向下
 		if(Math.abs(sbcsv.getDisplayOrder()-dbcsv.getDisplayOrder()) == 1){
-			short order = sbcsv.getDisplayOrder();
+			Integer order = sbcsv.getDisplayOrder();
 			sbcsv.setDisplayOrder(dbcsv.getDisplayOrder());
 			dbcsv.setDisplayOrder(order);
 			
@@ -1158,200 +1120,6 @@ public class CategoryServiceImpl implements ICategoryService {
 	public List<BcSpecValue> getBcSpecValueByBcSpecId(Long bcSpecId, String status) {
 		return this.bcSpecValueMapper.getBcSpecValueByBcSpecId(bcSpecId, status);
 	}
-	@Override
-	public Page<BcSpecValue> getBcSpecValueByBcSpecIdPage(Long bcSpecId,
-			String status, Page<BcSpecValue> page) {
-		page.setResult(this.bcSpecValueMapper.getBcSpecValueByBcSpecIdPage(bcSpecId, status, page));
-		return page;
-	}
-	@Override
-	public Long insertBrand(Brand brand) {
-		Long id = 0l;
-		if(this.brandMapper.insertBrand(brand)){
-			id = brand.getBrandId();
-		}
-		
-		return id;
-	}
-
-	@Override
-	public boolean updateByBrandId(Brand brand) {
-		boolean re = this.brandMapper.updateByBrandId(brand);
-		if(re){
-			List<BrandBc> bbcList = this.brandBcMapper.getByBrandIdAndBcId(brand.getBrandId(), null);
-			
-			if(bbcList!=null && bbcList.size()>0){
-				Object[] keys = new Object[bbcList.size()];
-				
-				for(int i=0; i<bbcList.size(); i++){
-					keys[i] = ProductConstants.BC_ATTR_SPEC_BRAND + bbcList.get(i).getBcId();
-				}
-				
-				try {
-					//清空缓存
-					this.redisTemplate.opsForHash().delete(ProductConstants.BASB, keys);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		
-		return re;
-	}
-
-	@Override
-	public int deleteByBrandId(Long brandId) {
-		int result = 1;
-		
-		//已关联类目不允许删除
-		List<BrandBc> bbcList = this.brandBcMapper.getByBrandIdAndBcId(brandId, null);
-		if(bbcList!=null && bbcList.size()>0){
-			result = -1;
-		}else{
-			Brand brand = this.brandMapper.getByBrandId(brandId);
-			brand.setStatus(SystemConstants.DB_STATUS_INVALID);
-			//修改为无效状态
-			result = this.brandMapper.updateByBrandId(brand)?1:0;
-		}
-		
-		return result;
-	}
-
-	@Override
-	public Brand getByBrandId(Long brandId) {
-		return this.brandMapper.getByBrandId(brandId);
-	}
-
-	@Override
-	public Brand getBrandByName(String brandName, String brandEname, String status) {
-		return this.brandMapper.getBrandByName(brandName, brandEname, status);
-	}
-
-	@Override
-	@UseWriteDbOnly
-	public Page<BrandBcVO> getBrandsByPage(Map<?, ?> map, Page<BrandBcVO> page) {
-		page.setResult(this.brandMapper.getBrandsByPage(map, page));
-		
-		return page;
-	}
-	
-	
-	@Override
-	public boolean deleteById(Long brandBcId) {
-		BrandBc brandBc = getBrandBcById(brandBcId);
-		
-		boolean re = this.brandBcMapper.deleteById(brandBcId);
-		if(re){
-			try {
-				//清除缓存
-				this.redisTemplate.opsForHash().delete(ProductConstants.BASB, ProductConstants.BC_ATTR_SPEC_BRAND+brandBc.getBcId());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-			//检查该品牌是否还有别的类目关联，若无则修改品牌关联状态
-			RWPlugin.setUseWriteDbOnly(Boolean.TRUE);
-			List<BrandBc> bbList = this.brandBcMapper.getByBrandIdAndBcId(brandBc.getBrandId(), null);
-			RWPlugin.setUseWriteDbOnly(Boolean.FALSE);
-			
-			if(bbList==null || bbList.size()==0){
-				//修改品牌状态
-				Brand brand = this.brandMapper.getByBrandId(brandBc.getBrandId());
-				brand.setBrandStatus(ProductConstants.BRAND_UNLINK);
-				this.brandMapper.updateByBrandId(brand);
-			}
-		}
-		
-		return re;
-	}
-	
-	
-	@Override
-	public boolean modBrandCateShow(Long brandBcId, Integer flag, Boolean value) {
-		return this.brandBcMapper.modBrandCateShow(brandBcId, flag, value);
-	}
-
-	@Override
-	public boolean delByBrandId(Long brandId) {
-		boolean re = false;
-		List<BrandBc> bbList = this.brandBcMapper.getByBrandIdAndBcId(brandId, null);
-		
-		if(bbList!=null && bbList.size()>0){
-			re = this.brandBcMapper.deleteByBrandId(brandId);
-			if(re){
-				//修改品牌状态
-				Brand brand = this.brandMapper.getByBrandId(brandId);
-				brand.setBrandStatus(ProductConstants.BRAND_UNLINK);
-				this.brandMapper.updateByBrandId(brand);
-				
-				Object[] keys = new Object[bbList.size()];
-				
-				for(int i=0; i<bbList.size(); i++){
-					keys[i] = ProductConstants.BC_ATTR_SPEC_BRAND + bbList.get(i).getBcId();
-				}
-				
-				try {
-					//清空缓存
-					this.redisTemplate.opsForHash().delete(ProductConstants.BASB, keys);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		
-		return re;
-	}
-
-	@Override
-	public Long insertBrandBc(BrandBc brandBc) {
-		Long id = 0l;
-		boolean re = this.brandBcMapper.insertBrandBc(brandBc);
-		if(re){
-			id = brandBc.getBrandBcId();
-			try {
-				//清除缓存
-				this.redisTemplate.opsForHash().delete(ProductConstants.BASB, ProductConstants.BC_ATTR_SPEC_BRAND+brandBc.getBcId());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-		return id;
-	}
-	
-	@Override
-	public BrandBc getBrandBcById(Long brandBcId) {
-		return this.brandBcMapper.getBrandBcById(brandBcId);
-	}
-	
-	@Override
-	public List<BrandBc> getByBrandIdAndBcId(Long brandId, Integer bcId) {
-		return this.brandBcMapper.getByBrandIdAndBcId(brandId, bcId);
-	}
-	
-	@Override
-	public boolean updateBrandBcById(BrandBc brandBc) {
-		BrandBc brandBcS = getBrandBcById(brandBc.getBrandBcId());
-		
-		boolean re = this.brandBcMapper.updateBrandBcById(brandBc);
-		if(re){
-			try {
-				//清除缓存
-				this.redisTemplate.opsForHash().delete(ProductConstants.BASB, ProductConstants.BC_ATTR_SPEC_BRAND+brandBcS.getBcId());
-				if(brandBcS.getBcId().intValue() != brandBc.getBcId()){
-					this.redisTemplate.opsForHash().delete(ProductConstants.BASB, ProductConstants.BC_ATTR_SPEC_BRAND+brandBc.getBcId());
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-		return re;
-	}
-
-	
-	
-	
 
 	/**
 	 * 获取所有子类目
@@ -1361,55 +1129,10 @@ public class CategoryServiceImpl implements ICategoryService {
 		if(list!=null && list.size()>0){
 			for(BaseCategory bc : list){
 				//非叶子类目
-				if(!bc.isLeaf()){
+				if(!bc.getIsLeaf()){
 					List<BaseCategory> subList = this.getBaseCategorysByPId(bc.getBcId(), status);
 					bc.setCategories(subList);
 					this.getChildBaseCategory(subList, status);
-				}
-			}
-		}
-	}
-	/**
-	 * 获取所有父类目
-	 * @param list
-	 */
-	protected void getParentBaseCategory(BaseCategory bc) {
-		if(bc.getpBcId() > 0){
-			BaseCategory p = this.getByBcId(bc.getpBcId());
-			bc.setpBc(p);
-			this.getParentBaseCategory(p);
-		}
-	}
-	
-	/**
-	 * 获取所有子类目
-	 * @param list
-	 */
-	protected void getSubContractCategory(List<ContractCategory> list, String status) {
-		if(list!=null && list.size()>0){
-			for(ContractCategory cc : list){
-				//非叶子类目
-				if(!cc.isLeaf()){
-					List<ContractCategory> subList = this.getContractCategorysByPId(cc.getCcId(), status);
-					cc.setCategories(subList);
-					this.getSubContractCategory(subList, status);
-				}
-			}
-		}
-	}
-	
-	/**
-	 * 获取所有子类目
-	 * @param list
-	 */
-	protected void getSubSaleCategory(List<SaleCategory> list, String status) {
-		if(list!=null && list.size()>0){
-			for(SaleCategory sc : list){
-				//非叶子类目
-				if(!sc.isLeaf()){
-					List<SaleCategory> subList = this.getSaleCategorysByPId(sc.getScId(), null, status, null);
-					sc.setCategories(subList);
-					this.getSubSaleCategory(subList, status);
 				}
 			}
 		}
@@ -1447,10 +1170,9 @@ public class CategoryServiceImpl implements ICategoryService {
 				av.setAttrValue(bav.getAttrValueName());
 				av.setDisplayOrder(bav.getDisplayOrder());
 				av.setIcon(bav.getIcon());
-				av.setIsSubAttr(bav.getStatus());
+				av.setIsSubAttr(bav.getIsSubAttr());
 				av.setIsFilter(bav.getIsFilter());
 				av.setIsMobileDisplay(bav.getIsMobileDisplay());
-				av.setmDisplayPosition(bav.getmDisplayPosition());
 				//若有子属性循环获取
 				if(bav.getIsSubAttr()){
 					av.setSubAttrObj(this.getBcAttrValueList(bav));;
@@ -1462,30 +1184,8 @@ public class CategoryServiceImpl implements ICategoryService {
 	}
 
 	@Override
-	public Map<Integer,BaseCategory> getAllBcNameByBcIds(Set<Integer> bcIds,
-			String status) {
-		Map<Integer,BaseCategory> resultMap = new HashMap<Integer,BaseCategory>();
-		for (Integer bcId : bcIds) {
-			BaseCategory bc = new BaseCategory();
-			BaseCategory threeBc = this.getByBcId(bcId);
-			String pathName = threeBc.getPathName();
-			pathName += "/"+ threeBc.getBcName();
-			String bcName = pathName.replace("|", "/");
-			bc.setBcName(bcName);
-			bc.setBcCode(threeBc.getBcCode());
-			resultMap.put(bcId, bc);
-		}
-		return resultMap;
-	}
-
-	@Override
-	public String getAllBcNameByBcId(String cateLevelThree, int bcId,
-			Object status) {
-		BaseCategory threeBc = this.getByBcId(bcId);
-		String pathName = threeBc.getPathName();
-		pathName += "/"+ threeBc.getBcName();
-		pathName.replace("|", "/");
-		return pathName;
+	public BaseCategory getBaseCategoryByName(String bcName, String pathName, String status) {
+		return this.bcMapper.getBaseCategoryByName(bcName, pathName, status);
 	}
 
 }

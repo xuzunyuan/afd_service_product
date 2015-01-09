@@ -12,14 +12,18 @@ public interface BaseCategoryMapper {
 
     public boolean insertBaseCategory(BaseCategory record);
 
-    public int insertSelective(BaseCategory record);
-
     public BaseCategory getByBcId(Integer bcId);
-
-    public int updateByPrimaryKeySelective(BaseCategory record);
 
     public boolean updateBaseCategory(BaseCategory record);
     
+    /**
+	 * @param bcName 类目名称
+	 * @param pathName 父类目名称
+	 * @param status0:无效,1:有效
+	 * @return
+	 */
+	public BaseCategory getBaseCategoryByName(@Param("bcName")String bcName, @Param("pathName")String pathName, @Param("status")String status);
+	
     /**
 	 * 获取指定类目的一级子类目
 	 * @param pId 基本类目ID

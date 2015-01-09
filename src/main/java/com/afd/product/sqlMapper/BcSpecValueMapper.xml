@@ -14,21 +14,32 @@
     <result column="is_mobile_display" property="isMobileDisplay" jdbcType="CHAR" />
     <result column="m_display_position" property="mDisplayPosition" jdbcType="INTEGER" />
   </resultMap>
+  
   <sql id="Base_Column_List" >
     bc_sv_id, bc_spec_id, spec_value_id, spec_value_name, img_url, display_order, status, 
     bc_id, is_filter, is_mobile_display, m_display_position
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  
+  <select id="getBcSpecValueById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from t_bc_spec_value
     where bc_sv_id = #{bcSvId,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from t_bc_spec_value
-    where bc_sv_id = #{bcSvId,jdbcType=INTEGER}
+  
+  <delete id="deleteBcSpecValueById" parameterType="java.lang.Long" >
+  	update T_BC_SPEC_VALUE
+    set STATUS = '0'
+    where BC_SV_ID = #{bcSvId,jdbcType=DECIMAL}
   </delete>
-  <insert id="insert" parameterType="com.afd.model.product.BcSpecValue" >
+  
+  <delete id="deleteBcSpecValueByBcSpecId" parameterType="java.lang.Long">
+      update T_BC_SPEC_VALUE
+      set STATUS = '0'
+      where BC_SPEC_ID = #{bcSpecId,jdbcType=DECIMAL}
+  </delete>
+  
+  <insert id="insertBcSpecValue" parameterType="com.afd.model.product.BcSpecValue" >
     insert into t_bc_spec_value (bc_sv_id, bc_spec_id, spec_value_id, 
       spec_value_name, img_url, display_order, 
       status, bc_id, is_filter, 
@@ -38,6 +49,7 @@
       #{status,jdbcType=CHAR}, #{bcId,jdbcType=SMALLINT}, #{isFilter,jdbcType=CHAR}, 
       #{isMobileDisplay,jdbcType=CHAR}, #{mDisplayPosition,jdbcType=INTEGER})
   </insert>
+  
   <insert id="insertSelective" parameterType="com.afd.model.product.BcSpecValue" >
     insert into t_bc_spec_value
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -111,7 +123,8 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.BcSpecValue" >
+  
+  <update id="updateBcSpecValueById" parameterType="com.afd.model.product.BcSpecValue" >
     update t_bc_spec_value
     <set >
       <if test="bcSpecId != null" >
@@ -147,6 +160,7 @@
     </set>
     where bc_sv_id = #{bcSvId,jdbcType=INTEGER}
   </update>
+  
   <update id="updateByPrimaryKey" parameterType="com.afd.model.product.BcSpecValue" >
     update t_bc_spec_value
     set bc_spec_id = #{bcSpecId,jdbcType=INTEGER},
@@ -161,4 +175,60 @@
       m_display_position = #{mDisplayPosition,jdbcType=INTEGER}
     where bc_sv_id = #{bcSvId,jdbcType=INTEGER}
   </update>
+  
+  <select id="getBcSpecValueBySpecValueId" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_BC_SPEC_VALUE
+    <where> 
+    	<if test="specValueId != null">
+			SPEC_VALUE_ID = #{specValueId,jdbcType=DECIMAL}
+		</if>
+		<if test="status != null">
+			and STATUS = #{status,jdbcType=CHAR}
+		</if>
+	</where>
+	order by DISPLAY_ORDER
+  </select>
+  
+  <update id="updateBcSpecValueBySpecValueId">
+      update T_BC_SPEC_VALUE
+      <set>
+          SPEC_VALUE_NAME = #{specValueName,jdbcType=VARCHAR},
+          IMG_URL = #{imgUrl,jdbcType=VARCHAR}
+      </set>
+      where SPEC_VALUE_ID = #{specValueId,jdbcType=DECIMAL}
+  </update>
+  
+  <update id="updateBcSpecValueOrders" >
+    update T_BC_SPEC_VALUE
+    set DISPLAY_ORDER = DISPLAY_ORDER + (#{value})
+    where BC_SPEC_ID = #{bcSpecId,jdbcType=DECIMAL} and 
+    <choose>
+		<when test="value &gt; 0">
+			DISPLAY_ORDER &lt; #{order} 
+		</when>
+		<when test="value &lt; 0">
+			DISPLAY_ORDER &gt; #{order} 
+		</when>
+	</choose>
+	 and STATUS=1
+  </update>
+  
+  <select id="getBcSpecValueByBcSpecId" resultMap="BaseResultMap">
+    select bcsv.BC_SV_ID, bcsv.BC_SPEC_ID, bcsv.SPEC_VALUE_NAME, bcsv.IMG_URL, 
+    bcsv.DISPLAY_ORDER, bcsv.STATUS, bcsv.SPEC_VALUE_ID, 
+    bcsv.BC_ID, bcsv.IS_FILTER, bcsv.IS_MOBILE_DISPLAY, bcsv.M_DISPLAY_POSITION
+    from T_BC_SPEC_VALUE bcsv
+    <where> 
+    	<if test="bcSpecId != null">
+			bcsv.BC_SPEC_ID = #{bcSpecId,jdbcType=DECIMAL}
+		</if>
+		<if test="status != null">
+			and bcsv.STATUS = #{status,jdbcType=CHAR}
+		</if>
+	</where>
+	order by bcsv.DISPLAY_ORDER
+  </select>
+  
 </mapper>
