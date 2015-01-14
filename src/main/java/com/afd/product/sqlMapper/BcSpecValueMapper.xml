@@ -2,17 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.afd.product.dao.BcSpecValueMapper" >
   <resultMap id="BaseResultMap" type="com.afd.model.product.BcSpecValue" >
-    <id column="bc_sv_id" property="bcSvId" jdbcType="INTEGER" />
-    <result column="bc_spec_id" property="bcSpecId" jdbcType="INTEGER" />
-    <result column="spec_value_id" property="specValueId" jdbcType="INTEGER" />
+    <id column="bc_sv_id" property="bcSvId" jdbcType="DECIMAL" />
+    <result column="bc_spec_id" property="bcSpecId" jdbcType="DECIMAL" />
+    <result column="spec_value_id" property="specValueId" jdbcType="DECIMAL" />
     <result column="spec_value_name" property="specValueName" jdbcType="VARCHAR" />
     <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
-    <result column="display_order" property="displayOrder" jdbcType="TINYINT" />
+    <result column="display_order" property="displayOrder" jdbcType="DECIMAL" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="bc_id" property="bcId" jdbcType="SMALLINT" />
     <result column="is_filter" property="isFilter" jdbcType="CHAR" />
     <result column="is_mobile_display" property="isMobileDisplay" jdbcType="CHAR" />
-    <result column="m_display_position" property="mDisplayPosition" jdbcType="INTEGER" />
+    <result column="m_display_position" property="mDisplayPosition" jdbcType="DECIMAL" />
   </resultMap>
   
   <sql id="Base_Column_List" >
@@ -20,11 +20,11 @@
     bc_id, is_filter, is_mobile_display, m_display_position
   </sql>
   
-  <select id="getBcSpecValueById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="getBcSpecValueById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from t_bc_spec_value
-    where bc_sv_id = #{bcSvId,jdbcType=INTEGER}
+    where bc_sv_id = #{bcSvId,jdbcType=DECIMAL}
   </select>
   
   <delete id="deleteBcSpecValueById" parameterType="java.lang.Long" >
@@ -44,10 +44,10 @@
       spec_value_name, img_url, display_order, 
       status, bc_id, is_filter, 
       is_mobile_display, m_display_position)
-    values (#{bcSvId,jdbcType=INTEGER}, #{bcSpecId,jdbcType=INTEGER}, #{specValueId,jdbcType=INTEGER}, 
-      #{specValueName,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, #{displayOrder,jdbcType=TINYINT}, 
+    values (#{bcSvId,jdbcType=DECIMAL}, #{bcSpecId,jdbcType=DECIMAL}, #{specValueId,jdbcType=DECIMAL}, 
+      #{specValueName,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, #{displayOrder,jdbcType=DECIMAL}, 
       #{status,jdbcType=CHAR}, #{bcId,jdbcType=SMALLINT}, #{isFilter,jdbcType=CHAR}, 
-      #{isMobileDisplay,jdbcType=CHAR}, #{mDisplayPosition,jdbcType=INTEGER})
+      #{isMobileDisplay,jdbcType=CHAR}, #{mDisplayPosition,jdbcType=DECIMAL})
   </insert>
   
   <insert id="insertSelective" parameterType="com.afd.model.product.BcSpecValue" >
@@ -89,13 +89,13 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="bcSvId != null" >
-        #{bcSvId,jdbcType=INTEGER},
+        #{bcSvId,jdbcType=DECIMAL},
       </if>
       <if test="bcSpecId != null" >
-        #{bcSpecId,jdbcType=INTEGER},
+        #{bcSpecId,jdbcType=DECIMAL},
       </if>
       <if test="specValueId != null" >
-        #{specValueId,jdbcType=INTEGER},
+        #{specValueId,jdbcType=DECIMAL},
       </if>
       <if test="specValueName != null" >
         #{specValueName,jdbcType=VARCHAR},
@@ -104,7 +104,7 @@
         #{imgUrl,jdbcType=VARCHAR},
       </if>
       <if test="displayOrder != null" >
-        #{displayOrder,jdbcType=TINYINT},
+        #{displayOrder,jdbcType=DECIMAL},
       </if>
       <if test="status != null" >
         #{status,jdbcType=CHAR},
@@ -119,7 +119,7 @@
         #{isMobileDisplay,jdbcType=CHAR},
       </if>
       <if test="mDisplayPosition != null" >
-        #{mDisplayPosition,jdbcType=INTEGER},
+        #{mDisplayPosition,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -128,10 +128,10 @@
     update t_bc_spec_value
     <set >
       <if test="bcSpecId != null" >
-        bc_spec_id = #{bcSpecId,jdbcType=INTEGER},
+        bc_spec_id = #{bcSpecId,jdbcType=DECIMAL},
       </if>
       <if test="specValueId != null" >
-        spec_value_id = #{specValueId,jdbcType=INTEGER},
+        spec_value_id = #{specValueId,jdbcType=DECIMAL},
       </if>
       <if test="specValueName != null" >
         spec_value_name = #{specValueName,jdbcType=VARCHAR},
@@ -140,7 +140,7 @@
         img_url = #{imgUrl,jdbcType=VARCHAR},
       </if>
       <if test="displayOrder != null" >
-        display_order = #{displayOrder,jdbcType=TINYINT},
+        display_order = #{displayOrder,jdbcType=DECIMAL},
       </if>
       <if test="status != null" >
         status = #{status,jdbcType=CHAR},
@@ -155,25 +155,25 @@
         is_mobile_display = #{isMobileDisplay,jdbcType=CHAR},
       </if>
       <if test="mDisplayPosition != null" >
-        m_display_position = #{mDisplayPosition,jdbcType=INTEGER},
+        m_display_position = #{mDisplayPosition,jdbcType=DECIMAL},
       </if>
     </set>
-    where bc_sv_id = #{bcSvId,jdbcType=INTEGER}
+    where bc_sv_id = #{bcSvId,jdbcType=DECIMAL}
   </update>
   
   <update id="updateByPrimaryKey" parameterType="com.afd.model.product.BcSpecValue" >
     update t_bc_spec_value
-    set bc_spec_id = #{bcSpecId,jdbcType=INTEGER},
-      spec_value_id = #{specValueId,jdbcType=INTEGER},
+    set bc_spec_id = #{bcSpecId,jdbcType=DECIMAL},
+      spec_value_id = #{specValueId,jdbcType=DECIMAL},
       spec_value_name = #{specValueName,jdbcType=VARCHAR},
       img_url = #{imgUrl,jdbcType=VARCHAR},
-      display_order = #{displayOrder,jdbcType=TINYINT},
+      display_order = #{displayOrder,jdbcType=DECIMAL},
       status = #{status,jdbcType=CHAR},
       bc_id = #{bcId,jdbcType=SMALLINT},
       is_filter = #{isFilter,jdbcType=CHAR},
       is_mobile_display = #{isMobileDisplay,jdbcType=CHAR},
-      m_display_position = #{mDisplayPosition,jdbcType=INTEGER}
-    where bc_sv_id = #{bcSvId,jdbcType=INTEGER}
+      m_display_position = #{mDisplayPosition,jdbcType=DECIMAL}
+    where bc_sv_id = #{bcSvId,jdbcType=DECIMAL}
   </update>
   
   <select id="getBcSpecValueBySpecValueId" resultMap="BaseResultMap">

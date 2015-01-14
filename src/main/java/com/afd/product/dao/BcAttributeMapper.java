@@ -51,4 +51,10 @@ public interface BcAttributeMapper {
 	 * @return
 	 */
 	boolean updateBcAttributeOrders(@Param("bcId") Integer bcId, @Param("order") Integer order, @Param("value") Integer value);
+	
+	/**
+     * @param attrId 属性ID
+     * @return 关联该属性的基本分类列表ID
+     */
+    List<Integer> getBcAttributeByAttrId(@Param(value = "attrId")Long attrId, @Param(value = "status") String status);
 }

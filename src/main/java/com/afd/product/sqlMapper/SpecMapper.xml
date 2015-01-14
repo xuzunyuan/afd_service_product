@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.afd.product.dao.SpecMapper" >
   <resultMap id="BaseResultMap" type="com.afd.model.product.Spec" >
-    <id column="spec_id" property="specId" jdbcType="INTEGER" />
+    <id column="spec_id" property="specId" jdbcType="DECIMAL" />
     <result column="spec_name" property="specName" jdbcType="VARCHAR" />
     <result column="pingyin" property="pingyin" jdbcType="VARCHAR" />
     <result column="show_mode" property="showMode" jdbcType="CHAR" />
@@ -12,30 +12,36 @@
     <result column="last_update_by_name" property="lastUpdateByName" jdbcType="VARCHAR" />
     <result column="last_update_by_date" property="lastUpdateByDate" jdbcType="TIMESTAMP" />
   </resultMap>
+  
   <sql id="Base_Column_List" >
     spec_id, spec_name, pingyin, show_mode, status, create_by_name, create_by_date, last_update_by_name, 
     last_update_by_date
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  
+  <select id="getSpecById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from t_spec
-    where spec_id = #{specId,jdbcType=INTEGER}
+    where spec_id = #{specId,jdbcType=DECIMAL}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from t_spec
-    where spec_id = #{specId,jdbcType=INTEGER}
+  
+  <delete id="deleteSpecById" parameterType="java.lang.Long" >
+    update T_SPEC
+    set STATUS = '0'
+    where SPEC_ID = #{specId,jdbcType=DECIMAL}
   </delete>
-  <insert id="insert" parameterType="com.afd.model.product.Spec" >
+  
+  <insert id="insertSpec" parameterType="com.afd.model.product.Spec" >
     insert into t_spec (spec_id, spec_name, pingyin, 
       show_mode, status, create_by_name, 
       create_by_date, last_update_by_name, last_update_by_date
       )
-    values (#{specId,jdbcType=INTEGER}, #{specName,jdbcType=VARCHAR}, #{pingyin,jdbcType=VARCHAR}, 
+    values (#{specId,jdbcType=DECIMAL}, #{specName,jdbcType=VARCHAR}, #{pingyin,jdbcType=VARCHAR}, 
       #{showMode,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{createByName,jdbcType=VARCHAR}, 
       #{createByDate,jdbcType=TIMESTAMP}, #{lastUpdateByName,jdbcType=VARCHAR}, #{lastUpdateByDate,jdbcType=TIMESTAMP}
       )
   </insert>
+  
   <insert id="insertSelective" parameterType="com.afd.model.product.Spec" >
     insert into t_spec
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -69,7 +75,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="specId != null" >
-        #{specId,jdbcType=INTEGER},
+        #{specId,jdbcType=DECIMAL},
       </if>
       <if test="specName != null" >
         #{specName,jdbcType=VARCHAR},
@@ -97,7 +103,8 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.Spec" >
+  
+  <update id="updateSpecById" parameterType="com.afd.model.product.Spec" >
     update t_spec
     <set >
       <if test="specName != null" >
@@ -125,8 +132,9 @@
         last_update_by_date = #{lastUpdateByDate,jdbcType=TIMESTAMP},
       </if>
     </set>
-    where spec_id = #{specId,jdbcType=INTEGER}
+    where spec_id = #{specId,jdbcType=DECIMAL}
   </update>
+  
   <update id="updateByPrimaryKey" parameterType="com.afd.model.product.Spec" >
     update t_spec
     set spec_name = #{specName,jdbcType=VARCHAR},
@@ -137,6 +145,79 @@
       create_by_date = #{createByDate,jdbcType=TIMESTAMP},
       last_update_by_name = #{lastUpdateByName,jdbcType=VARCHAR},
       last_update_by_date = #{lastUpdateByDate,jdbcType=TIMESTAMP}
-    where spec_id = #{specId,jdbcType=INTEGER}
+    where spec_id = #{specId,jdbcType=DECIMAL}
   </update>
+  
+  <select id="getSpecByName" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from T_SPEC
+    <where> 
+		<if test="specName!=null and specName!=''">  
+			SPEC_NAME = #{specName,jdbcType=DECIMAL}
+		</if>
+		<if test="status != null">
+			and STATUS = #{status,jdbcType=CHAR}
+		</if>
+	</where>
+  </select>
+  
+  <select id="getSpecByPage" resultMap="BaseResultMap"> 
+	SELECT <include refid="Base_Column_List" />
+	FROM T_SPEC 
+	<where> 
+		<if test="cond.specName!=null and cond.specName!=''">  
+			<bind name="specName" value="'%' + cond.specName + '%'" />
+			SPEC_NAME LIKE #{specName} 
+		</if>
+		<if test="cond.pingyin != null">
+			<bind name="pingyin" value="'%' + cond.pingyin + '%'" />
+			and PINGYIN LIKE #{pingyin,jdbcType=VARCHAR}
+		</if>
+		<if test="cond.status != null">
+			and STATUS = #{cond.status,jdbcType=CHAR}
+		</if>
+		<if test="cond.startDt != null" >
+		 	and CREATE_BY_DATE &gt;= #{cond.startDt,jdbcType=TIMESTAMP}
+	    </if>
+	    <if test="cond.endDt != null" >
+		 	and CREATE_BY_DATE &lt;= #{cond.endDt,jdbcType=TIMESTAMP}
+	    </if>
+	</where>
+	ORDER BY SPEC_ID ${cond.order}
+  </select>
+  
+  <select id="getSpecs" resultMap="BaseResultMap"> 
+	SELECT <include refid="Base_Column_List" />
+	FROM T_SPEC 
+	<where> 
+		<if test="cond.specName!=null and cond.specName!=''">  
+			<bind name="specName" value="'%' + cond.specName + '%'" />
+			SPEC_NAME LIKE #{specName} 
+		</if>
+		<if test="cond.pingyin != null">
+			<bind name="pingyin" value="'%' + cond.pingyin + '%'" />
+			PINGYIN LIKE #{pingyin,jdbcType=VARCHAR},
+		</if>
+		<if test="cond.status != null">
+			and STATUS = #{cond.status,jdbcType=CHAR}
+		</if>
+		<if test="cond.startDt != null" >
+		 	and CREATE_BY_DATE &gt;= #{cond.startDt,jdbcType=TIMESTAMP}
+	    </if>
+	    <if test="cond.endDt != null" >
+		 	and CREATE_BY_DATE &lt;= #{cond.endDt,jdbcType=TIMESTAMP}
+	    </if>
+	</where>
+	<choose>
+		<when test="cond.order != null">
+			ORDER BY SPEC_ID ${cond.order}
+		</when>
+		<otherwise>
+			ORDER BY SPEC_ID DESC
+		</otherwise>
+	</choose>
+  </select> 
+  
+  
 </mapper>

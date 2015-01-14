@@ -2,34 +2,44 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.afd.product.dao.AttrAttrValueMapper" >
   <resultMap id="BaseResultMap" type="com.afd.model.product.AttrAttrValue" >
-    <id column="a_av_id" property="aAvId" jdbcType="INTEGER" />
-    <result column="attr_id" property="attrId" jdbcType="INTEGER" />
-    <result column="attr_value_id" property="attrValueId" jdbcType="INTEGER" />
-    <result column="display_order" property="displayOrder" jdbcType="SMALLINT" />
-    <result column="p_a_av_id" property="pAAvId" jdbcType="INTEGER" />
+    <id column="a_av_id" property="aAvId" jdbcType="DECIMAL" />
+    <result column="attr_id" property="attrId" jdbcType="DECIMAL" />
+    <result column="attr_value_id" property="attrValueId" jdbcType="DECIMAL" />
+    <result column="display_order" property="displayOrder" jdbcType="DECIMAL" />
+    <result column="p_a_av_id" property="pAAvId" jdbcType="DECIMAL" />
     <result column="has_sub" property="hasSub" jdbcType="CHAR" />
   </resultMap>
+  
+  <resultMap id="ExtResultMap" type="com.afd.model.product.vo.AttrAttrValueVO" extends="BaseResultMap">
+    <result column="ATTR_VALUE_NAME" jdbcType="VARCHAR" property="attrValueName" />
+    <result column="PINYIN" jdbcType="VARCHAR" property="pinyin" />
+  </resultMap>
+  
   <sql id="Base_Column_List" >
     a_av_id, attr_id, attr_value_id, display_order, p_a_av_id, has_sub
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  
+  <select id="getAttrAttrValueById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from t_attr_attr_value
-    where a_av_id = #{aAvId,jdbcType=INTEGER}
+    where a_av_id = #{aAvId,jdbcType=DECIMAL}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  
+  <delete id="deleteAttrAttrValueById" parameterType="java.lang.Long">
     delete from t_attr_attr_value
-    where a_av_id = #{aAvId,jdbcType=INTEGER}
+    where a_av_id = #{aAvId,jdbcType=DECIMAL}
   </delete>
-  <insert id="insert" parameterType="com.afd.model.product.AttrAttrValue" >
+  
+  <insert id="insertAttrAttrValue" parameterType="com.afd.model.product.AttrAttrValue" >
     insert into t_attr_attr_value (a_av_id, attr_id, attr_value_id, 
       display_order, p_a_av_id, has_sub
       )
-    values (#{aAvId,jdbcType=INTEGER}, #{attrId,jdbcType=INTEGER}, #{attrValueId,jdbcType=INTEGER}, 
-      #{displayOrder,jdbcType=SMALLINT}, #{pAAvId,jdbcType=INTEGER}, #{hasSub,jdbcType=CHAR}
+    values (#{aAvId,jdbcType=DECIMAL}, #{attrId,jdbcType=DECIMAL}, #{attrValueId,jdbcType=DECIMAL}, 
+      #{displayOrder,jdbcType=DECIMAL}, #{pAAvId,jdbcType=DECIMAL}, #{hasSub,jdbcType=CHAR}
       )
   </insert>
+  
   <insert id="insertSelective" parameterType="com.afd.model.product.AttrAttrValue" >
     insert into t_attr_attr_value
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -54,53 +64,151 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="aAvId != null" >
-        #{aAvId,jdbcType=INTEGER},
+        #{aAvId,jdbcType=DECIMAL},
       </if>
       <if test="attrId != null" >
-        #{attrId,jdbcType=INTEGER},
+        #{attrId,jdbcType=DECIMAL},
       </if>
       <if test="attrValueId != null" >
-        #{attrValueId,jdbcType=INTEGER},
+        #{attrValueId,jdbcType=DECIMAL},
       </if>
       <if test="displayOrder != null" >
-        #{displayOrder,jdbcType=SMALLINT},
+        #{displayOrder,jdbcType=DECIMAL},
       </if>
       <if test="pAAvId != null" >
-        #{pAAvId,jdbcType=INTEGER},
+        #{pAAvId,jdbcType=DECIMAL},
       </if>
       <if test="hasSub != null" >
         #{hasSub,jdbcType=CHAR},
       </if>
     </trim>
   </insert>
+  
   <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.AttrAttrValue" >
     update t_attr_attr_value
     <set >
       <if test="attrId != null" >
-        attr_id = #{attrId,jdbcType=INTEGER},
+        attr_id = #{attrId,jdbcType=DECIMAL},
       </if>
       <if test="attrValueId != null" >
-        attr_value_id = #{attrValueId,jdbcType=INTEGER},
+        attr_value_id = #{attrValueId,jdbcType=DECIMAL},
       </if>
       <if test="displayOrder != null" >
-        display_order = #{displayOrder,jdbcType=SMALLINT},
+        display_order = #{displayOrder,jdbcType=DECIMAL},
       </if>
       <if test="pAAvId != null" >
-        p_a_av_id = #{pAAvId,jdbcType=INTEGER},
+        p_a_av_id = #{pAAvId,jdbcType=DECIMAL},
       </if>
       <if test="hasSub != null" >
         has_sub = #{hasSub,jdbcType=CHAR},
       </if>
     </set>
-    where a_av_id = #{aAvId,jdbcType=INTEGER}
+    where a_av_id = #{aAvId,jdbcType=DECIMAL}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.afd.model.product.AttrAttrValue" >
+  
+  <update id="updateByAAvId" parameterType="com.afd.model.product.AttrAttrValue" >
     update t_attr_attr_value
-    set attr_id = #{attrId,jdbcType=INTEGER},
-      attr_value_id = #{attrValueId,jdbcType=INTEGER},
-      display_order = #{displayOrder,jdbcType=SMALLINT},
-      p_a_av_id = #{pAAvId,jdbcType=INTEGER},
+    set attr_id = #{attrId,jdbcType=DECIMAL},
+      attr_value_id = #{attrValueId,jdbcType=DECIMAL},
+      display_order = #{displayOrder,jdbcType=DECIMAL},
+      p_a_av_id = #{pAAvId,jdbcType=DECIMAL},
       has_sub = #{hasSub,jdbcType=CHAR}
-    where a_av_id = #{aAvId,jdbcType=INTEGER}
+    where a_av_id = #{aAvId,jdbcType=DECIMAL}
   </update>
+  
+  <select id="getAttrAttrValueByAttrIdAndAVId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_ATTR_ATTR_VALUE
+    where ATTR_ID = #{attrId,jdbcType=DECIMAL} and ATTR_VALUE_ID = #{attrValueId,jdbcType=DECIMAL}
+  </select>
+  
+  <delete id="deleteSubAttrAttrValueByAttrId" parameterType="java.lang.Long">
+    delete from T_ATTR_ATTR_VALUE
+    where P_A_AV_ID in (select A_AV_ID 
+    from T_ATTR_ATTR_VALUE
+    where ATTR_ID = #{attrId,jdbcType=DECIMAL})
+  </delete>
+  
+  <delete id="deleteAttrAttrValueByAttrId" parameterType="java.lang.Long">
+    delete from T_ATTR_ATTR_VALUE
+    where ATTR_ID = #{attrId,jdbcType=DECIMAL}
+  </delete>
+  
+  <select id="getAttrAttrValueByAttrIdAndAVId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_ATTR_ATTR_VALUE
+    where ATTR_ID = #{attrId,jdbcType=DECIMAL} and ATTR_VALUE_ID = #{attrValueId,jdbcType=DECIMAL}
+  </select>
+  
+  <delete id="deleteAttrAttrValueByPAAvId" parameterType="java.lang.Long">
+    delete from T_ATTR_ATTR_VALUE
+    where P_A_AV_ID = #{aAvId,jdbcType=DECIMAL}
+  </delete>
+  
+  <select id="getAttrAttrValueByPAAvIdAndAVId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_ATTR_ATTR_VALUE
+    where P_A_AV_ID = #{pAAvId,jdbcType=DECIMAL} and ATTR_VALUE_ID = #{attrValueId,jdbcType=DECIMAL}
+  </select>
+  
+  <select id="getAttrAttrValueByPAAvId" parameterType="java.lang.Long" resultMap="ExtResultMap">
+    select aav.A_AV_ID, aav.ATTR_ID, aav.ATTR_VALUE_ID, aav.DISPLAY_ORDER, aav.P_A_AV_ID, aav.HAS_SUB, av.ATTR_VALUE_NAME, av.PINYIN
+    from T_ATTR_ATTR_VALUE aav, T_ATTRIBUTE_VALUE av
+    where P_A_AV_ID = #{pAAvId,jdbcType=DECIMAL} and aav.ATTR_VALUE_ID=av.ATTR_VALUE_ID
+    order by aav.A_AV_ID desc
+  </select>
+  
+  <update id="updateAttrAttrValueOrderByAAvId">
+    update T_ATTR_ATTR_VALUE
+    set DISPLAY_ORDER = #{displayOrder,jdbcType=DECIMAL},
+    where A_AV_ID = #{aAvId,jdbcType=DECIMAL}
+  </update>
+  
+  <update id="updateAttrAttrValueOrders" >
+    update T_ATTR_ATTR_VALUE
+    set DISPLAY_ORDER = DISPLAY_ORDER + #{value}
+    where 
+    <choose>
+		<when test="flag == 0">
+			ATTR_ID = #{id} and 
+		</when>
+		<when test="flag == 1">
+			P_A_AV_ID = #{id} and 
+		</when>
+	</choose>
+    <choose>
+		<when test="value &gt; 0">
+			DISPLAY_ORDER &lt; #{order}
+		</when>
+		<when test="value &lt; 0">
+			DISPLAY_ORDER &gt; #{order}
+		</when>
+	</choose>
+  </update>
+  
+  <select id="getAttrAttrValueByAttrAttrValueId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from T_ATTR_ATTR_VALUE
+    where ATTR_VALUE_ID = #{attrValueId,jdbcType=DECIMAL} and HAS_SUB = '1'
+  </select>
+  
+  
+  <delete id="deleteSubAttrAttrValueByAttrValueId" parameterType="java.lang.Long">
+    delete from T_ATTR_ATTR_VALUE
+    where P_A_AV_ID in (select A_AV_ID 
+    from T_ATTR_ATTR_VALUE
+    where ATTR_VALUE_ID = #{attrValueId,jdbcType=DECIMAL})
+  </delete>
+  
+  
+  <delete id="deleteAttrAttrValueByAttrValueId" parameterType="java.lang.Long">
+    delete from T_ATTR_ATTR_VALUE
+    where ATTR_VALUE_ID = #{attrValueId,jdbcType=DECIMAL}
+  </delete>
+  
+  
 </mapper>

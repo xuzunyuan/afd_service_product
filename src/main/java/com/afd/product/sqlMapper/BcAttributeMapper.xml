@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.afd.product.dao.BcAttributeMapper" >
   <resultMap id="BaseResultMap" type="com.afd.model.product.BcAttribute" >
-    <id column="bc_attr_id" property="bcAttrId" jdbcType="INTEGER" />
-    <result column="bc_id" property="bcId" jdbcType="SMALLINT" />
-    <result column="attr_id" property="attrId" jdbcType="INTEGER" />
+    <id column="bc_attr_id" property="bcAttrId" jdbcType="DECIMAL" />
+    <result column="bc_id" property="bcId" jdbcType="DECIMAL" />
+    <result column="attr_id" property="attrId" jdbcType="DECIMAL" />
     <result column="display_mode" property="displayMode" jdbcType="CHAR" />
-    <result column="display_order" property="displayOrder" jdbcType="TINYINT" />
+    <result column="display_order" property="displayOrder" jdbcType="DECIMAL" />
     <result column="is_require" property="isRequire" jdbcType="CHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="is_filter" property="isFilter" jdbcType="CHAR" />
@@ -28,7 +28,7 @@
     where bc_attr_id = #{bcAttrId,jdbcType=Long}
   </select>
   
-  <delete id="deleteBcAttributeById" parameterType="java.lang.Integer" >
+  <delete id="deleteBcAttributeById" parameterType="java.lang.Long" >
     update t_bc_attribute
     set status = '0'
     where bc_attr_id = #{bcattrid,jdbctype=decimal}
@@ -38,8 +38,8 @@
     insert into t_bc_attribute (bc_attr_id, bc_id, attr_id, display_mode,
       display_order, is_require, status, 
       is_filter)
-    values (#{bcAttrId,jdbcType=INTEGER}, #{bcId,jdbcType=SMALLINT}, #{attrId,jdbcType=INTEGER}, #{displayMode,jdbcType=CHAR}, 
-      #{displayOrder,jdbcType=TINYINT}, #{isRequire,jdbcType=CHAR}, #{status,jdbcType=CHAR}, 
+    values (#{bcAttrId,jdbcType=DECIMAL}, #{bcId,jdbcType=DECIMAL}, #{attrId,jdbcType=DECIMAL}, #{displayMode,jdbcType=CHAR}, 
+      #{displayOrder,jdbcType=DECIMAL}, #{isRequire,jdbcType=CHAR}, #{status,jdbcType=CHAR}, 
       #{isFilter,jdbcType=CHAR})
   </insert>
   
@@ -70,16 +70,16 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="bcAttrId != null" >
-        #{bcAttrId,jdbcType=INTEGER},
+        #{bcAttrId,jdbcType=DECIMAL},
       </if>
       <if test="bcId != null" >
-        #{bcId,jdbcType=SMALLINT},
+        #{bcId,jdbcType=DECIMAL},
       </if>
       <if test="attrId != null" >
-        #{attrId,jdbcType=INTEGER},
+        #{attrId,jdbcType=DECIMAL},
       </if>
       <if test="displayOrder != null" >
-        #{displayOrder,jdbcType=TINYINT},
+        #{displayOrder,jdbcType=DECIMAL},
       </if>
       <if test="isRequire != null" >
         #{isRequire,jdbcType=CHAR},
@@ -97,16 +97,16 @@
     update t_bc_attribute
     <set >
       <if test="bcId != null" >
-        bc_id = #{bcId,jdbcType=SMALLINT},
+        bc_id = #{bcId,jdbcType=DECIMAL},
       </if>
       <if test="attrId != null" >
-        attr_id = #{attrId,jdbcType=INTEGER},
+        attr_id = #{attrId,jdbcType=DECIMAL},
       </if>
       <if test="displayMode != null" >
         display_mode = #{displayMode,jdbcType=CHAR},
       </if>
       <if test="displayOrder != null" >
-        display_order = #{displayOrder,jdbcType=TINYINT},
+        display_order = #{displayOrder,jdbcType=DECIMAL},
       </if>
       <if test="isRequire != null" >
         is_require = #{isRequire,jdbcType=CHAR},
@@ -118,22 +118,22 @@
         is_filter = #{isFilter,jdbcType=CHAR},
       </if>
     </set>
-    where bc_attr_id = #{bcAttrId,jdbcType=INTEGER}
+    where bc_attr_id = #{bcAttrId,jdbcType=DECIMAL}
   </update>
   
   <update id="updateByPrimaryKey" parameterType="com.afd.model.product.BcAttribute" >
     update t_bc_attribute
-    set bc_id = #{bcId,jdbcType=INTEGER},
+    set bc_id = #{bcId,jdbcType=DECIMAL},
       attr_id = #{attrId,jdbcType=Long},
       display_mode = #{displayMode,jdbcType=CHAR},
-      display_order = #{displayOrder,jdbcType=TINYINT},
+      display_order = #{displayOrder,jdbcType=DECIMAL},
       is_require = #{isRequire,jdbcType=CHAR},
       status = #{status,jdbcType=CHAR},
       is_filter = #{isFilter,jdbcType=CHAR}
-    where bc_attr_id = #{bcAttrId,jdbcType=INTEGER}
+    where bc_attr_id = #{bcAttrId,jdbcType=DECIMAL}
   </update>
   
-  <select id="getMaxOrder" resultType="java.lang.Integer" parameterType="java.lang.Long" >
+  <select id="getMaxOrder" resultType="java.lang.Long" parameterType="java.lang.Long" >
     select max(DISPLAY_ORDER) from T_BC_ATTRIBUTE where BC_ID = #{bcId,jdbcType=DECIMAL} and status='1'
   </select>
   
@@ -147,6 +147,18 @@
 		</if>
     	<if test="attrId != null">
 			and ATTR_ID = #{attrId,jdbcType=DECIMAL}
+		</if>
+		<if test="status != null">
+			and STATUS = #{status,jdbcType=CHAR}
+		</if>
+    </where>
+  </select>
+  
+  <select id="getBcAttributeByAttrId" resultType="java.lang.Long">
+    select BC_ID from T_BC_ATTRIBUTE
+    <where>
+    	<if test="attrId != null">
+			ATTR_ID = #{attrId,jdbcType=DECIMAL}
 		</if>
 		<if test="status != null">
 			and STATUS = #{status,jdbcType=CHAR}

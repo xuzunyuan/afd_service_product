@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.afd.product.dao.AttributeMapper" >
   <resultMap id="BaseResultMap" type="com.afd.model.product.Attribute" >
-    <id column="attr_id" property="attrId" jdbcType="INTEGER" />
+    <id column="attr_id" property="attrId" jdbcType="DECIMAL" />
     <result column="attr_name" property="attrName" jdbcType="VARCHAR" />
     <result column="pinyin" property="pinyin" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="CHAR" />
@@ -11,28 +11,34 @@
     <result column="last_update_by_name" property="lastUpdateByName" jdbcType="VARCHAR" />
     <result column="last_update_by_date" property="lastUpdateByDate" jdbcType="TIMESTAMP" />
   </resultMap>
+  
   <sql id="Base_Column_List" >
     attr_id, attr_name, pinyin, status, create_by_name, create_by_date, last_update_by_name, 
     last_update_by_date
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  
+  <delete id="deleteAttributeById" parameterType="java.lang.Long" >
+    update t_attribute
+    set STATUS = '0'
+    where ATTR_ID = #{attrId,jdbcType=DECIMAL}
+  </delete>
+  
+  <select id="getAttributeById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
-    from t_attribute
-    where attr_id = #{attrId,jdbcType=INTEGER}
+    from T_ATTRIBUTE
+    where ATTR_ID = #{attrId,jdbcType=DECIMAL}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from t_attribute
-    where attr_id = #{attrId,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.afd.model.product.Attribute" >
+  
+  <insert id="insertAttribute" parameterType="com.afd.model.product.Attribute" >
     insert into t_attribute (attr_id, attr_name, pinyin, 
       status, create_by_name, create_by_date, 
       last_update_by_name, last_update_by_date)
-    values (#{attrId,jdbcType=INTEGER}, #{attrName,jdbcType=VARCHAR}, #{pinyin,jdbcType=VARCHAR}, 
+    values (#{attrId,jdbcType=DECIMAL}, #{attrName,jdbcType=VARCHAR}, #{pinyin,jdbcType=VARCHAR}, 
       #{status,jdbcType=CHAR}, #{createByName,jdbcType=VARCHAR}, #{createByDate,jdbcType=TIMESTAMP}, 
       #{lastUpdateByName,jdbcType=VARCHAR}, #{lastUpdateByDate,jdbcType=TIMESTAMP})
   </insert>
+  
   <insert id="insertSelective" parameterType="com.afd.model.product.Attribute" >
     insert into t_attribute
     <trim prefix="(" suffix=")" suffixOverrides="," >
@@ -88,33 +94,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.Attribute" >
-    update t_attribute
-    <set >
-      <if test="attrName != null" >
-        attr_name = #{attrName,jdbcType=VARCHAR},
-      </if>
-      <if test="pinyin != null" >
-        pinyin = #{pinyin,jdbcType=VARCHAR},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=CHAR},
-      </if>
-      <if test="createByName != null" >
-        create_by_name = #{createByName,jdbcType=VARCHAR},
-      </if>
-      <if test="createByDate != null" >
-        create_by_date = #{createByDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="lastUpdateByName != null" >
-        last_update_by_name = #{lastUpdateByName,jdbcType=VARCHAR},
-      </if>
-      <if test="lastUpdateByDate != null" >
-        last_update_by_date = #{lastUpdateByDate,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where attr_id = #{attrId,jdbcType=INTEGER}
-  </update>
+  
   <update id="updateByPrimaryKey" parameterType="com.afd.model.product.Attribute" >
     update t_attribute
     set attr_name = #{attrName,jdbcType=VARCHAR},
@@ -126,4 +106,115 @@
       last_update_by_date = #{lastUpdateByDate,jdbcType=TIMESTAMP}
     where attr_id = #{attrId,jdbcType=INTEGER}
   </update>
+  
+  <select id="getAttributeByName" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from T_ATTRIBUTE
+    <where> 
+		<if test="attrName!=null and attrName!=''">  
+			ATTR_NAME = #{attrName,jdbcType=DECIMAL}
+		</if>
+		<if test="status != null">
+			and STATUS = #{status,jdbcType=CHAR}
+		</if>
+	</where>
+  </select>
+  
+  
+  <select id="getAttributes" resultMap="BaseResultMap"  >
+    select 
+    <include refid="Base_Column_List" />
+    from T_ATTRIBUTE
+    <where> 
+		<if test="cond.attrName!=null and cond.attrName!=''">  
+			<bind name="attrName" value="'%' + cond.attrName + '%'" />
+			ATTR_NAME LIKE #{attrName} 
+		</if>
+		<if test="cond.pinyin!=null and cond.pinyin!=''">  
+			<bind name="pinyin" value="'%' + cond.pinyin + '%'" />
+			and PINYIN LIKE #{pinyin,jdbcType=VARCHAR},
+		</if>
+		<if test="cond.status != null">
+			and STATUS = #{cond.status,jdbcType=CHAR}
+		</if>
+		<if test="cond.startDt != null" >
+		 	and CREATE_BY_DATE &gt;= #{cond.startDt,jdbcType=TIMESTAMP}
+	    </if>
+	    <if test="cond.endDt != null" >
+		 	and CREATE_BY_DATE &lt;= #{cond.endDt,jdbcType=TIMESTAMP}
+	    </if>
+	</where>
+	<choose>
+		<when test="cond.order != null">
+			ORDER BY ATTR_ID ${cond.order}
+		</when>
+		<otherwise>
+			ORDER BY ATTR_ID DESC
+		</otherwise>
+	</choose>
+  </select>
+  
+  
+  <select id="getAttributeByPage" resultMap="BaseResultMap"> 
+	SELECT <include refid="Base_Column_List" />
+	FROM T_ATTRIBUTE 
+	<where> 
+		<if test="cond.attrName!=null and cond.attrName!=''">  
+			<bind name="attrName" value="'%' + cond.attrName + '%'" />
+			ATTR_NAME LIKE #{attrName} 
+		</if>
+		<if test="cond.pinyin!=null and cond.pinyin!=''">  
+			<bind name="pinyin" value="'%' + cond.pinyin + '%'" />
+			and PINYIN LIKE #{pinyin,jdbcType=VARCHAR}
+		</if>
+		<if test="cond.status != null">
+			and STATUS = #{cond.status,jdbcType=CHAR}
+		</if>
+		<if test="cond.startDt != null" >
+		 	and CREATE_BY_DATE &gt;= #{cond.startDt,jdbcType=TIMESTAMP}
+	    </if>
+	    <if test="cond.endDt != null" >
+		 	and CREATE_BY_DATE &lt;= #{cond.endDt,jdbcType=TIMESTAMP}
+	    </if>
+	</where>
+	<choose>
+		<when test="cond.order != null">
+			ORDER BY ATTR_ID ${cond.order}
+		</when>
+		<otherwise>
+			ORDER BY ATTR_ID DESC
+		</otherwise>
+	</choose>
+  </select> 
+  
+  <update id="updateAttributeById" parameterType="com.afd.model.product.Attribute" >
+    update T_ATTRIBUTE
+    <set >
+      <if test="attrName != null">
+        ATTR_NAME = #{attrName,jdbcType=VARCHAR},
+      </if>
+      <if test="pinyin != null">
+        PINYIN = #{pinyin,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        STATUS = #{status,jdbcType=CHAR},
+      </if>
+      <if test="createByName != null">
+        CREATE_BY_NAME = #{createByName,jdbcType=VARCHAR},
+      </if>
+      <if test="createByDate != null">
+        CREATE_BY_DATE = #{createByDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateByName != null">
+        LAST_UPDATE_BY_NAME = #{lastUpdateByName,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdateByDate != null">
+        LAST_UPDATE_BY_DATE = #{lastUpdateByDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where ATTR_ID = #{attrId,jdbcType=DECIMAL}
+  </update>
+  
+  
 </mapper>

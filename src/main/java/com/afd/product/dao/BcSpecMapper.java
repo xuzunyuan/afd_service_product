@@ -55,4 +55,12 @@ public interface BcSpecMapper {
      * @return
      */
     List<BcSpecVO> getBcSpecByBcId(@Param(value = "bcId")Integer bcId, @Param(value = "status") String status);
+    
+    /**
+     * 根据规格ID获取关联的基本类目ID列表
+     * @param specId 规格ID
+     * @param status 
+     * @return
+     */
+    List<Integer> getBcIdBySpecId(@Param(value = "specId")Long specId, @Param(value = "status") String status);
 }
