@@ -39,12 +39,12 @@
       where BC_SPEC_ID = #{bcSpecId,jdbcType=DECIMAL}
   </delete>
   
-  <insert id="insertBcSpecValue" parameterType="com.afd.model.product.BcSpecValue" >
-    insert into t_bc_spec_value (bc_sv_id, bc_spec_id, spec_value_id, 
+  <insert id="insertBcSpecValue" parameterType="com.afd.model.product.BcSpecValue" useGeneratedKeys="true" keyProperty="bcSvId" >
+    insert into t_bc_spec_value (bc_spec_id, spec_value_id, 
       spec_value_name, img_url, display_order, 
       status, bc_id, is_filter, 
       is_mobile_display, m_display_position)
-    values (#{bcSvId,jdbcType=DECIMAL}, #{bcSpecId,jdbcType=DECIMAL}, #{specValueId,jdbcType=DECIMAL}, 
+    values (#{bcSpecId,jdbcType=DECIMAL}, #{specValueId,jdbcType=DECIMAL}, 
       #{specValueName,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, #{displayOrder,jdbcType=DECIMAL}, 
       #{status,jdbcType=CHAR}, #{bcId,jdbcType=SMALLINT}, #{isFilter,jdbcType=CHAR}, 
       #{isMobileDisplay,jdbcType=CHAR}, #{mDisplayPosition,jdbcType=DECIMAL})

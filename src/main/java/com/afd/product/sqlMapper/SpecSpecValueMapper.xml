@@ -30,10 +30,10 @@
     where s_s_v_id = #{sSVId,jdbcType=DECIMAL}
   </delete>
   
-  <insert id="insertSpecSpecValue" parameterType="com.afd.model.product.SpecSpecValue" >
-    insert into t_spec_spec_value (s_s_v_id, spec_id, spec_value_id, 
+  <insert id="insertSpecSpecValue" parameterType="com.afd.model.product.SpecSpecValue" useGeneratedKeys="true" keyProperty="sSVId" >
+    insert into t_spec_spec_value (spec_id, spec_value_id, 
       display_order)
-    values (#{sSVId,jdbcType=DECIMAL}, #{specId,jdbcType=DECIMAL}, #{specValueId,jdbcType=DECIMAL}, 
+    values (#{specId,jdbcType=DECIMAL}, #{specValueId,jdbcType=DECIMAL}, 
       #{displayOrder,jdbcType=DECIMAL})
   </insert>
   

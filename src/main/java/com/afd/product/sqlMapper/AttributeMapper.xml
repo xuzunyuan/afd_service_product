@@ -30,11 +30,11 @@
     where ATTR_ID = #{attrId,jdbcType=DECIMAL}
   </select>
   
-  <insert id="insertAttribute" parameterType="com.afd.model.product.Attribute" >
-    insert into t_attribute (attr_id, attr_name, pinyin, 
+  <insert id="insertAttribute" parameterType="com.afd.model.product.Attribute" useGeneratedKeys="true" keyProperty="attrId" >
+    insert into t_attribute (attr_name, pinyin, 
       status, create_by_name, create_by_date, 
       last_update_by_name, last_update_by_date)
-    values (#{attrId,jdbcType=DECIMAL}, #{attrName,jdbcType=VARCHAR}, #{pinyin,jdbcType=VARCHAR}, 
+    values (#{attrName,jdbcType=VARCHAR}, #{pinyin,jdbcType=VARCHAR}, 
       #{status,jdbcType=CHAR}, #{createByName,jdbcType=VARCHAR}, #{createByDate,jdbcType=TIMESTAMP}, 
       #{lastUpdateByName,jdbcType=VARCHAR}, #{lastUpdateByDate,jdbcType=TIMESTAMP})
   </insert>

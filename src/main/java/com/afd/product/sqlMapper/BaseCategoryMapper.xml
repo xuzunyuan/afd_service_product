@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.afd.product.dao.BaseCategoryMapper" >
   <resultMap id="BaseResultMap" type="com.afd.model.product.BaseCategory" >
-    <id column="bc_id" property="bcId" jdbcType="SMALLINT" />
+    <id column="bc_id" property="bcId" jdbcType="DECIMAL" />
     <result column="bc_name" property="bcName" jdbcType="VARCHAR" />
     <result column="bc_code" property="bcCode" jdbcType="VARCHAR" />
     <result column="bc_level" property="bcLevel" jdbcType="CHAR" />
@@ -25,21 +25,21 @@
     select 
     <include refid="Base_Column_List" />
     from t_base_category
-    where bc_id = #{bcId,jdbcType=SMALLINT}
+    where bc_id = #{bcId,jdbcType=DECIMAL}
   </select>
   
   <delete id="deleteByBcId" parameterType="java.lang.Short" >
     delete from t_base_category
-    where bc_id = #{bcId,jdbcType=SMALLINT}
+    where bc_id = #{bcId,jdbcType=DECIMAL}
   </delete>
   
-  <insert id="insertBaseCategory" parameterType="com.afd.model.product.BaseCategory" >
-    insert into t_base_category (bc_id, bc_name, bc_code, 
+  <insert id="insertBaseCategory" useGeneratedKeys="true" keyProperty="bcId" parameterType="com.afd.model.product.BaseCategory" >
+    insert into t_base_category (bc_name, bc_code, 
       bc_level, p_bc_id, path_id, 
       path_name, is_leaf, display_order, 
       create_date, update_data, status
       )
-    values (#{bcId,jdbcType=SMALLINT}, #{bcName,jdbcType=VARCHAR}, #{bcCode,jdbcType=VARCHAR}, 
+    values (#{bcName,jdbcType=VARCHAR}, #{bcCode,jdbcType=VARCHAR}, 
       #{bcLevel,jdbcType=CHAR}, #{pBcId,jdbcType=DECIMAL}, #{pathId,jdbcType=VARCHAR}, 
       #{pathName,jdbcType=VARCHAR}, #{isLeaf,jdbcType=BOOLEAN}, #{displayOrder,jdbcType=DECIMAL}, 
       #{createDate,jdbcType=TIMESTAMP}, #{updateData,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR}
@@ -88,7 +88,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="bcId != null" >
-        #{bcId,jdbcType=SMALLINT},
+        #{bcId,jdbcType=DECIMAL},
       </if>
       <if test="bcName != null" >
         #{bcName,jdbcType=VARCHAR},
@@ -163,7 +163,7 @@
         status = #{status,jdbcType=CHAR},
       </if>
     </set>
-    where bc_id = #{bcId,jdbcType=SMALLINT}
+    where bc_id = #{bcId,jdbcType=DECIMAL}
   </update>
   
   <update id="updateBaseCategory" parameterType="com.afd.model.product.BaseCategory" >
@@ -179,7 +179,7 @@
       create_date = #{createDate,jdbcType=TIMESTAMP},
       update_data = #{updateData,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=CHAR}
-    where bc_id = #{bcId,jdbcType=SMALLINT}
+    where bc_id = #{bcId,jdbcType=DECIMAL}
   </update>
   
   <select id="getBaseCategorysByPId" resultMap="BaseResultMap" >

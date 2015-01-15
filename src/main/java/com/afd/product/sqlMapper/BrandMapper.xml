@@ -14,12 +14,17 @@
     <result column="pinyin" property="pinyin" jdbcType="VARCHAR" />
   </resultMap>
   
-  <insert id="insertBrand" parameterType="com.afd.model.product.Brand" >
-    insert into t_brand (brand_id, brand_name, brand_ename, 
+  <sql id="Base_Column_List">
+    brand_id, brand_name, brand_ename, logo_url, brand_abbr, brand_story, create_date, 
+    status,create_by_name,pinyin
+  </sql>
+  
+  <insert id="insertBrand" parameterType="com.afd.model.product.Brand"  useGeneratedKeys="true" keyProperty="brandId" >
+    insert into t_brand (brand_name, brand_ename, 
       logo_url, brand_abbr, brand_story, 
       create_date, status, create_by_name, 
       pinyin)
-    values (#{brandId,jdbcType=DECIMAL}, #{brandName,jdbcType=VARCHAR}, #{brandEname,jdbcType=VARCHAR}, 
+    values (#{brandName,jdbcType=VARCHAR}, #{brandEname,jdbcType=VARCHAR}, 
       #{logoUrl,jdbcType=VARCHAR}, #{brandAbbr,jdbcType=VARCHAR}, #{brandStory,jdbcType=VARCHAR}, 
       #{createDate,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR}, #{createByName,jdbcType=VARCHAR}, 
       #{pinyin,jdbcType=VARCHAR})

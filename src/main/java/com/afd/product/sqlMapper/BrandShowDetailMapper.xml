@@ -42,15 +42,15 @@
     where b_s_d_id = #{bSDId,jdbcType=DECIMAL}
   </delete>
   
-  <insert id="insert" parameterType="com.afd.model.product.BrandShowDetail" >
-    insert into t_brand_show_detail (b_s_d_id, brand_show_id, prod_id, 
+  <insert id="insert" parameterType="com.afd.model.product.BrandShowDetail" useGeneratedKeys="true" keyProperty="bSDId" >
+    insert into t_brand_show_detail (brand_show_id, prod_id, 
       prod_code, sku_code, sku_id, 
       prod_name, prod_title, prod_img, 
       sku_spec_name, show_price, show_balance, 
       sale_amount, purchase_count_limit, start_date, 
       end_date, status, create_by_date, 
       create_by_name, remove_date)
-    values (#{bSDId,jdbcType=DECIMAL}, #{brandShowId,jdbcType=DECIMAL}, #{prodId,jdbcType=DECIMAL}, 
+    values (#{brandShowId,jdbcType=DECIMAL}, #{prodId,jdbcType=DECIMAL}, 
       #{prodCode,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{skuId,jdbcType=DECIMAL}, 
       #{prodName,jdbcType=VARCHAR}, #{prodTitle,jdbcType=VARCHAR}, #{prodImg,jdbcType=VARCHAR}, 
       #{skuSpecName,jdbcType=VARCHAR}, #{showPrice,jdbcType=DECIMAL}, #{showBalance,jdbcType=DECIMAL}, 

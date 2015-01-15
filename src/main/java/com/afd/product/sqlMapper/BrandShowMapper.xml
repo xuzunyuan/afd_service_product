@@ -40,15 +40,15 @@
     where brand_show_id = #{brandShowId,jdbcType=INTEGER}
   </delete>
   
-  <insert id="insert" parameterType="com.afd.model.product.BrandShow" >
-    insert into t_brand_show (brand_show_id, seller_id, brand_id, 
+  <insert id="insert" parameterType="com.afd.model.product.BrandShow" useGeneratedKeys="true" keyProperty="brandShowId" >
+    insert into t_brand_show (seller_id, brand_id, 
       title, banner_img, bg_color, 
       type, create_by_date, audit_date, 
       audit_by_name, audit_content, start_date, 
       end_date, end_by_date, end_by_name, 
       end_by_id, buy_limit, s_r_a_id
       )
-    values (#{brandShowId,jdbcType=INTEGER}, #{sellerId,jdbcType=INTEGER}, #{brandId,jdbcType=INTEGER}, 
+    values (#{sellerId,jdbcType=INTEGER}, #{brandId,jdbcType=INTEGER}, 
       #{title,jdbcType=VARCHAR}, #{bannerImg,jdbcType=VARCHAR}, #{bgColor,jdbcType=VARCHAR}, 
       #{type,jdbcType=CHAR}, #{createByDate,jdbcType=TIMESTAMP}, #{auditDate,jdbcType=TIMESTAMP}, 
       #{auditByName,jdbcType=VARCHAR}, #{auditContent,jdbcType=VARCHAR}, #{startDate,jdbcType=TIMESTAMP}, 

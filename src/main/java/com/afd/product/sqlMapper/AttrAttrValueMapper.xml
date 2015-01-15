@@ -31,11 +31,11 @@
     where a_av_id = #{aAvId,jdbcType=DECIMAL}
   </delete>
   
-  <insert id="insertAttrAttrValue" parameterType="com.afd.model.product.AttrAttrValue" >
-    insert into t_attr_attr_value (a_av_id, attr_id, attr_value_id, 
+  <insert id="insertAttrAttrValue" parameterType="com.afd.model.product.AttrAttrValue" useGeneratedKeys="true" keyProperty="aAvId" >
+    insert into t_attr_attr_value (attr_id, attr_value_id, 
       display_order, p_a_av_id, has_sub
       )
-    values (#{aAvId,jdbcType=DECIMAL}, #{attrId,jdbcType=DECIMAL}, #{attrValueId,jdbcType=DECIMAL}, 
+    values (#{attrId,jdbcType=DECIMAL}, #{attrValueId,jdbcType=DECIMAL}, 
       #{displayOrder,jdbcType=DECIMAL}, #{pAAvId,jdbcType=DECIMAL}, #{hasSub,jdbcType=CHAR}
       )
   </insert>

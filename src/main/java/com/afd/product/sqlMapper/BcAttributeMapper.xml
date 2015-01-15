@@ -34,11 +34,11 @@
     where bc_attr_id = #{bcattrid,jdbctype=decimal}
   </delete>
   
-  <insert id="insertBcAttribute" parameterType="com.afd.model.product.BcAttribute" >
-    insert into t_bc_attribute (bc_attr_id, bc_id, attr_id, display_mode,
+  <insert id="insertBcAttribute" parameterType="com.afd.model.product.BcAttribute" useGeneratedKeys="true" keyProperty="bcAttrId" >
+    insert into t_bc_attribute (bc_id, attr_id, display_mode,
       display_order, is_require, status, 
       is_filter)
-    values (#{bcAttrId,jdbcType=DECIMAL}, #{bcId,jdbcType=DECIMAL}, #{attrId,jdbcType=DECIMAL}, #{displayMode,jdbcType=CHAR}, 
+    values (#{bcId,jdbcType=DECIMAL}, #{attrId,jdbcType=DECIMAL}, #{displayMode,jdbcType=CHAR}, 
       #{displayOrder,jdbcType=DECIMAL}, #{isRequire,jdbcType=CHAR}, #{status,jdbcType=CHAR}, 
       #{isFilter,jdbcType=CHAR})
   </insert>

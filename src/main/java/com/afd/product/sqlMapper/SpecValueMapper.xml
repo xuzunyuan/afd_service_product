@@ -31,12 +31,12 @@
     where spec_value_id = #{specValueId,jdbcType=DECIMAL}
   </delete>
   
-  <insert id="insertSpecValue" parameterType="com.afd.model.product.SpecValue" >
-    insert into t_spec_value (spec_value_id, spec_value_name, pinyin, 
+  <insert id="insertSpecValue" parameterType="com.afd.model.product.SpecValue" useGeneratedKeys="true" keyProperty="specValueId" >
+    insert into t_spec_value (spec_value_name, pinyin, 
       img_url, status, create_by_name, 
       create_by_date, last_update_by_name, last_update_by_date
       )
-    values (#{specValueId,jdbcType=DECIMAL}, #{specValueName,jdbcType=VARCHAR}, #{pinyin,jdbcType=VARCHAR}, 
+    values (#{specValueName,jdbcType=VARCHAR}, #{pinyin,jdbcType=VARCHAR}, 
       #{imgUrl,jdbcType=VARCHAR}, #{status,jdbcType=CHAR}, #{createByName,jdbcType=VARCHAR}, 
       #{createByDate,jdbcType=TIMESTAMP}, #{lastUpdateByName,jdbcType=VARCHAR}, #{lastUpdateByDate,jdbcType=TIMESTAMP}
       )

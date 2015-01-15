@@ -10,6 +10,10 @@
     <result column="is_filter" property="isFilter" jdbcType="CHAR" />
   </resultMap>
   
+  <resultMap id="ExtResultMap" type="com.afd.model.product.vo.BcSpecVO" extends="BaseResultMap">
+    <result column="SPEC_NAME" jdbcType="VARCHAR" property="specName" />
+  </resultMap>
+  
   <sql id="Base_Column_List" >
     bc_spec_id, bc_id, spec_id, display_order, status, is_filter
   </sql>
@@ -26,11 +30,11 @@
     where bc_spec_id = #{bcSpecId,jdbcType=DECIMAL}
   </delete>
   
-  <insert id="insertBcSpec" parameterType="com.afd.model.product.BcSpec" >
-    insert into t_bc_spec (bc_spec_id, bc_id, spec_id, 
+  <insert id="insertBcSpec" parameterType="com.afd.model.product.BcSpec" useGeneratedKeys="true" keyProperty="bcSpecId" >
+    insert into t_bc_spec (bc_id, spec_id, 
       display_order, status, is_filter
       )
-    values (#{bcSpecId,jdbcType=DECIMAL}, #{bcId,jdbcType=DECIMAL}, #{specId,jdbcType=DECIMAL}, 
+    values (#{bcId,jdbcType=DECIMAL}, #{specId,jdbcType=DECIMAL}, 
       #{displayOrder,jdbcType=DECIMAL}, #{status,jdbcType=CHAR}, #{isFilter,jdbcType=CHAR}
       )
   </insert>

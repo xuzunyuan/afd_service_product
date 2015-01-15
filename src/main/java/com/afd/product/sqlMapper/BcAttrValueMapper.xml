@@ -38,12 +38,12 @@
     where BC_AV_ID = #{bcAvId,jdbcType=DECIMAL}
   </delete>
   
-  <insert id="insertBcAttrValue" parameterType="com.afd.model.product.BcAttrValue" >
-    insert into t_bc_attr_value (bc_av_id, bc_attr_id, attr_value_id, 
+  <insert id="insertBcAttrValue" parameterType="com.afd.model.product.BcAttrValue"  useGeneratedKeys="true" keyProperty="bcAvId" >
+    insert into t_bc_attr_value (bc_attr_id, attr_value_id, 
       p_bc_av_id, is_sub_attr, icon, 
       display_order, status, bc_id, 
       is_filter, is_mobile_display)
-    values (#{bcAvId,jdbcType=INTEGER}, #{bcAttrId,jdbcType=INTEGER}, #{attrValueId,jdbcType=INTEGER}, 
+    values (#{bcAttrId,jdbcType=INTEGER}, #{attrValueId,jdbcType=INTEGER}, 
       #{pBcAvId,jdbcType=INTEGER}, #{isSubAttr,jdbcType=CHAR}, #{icon,jdbcType=VARCHAR}, 
       #{displayOrder,jdbcType=TINYINT}, #{status,jdbcType=CHAR}, #{bcId,jdbcType=SMALLINT}, 
       #{isFilter,jdbcType=CHAR}, #{isMobileDisplay,jdbcType=CHAR})
