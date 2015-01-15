@@ -20,6 +20,9 @@
  
     <!-- 声明需要暴露的服务接口  loadbalance: random(随机);roundrobin(轮询);leastactive(最小活跃调用)-->
     <dubbo:service owner="lgc" timeout="2000" interface="com.afd.service.product.ICategoryService" loadbalance="random" ref="categoryService" />
+    <dubbo:service owner="lgc" timeout="2000" interface="com.afd.service.product.IAttributeService" loadbalance="random" ref="attributeService" />
+    <dubbo:service owner="lgc" timeout="2000" interface="com.afd.service.product.IBrandService" loadbalance="random" ref="brandService" />
+    <dubbo:service owner="lgc" timeout="2000" interface="com.afd.service.product.ISpecService" loadbalance="random" ref="specService" />
 	
 
 </beans>
