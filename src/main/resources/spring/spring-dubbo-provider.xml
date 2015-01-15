@@ -7,7 +7,12 @@
         http://code.alibabatech.com/schema/dubbo
         http://code.alibabatech.com/schema/dubbo/dubbo.xsd
         ">
+        
+    <dubbo:application name="afd_service"/>
   
+  	<!-- 广播中心地址 -->
+	<dubbo:registry protocol="zookeeper" port="2181" address="192.168.1.19" />
+   	
     <!-- 用hessian协议暴露服务 -->
 	<!-- jetty服务时，设置server="servlet" servlet服务时，设置server="jetty" -->
 	<!-- hessian协议时要与服务启动的端口一致，此处，port与tomcat均为8080；dubbo协议不做限制 -->

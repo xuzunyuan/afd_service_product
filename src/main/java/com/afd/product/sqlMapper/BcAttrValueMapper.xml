@@ -15,7 +15,7 @@
     <result column="is_mobile_display" property="isMobileDisplay" jdbcType="CHAR" />
   </resultMap>
   
-  <resultMap id="ExtResultMap" type="com.yiwang.model.product.vo.BcAttrValueVO" extends="BaseResultMap">
+  <resultMap id="ExtResultMap" type="com.afd.model.product.vo.BcAttrValueVO" extends="BaseResultMap">
     <id column="ATTR_VALUE_NAME" jdbcType="VARCHAR" property="attrValueName" />
     <id column="PINYIN" jdbcType="VARCHAR" property="pinyin" />
   </resultMap>

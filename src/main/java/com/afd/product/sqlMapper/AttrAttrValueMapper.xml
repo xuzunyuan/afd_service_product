@@ -116,13 +116,6 @@
     where a_av_id = #{aAvId,jdbcType=DECIMAL}
   </update>
   
-  <select id="getAttrAttrValueByAttrIdAndAVId" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
-    <include refid="Base_Column_List" />
-    from T_ATTR_ATTR_VALUE
-    where ATTR_ID = #{attrId,jdbcType=DECIMAL} and ATTR_VALUE_ID = #{attrValueId,jdbcType=DECIMAL}
-  </select>
-  
   <delete id="deleteSubAttrAttrValueByAttrId" parameterType="java.lang.Long">
     delete from T_ATTR_ATTR_VALUE
     where P_A_AV_ID in (select A_AV_ID 
