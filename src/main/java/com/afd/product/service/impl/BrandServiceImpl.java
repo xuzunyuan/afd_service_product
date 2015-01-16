@@ -10,6 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.afd.constants.SystemConstants;
+import com.afd.constants.product.ProductConstants;
 import com.afd.model.product.Brand;
 import com.afd.model.product.SellerBrand;
 import com.afd.product.dao.BrandMapper;
@@ -32,6 +33,14 @@ public class BrandServiceImpl implements IBrandService {
 		Long id = 0l;
 		if(this.brandMapper.insertBrand(brand)){
 			id = brand.getBrandId();
+			if(id > 0){
+				try {
+					//写入缓存
+					this.redisTemplate.opsForValue().set(ProductConstants.BRAND+brand.getBrandId(), brand);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		
 		return id;
@@ -39,7 +48,16 @@ public class BrandServiceImpl implements IBrandService {
 
 	@Override
 	public boolean updateByBrandId(Brand brand) {
-		return this.brandMapper.updateByBrandId(brand);
+		boolean re = this.brandMapper.updateByBrandId(brand);
+		if(re){
+			try {
+				this.redisTemplate.delete(ProductConstants.BRAND+brand.getBrandId());;
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		return re;
 	}
 
 	@Override
@@ -51,8 +69,17 @@ public class BrandServiceImpl implements IBrandService {
 		if(sb==null || sb.isEmpty()){
 			Brand brand = this.brandMapper.getByBrandId(brandId);
 			brand.setStatus(SystemConstants.DB_STATUS_INVALID);
-			//修改为无效状态
-			result = this.brandMapper.updateByBrandId(brand)?1:0;
+			boolean re = this.brandMapper.updateByBrandId(brand);
+			
+			if(re){
+				try {
+					this.redisTemplate.delete(ProductConstants.BRAND+brandId);;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}else{
+				result = 0;
+			}
 		}else{
 			result = -1;
 		}
@@ -62,7 +89,20 @@ public class BrandServiceImpl implements IBrandService {
 
 	@Override
 	public Brand getByBrandId(Long brandId) {
-		return this.brandMapper.getByBrandId(brandId);
+		Brand brand = null;
+		
+		try {
+			//先从缓存中获取
+			brand = (Brand) this.redisTemplate.opsForValue().get(ProductConstants.BRAND+brandId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if(brand == null){
+			brand = this.brandMapper.getByBrandId(brandId);
+		}
+		
+		return brand;
 	}
 
 	@Override
