@@ -83,4 +83,10 @@ public class SkuServiceImpl implements ISkuService {
 		return null;
 	}
 
+	@Override
+	public List<Sku> getSkusByIds(List<Long> skuIds) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
