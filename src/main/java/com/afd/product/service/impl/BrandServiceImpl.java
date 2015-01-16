@@ -39,13 +39,7 @@ public class BrandServiceImpl implements IBrandService {
 
 	@Override
 	public boolean updateByBrandId(Brand brand) {
-		boolean re = this.brandMapper.updateByBrandId(brand);
-		if(re){
-			//修改卖家签约的品牌
-			this.sellerBrandMapper.updateBrandName(brand.getBrandId());
-		}
-		
-		return re;
+		return this.brandMapper.updateByBrandId(brand);
 	}
 
 	@Override

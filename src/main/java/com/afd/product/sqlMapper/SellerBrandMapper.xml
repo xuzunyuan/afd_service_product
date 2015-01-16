@@ -5,7 +5,6 @@
     <id column="seller_brand_id" property="sellerBrandId" jdbcType="INTEGER" />
     <result column="seller_id" property="sellerId" jdbcType="INTEGER" />
     <result column="brand_id" property="brandId" jdbcType="INTEGER" />
-    <result column="brand_name" property="brandName" jdbcType="VARCHAR" />
     <result column="submit_date" property="submitDate" jdbcType="TIMESTAMP" />
     <result column="status" property="status" jdbcType="CHAR" />
     <result column="audit_status" property="auditStatus" jdbcType="CHAR" />
@@ -20,7 +19,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    seller_brand_id, seller_id, brand_id, brand_name, submit_date, status, audit_status, audit_date, 
+    seller_brand_id, seller_id, brand_id, submit_date, status, audit_status, audit_date, 
     audit_by_name, audit_content, auth_start_date, auth_end_date, bc_ids, trademark_cert, 
     other_cert
   </sql>
@@ -52,12 +51,12 @@
   </delete>
   
   <insert id="insert" parameterType="com.afd.model.product.SellerBrand" useGeneratedKeys="true" keyProperty="sellerBrandId" >
-    insert into t_seller_brand (seller_id, brand_id, brand_name,
+    insert into t_seller_brand (seller_id, brand_id, 
       submit_date, status, audit_status, 
       audit_date, audit_by_name, audit_content, 
       auth_start_date, auth_end_date, bc_ids, 
       trademark_cert, other_cert)
-    values (#{sellerId,jdbcType=INTEGER}, #{brandId,jdbcType=INTEGER}, #{brandName,jdbcType=VARCHAR}, 
+    values (#{sellerId,jdbcType=INTEGER}, #{brandId,jdbcType=INTEGER}, 
       #{submitDate,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR}, #{auditStatus,jdbcType=CHAR}, 
       #{auditDate,jdbcType=TIMESTAMP}, #{auditByName,jdbcType=VARCHAR}, #{auditContent,jdbcType=VARCHAR}, 
       #{authStartDate,jdbcType=TIMESTAMP}, #{authEndDate,jdbcType=TIMESTAMP}, #{bcIds,jdbcType=VARCHAR}, 
@@ -165,9 +164,6 @@
       <if test="brandId != null" >
         brand_id = #{brandId,jdbcType=INTEGER},
       </if>
-      <if test="brandName != null" >
-        brand_name = #{brandName,jdbcType=VARCHAR},
-      </if>
       <if test="submitDate != null" >
         submit_date = #{submitDate,jdbcType=TIMESTAMP},
       </if>
@@ -222,11 +218,4 @@
       other_cert = #{otherCert,jdbcType=VARCHAR}
     where seller_brand_id = #{sellerBrandId,jdbcType=INTEGER}
   </update>
-  
-  <update id="updateBrandName" parameterType="com.afd.model.product.SellerBrand" >
-    update t_seller_brand
-    set brand_name = #{brandName,jdbcType=VARCHAR}
-    where brand_id = #{brandId,jdbcType=DECIMAL}
-  </update>
-  
 </mapper>

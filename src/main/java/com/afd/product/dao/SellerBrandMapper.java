@@ -20,6 +20,4 @@ public interface SellerBrandMapper {
     int updateByPrimaryKey(SellerBrand record);
     
     public List<SellerBrand> getSellerBrandByBrandId(@Param(value = "brandId") Long brandId, @Param(value = "status") String status);
-    
-    public boolean updateBrandName(Long brandId);
 }
