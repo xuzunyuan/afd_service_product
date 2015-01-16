@@ -129,4 +129,10 @@ public class ProductServiceImpl implements IProductService {
 		return null;
 	}
 
+	@Override
+	public List<Product> getProductsByIds(List<Long> prodIds) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
