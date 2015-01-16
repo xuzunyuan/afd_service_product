@@ -32,6 +32,20 @@
     where seller_brand_id = #{sellerBrandId,jdbcType=INTEGER}
   </select>
   
+  <select id="getSellerBrandByBrandId" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_seller_brand
+    <where> 
+		<if test="brandId != null">  
+			brand_id = #{brandId,jdbcType=DECIMAL}
+		</if>
+		<if test="status != null">
+			and status = #{status,jdbcType=CHAR}
+		</if>
+	</where>
+  </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from t_seller_brand
     where seller_brand_id = #{sellerBrandId,jdbcType=INTEGER}
@@ -208,4 +222,11 @@
       other_cert = #{otherCert,jdbcType=VARCHAR}
     where seller_brand_id = #{sellerBrandId,jdbcType=INTEGER}
   </update>
+  
+  <update id="updateBrandName" parameterType="com.afd.model.product.SellerBrand" >
+    update t_seller_brand
+    set brand_name = #{brandName,jdbcType=VARCHAR}
+    where brand_id = #{brandId,jdbcType=DECIMAL}
+  </update>
+  
 </mapper>
