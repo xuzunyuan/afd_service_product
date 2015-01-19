@@ -258,7 +258,7 @@ public class ProductServiceImpl implements IProductService {
 	}
 
 	@Override
-	public Page<Sku> getSkusBySkuIds(List<Integer> skuIds) {
+	public List<Sku> getSkusBySkuIds(List<Integer> skuIds) {
 		// TODO Auto-generated method stub
 		return null;
 	}
