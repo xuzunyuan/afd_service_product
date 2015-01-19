@@ -45,8 +45,8 @@
     delete from t_product_comment
     where p_comment_id = #{pCommentId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.afd.model.product.ProductComment" >
-    insert into t_product_comment (p_comment_id, prod_id, sku_id, 
+  <insert id="insert" parameterType="com.afd.model.product.ProductComment" useGeneratedKeys="true" keyProperty="pCommentId"  >
+    insert into t_product_comment (prod_id, sku_id, 
       item_id, order_id, order_code, 
       create_date, create_by_ip, seller_id, 
       user_id, nickname, title, 
@@ -55,7 +55,7 @@
       reply_score, reply_status, reply_by_id, 
       reply_by_name, reply_date, is_have_additional, 
       is_have_Content)
-    values (#{pCommentId,jdbcType=INTEGER}, #{prodId,jdbcType=INTEGER}, #{skuId,jdbcType=INTEGER}, 
+    values (#{prodId,jdbcType=INTEGER}, #{skuId,jdbcType=INTEGER}, 
       #{itemId,jdbcType=INTEGER}, #{orderId,jdbcType=INTEGER}, #{orderCode,jdbcType=VARCHAR}, 
       #{createDate,jdbcType=TIMESTAMP}, #{createByIp,jdbcType=VARCHAR}, #{sellerId,jdbcType=INTEGER}, 
       #{userId,jdbcType=INTEGER}, #{nickname,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, 
@@ -65,12 +65,9 @@
       #{replyByName,jdbcType=VARCHAR}, #{replyDate,jdbcType=TIMESTAMP}, #{isHaveAdditional,jdbcType=CHAR}, 
       #{isHaveContent,jdbcType=CHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.afd.model.product.ProductComment" >
+  <insert id="insertSelective" parameterType="com.afd.model.product.ProductComment" useGeneratedKeys="true" keyProperty="pCommentId" >
     insert into t_product_comment
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="pCommentId != null" >
-        p_comment_id,
-      </if>
       <if test="prodId != null" >
         prod_id,
       </if>
@@ -148,9 +145,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="pCommentId != null" >
-        #{pCommentId,jdbcType=INTEGER},
-      </if>
       <if test="prodId != null" >
         #{prodId,jdbcType=INTEGER},
       </if>

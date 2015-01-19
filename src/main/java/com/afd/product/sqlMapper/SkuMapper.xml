@@ -35,26 +35,23 @@
     delete from t_sku
     where sku_id = #{skuId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.afd.model.product.Sku" >
-    insert into t_sku (sku_id, prod_id, sku_spec_id, 
+  <insert id="insert" parameterType="com.afd.model.product.Sku" useGeneratedKeys="true" keyProperty="skuId" >
+    insert into t_sku (prod_id, sku_spec_id, 
       sku_spec_name, prod_code, sku_code, 
       sku_img_url, stock_balance, market_price, 
       sale_price, sku_type, sku_status, 
       sort_rank, create_date, create_by_name, 
       last_update_date, update_by_name)
-    values (#{skuId,jdbcType=INTEGER}, #{prodId,jdbcType=INTEGER}, #{skuSpecId,jdbcType=VARCHAR}, 
+    values (#{prodId,jdbcType=INTEGER}, #{skuSpecId,jdbcType=VARCHAR}, 
       #{skuSpecName,jdbcType=VARCHAR}, #{prodCode,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, 
       #{skuImgUrl,jdbcType=VARCHAR}, #{stockBalance,jdbcType=INTEGER}, #{marketPrice,jdbcType=DECIMAL}, 
       #{salePrice,jdbcType=DECIMAL}, #{skuType,jdbcType=CHAR}, #{skuStatus,jdbcType=CHAR}, 
       #{sortRank,jdbcType=TINYINT}, #{createDate,jdbcType=TIMESTAMP}, #{createByName,jdbcType=VARCHAR}, 
       #{lastUpdateDate,jdbcType=TIMESTAMP}, #{updateByName,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.afd.model.product.Sku" >
+  <insert id="insertSelective" parameterType="com.afd.model.product.Sku" useGeneratedKeys="true" keyProperty="skuId" >
     insert into t_sku
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="skuId != null" >
-        sku_id,
-      </if>
       <if test="prodId != null" >
         prod_id,
       </if>
@@ -105,9 +102,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="skuId != null" >
-        #{skuId,jdbcType=INTEGER},
-      </if>
       <if test="prodId != null" >
         #{prodId,jdbcType=INTEGER},
       </if>

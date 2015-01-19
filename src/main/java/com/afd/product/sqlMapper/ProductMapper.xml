@@ -26,6 +26,8 @@
     <result column="audit_status" property="auditStatus" jdbcType="CHAR" />
     <result column="last_audit_name" property="lastAuditName" jdbcType="VARCHAR" />
     <result column="last_audit_date" property="lastAuditDate" jdbcType="TIMESTAMP" />
+    <result column="material" property="material" jdbcType="VARCHAR" />
+    <result column="source_area" property="sourceArea" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.afd.model.product.Product" extends="BaseResultMap" >
     <result column="detail" property="detail" jdbcType="LONGVARCHAR" />
@@ -33,7 +35,8 @@
   <sql id="Base_Column_List" >
     prod_id, prod_code, bc_code, name, title, subtitle, bc_id, seller_id, art_no, brand_id, 
     brand_name, type, status, brief, weight, volume, attr_value_id, attr_value_name, 
-    expire_date, create_date, last_update_date, audit_status, last_audit_name, last_audit_date
+    expire_date, create_date, last_update_date, audit_status, last_audit_name, last_audit_date, 
+    material, source_area
   </sql>
   <sql id="Blob_Column_List" >
     detail
@@ -50,8 +53,8 @@
     delete from t_product
     where prod_id = #{prodId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.afd.model.product.Product" >
-    insert into t_product (prod_id, prod_code, bc_code, 
+  <insert id="insert" parameterType="com.afd.model.product.Product" useGeneratedKeys="true" keyProperty="prodId" >
+    insert into t_product (prod_code, bc_code, 
       name, title, subtitle, 
       bc_id, seller_id, art_no, 
       brand_id, brand_name, type, 
@@ -59,8 +62,9 @@
       volume, attr_value_id, attr_value_name, 
       expire_date, create_date, last_update_date, 
       audit_status, last_audit_name, last_audit_date, 
-      detail)
-    values (#{prodId,jdbcType=INTEGER}, #{prodCode,jdbcType=VARCHAR}, #{bcCode,jdbcType=VARCHAR}, 
+      material, source_area, detail
+      )
+    values (#{prodCode,jdbcType=VARCHAR}, #{bcCode,jdbcType=VARCHAR}, 
       #{name,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{subtitle,jdbcType=VARCHAR}, 
       #{bcId,jdbcType=INTEGER}, #{sellerId,jdbcType=INTEGER}, #{artNo,jdbcType=VARCHAR}, 
       #{brandId,jdbcType=INTEGER}, #{brandName,jdbcType=VARCHAR}, #{type,jdbcType=CHAR}, 
@@ -68,14 +72,12 @@
       #{volume,jdbcType=VARCHAR}, #{attrValueId,jdbcType=VARCHAR}, #{attrValueName,jdbcType=VARCHAR}, 
       #{expireDate,jdbcType=TIMESTAMP}, #{createDate,jdbcType=TIMESTAMP}, #{lastUpdateDate,jdbcType=TIMESTAMP}, 
       #{auditStatus,jdbcType=CHAR}, #{lastAuditName,jdbcType=VARCHAR}, #{lastAuditDate,jdbcType=TIMESTAMP}, 
-      #{detail,jdbcType=LONGVARCHAR})
+      #{material,jdbcType=VARCHAR}, #{sourceArea,jdbcType=VARCHAR}, #{detail,jdbcType=LONGVARCHAR}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.afd.model.product.Product" >
+  <insert id="insertSelective" parameterType="com.afd.model.product.Product" useGeneratedKeys="true" keyProperty="prodId" >
     insert into t_product
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="prodId != null" >
-        prod_id,
-      </if>
       <if test="prodCode != null" >
         prod_code,
       </if>
@@ -145,14 +147,17 @@
       <if test="lastAuditDate != null" >
         last_audit_date,
       </if>
+      <if test="material != null" >
+        material,
+      </if>
+      <if test="sourceArea != null" >
+        source_area,
+      </if>
       <if test="detail != null" >
         detail,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="prodId != null" >
-        #{prodId,jdbcType=INTEGER},
-      </if>
       <if test="prodCode != null" >
         #{prodCode,jdbcType=VARCHAR},
       </if>
@@ -221,6 +226,12 @@
       </if>
       <if test="lastAuditDate != null" >
         #{lastAuditDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="material != null" >
+        #{material,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceArea != null" >
+        #{sourceArea,jdbcType=VARCHAR},
       </if>
       <if test="detail != null" >
         #{detail,jdbcType=LONGVARCHAR},
@@ -299,6 +310,12 @@
       <if test="lastAuditDate != null" >
         last_audit_date = #{lastAuditDate,jdbcType=TIMESTAMP},
       </if>
+      <if test="material != null" >
+        material = #{material,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceArea != null" >
+        source_area = #{sourceArea,jdbcType=VARCHAR},
+      </if>
       <if test="detail != null" >
         detail = #{detail,jdbcType=LONGVARCHAR},
       </if>
@@ -330,6 +347,8 @@
       audit_status = #{auditStatus,jdbcType=CHAR},
       last_audit_name = #{lastAuditName,jdbcType=VARCHAR},
       last_audit_date = #{lastAuditDate,jdbcType=TIMESTAMP},
+      material = #{material,jdbcType=VARCHAR},
+      source_area = #{sourceArea,jdbcType=VARCHAR},
       detail = #{detail,jdbcType=LONGVARCHAR}
     where prod_id = #{prodId,jdbcType=INTEGER}
   </update>
@@ -357,7 +376,9 @@
       last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
       audit_status = #{auditStatus,jdbcType=CHAR},
       last_audit_name = #{lastAuditName,jdbcType=VARCHAR},
-      last_audit_date = #{lastAuditDate,jdbcType=TIMESTAMP}
+      last_audit_date = #{lastAuditDate,jdbcType=TIMESTAMP},
+      material = #{material,jdbcType=VARCHAR},
+      source_area = #{sourceArea,jdbcType=VARCHAR}
     where prod_id = #{prodId,jdbcType=INTEGER}
   </update>
 </mapper>

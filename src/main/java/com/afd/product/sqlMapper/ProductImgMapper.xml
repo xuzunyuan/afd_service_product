@@ -26,22 +26,19 @@
     delete from t_product_img
     where prod_img_id = #{prodImgId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.afd.model.product.ProductImg" >
-    insert into t_product_img (prod_img_id, prod_id, img_title, 
+  <insert id="insert" parameterType="com.afd.model.product.ProductImg" useGeneratedKeys="true" keyProperty="prodImgId" >
+    insert into t_product_img (prod_id, img_title, 
       img_url, img_desc, sort_rank, 
       img_type, img_status, create_date
       )
-    values (#{prodImgId,jdbcType=INTEGER}, #{prodId,jdbcType=INTEGER}, #{imgTitle,jdbcType=VARCHAR}, 
+    values (#{prodId,jdbcType=INTEGER}, #{imgTitle,jdbcType=VARCHAR}, 
       #{imgUrl,jdbcType=VARCHAR}, #{imgDesc,jdbcType=VARCHAR}, #{sortRank,jdbcType=TINYINT}, 
       #{imgType,jdbcType=CHAR}, #{imgStatus,jdbcType=CHAR}, #{createDate,jdbcType=TIMESTAMP}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.afd.model.product.ProductImg" >
+  <insert id="insertSelective" parameterType="com.afd.model.product.ProductImg" useGeneratedKeys="true" keyProperty="prodImgId" >
     insert into t_product_img
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="prodImgId != null" >
-        prod_img_id,
-      </if>
       <if test="prodId != null" >
         prod_id,
       </if>
@@ -68,9 +65,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="prodImgId != null" >
-        #{prodImgId,jdbcType=INTEGER},
-      </if>
       <if test="prodId != null" >
         #{prodId,jdbcType=INTEGER},
       </if>
