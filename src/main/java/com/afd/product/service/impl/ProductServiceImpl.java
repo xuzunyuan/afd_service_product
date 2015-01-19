@@ -1,96 +1,209 @@
 package com.afd.product.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import com.afd.common.mybatis.Page;
 import com.afd.model.product.Product;
+import com.afd.model.product.ProductImg;
+import com.afd.model.product.Sku;
 import com.afd.param.product.ProductCondition;
 import com.afd.service.product.IProductService;
 
 public class ProductServiceImpl implements IProductService {
 
 	@Override
-	public Long addProduct(Product product) {
+	public boolean addSku(Sku sku) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean batchAddSkus(List<Sku> skus) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean removeSkuById(Integer skuId) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean editSkuById(Sku sku, Integer increaseNum) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean batchEditSkus(List<Sku> skus, List<Integer> increaseNum) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Sku getSkuById(Integer skuId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean editProductById(Product product) {
+	public List<Sku> getSkusByProdId(Integer prodId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Sku getSkuBySkuCode(String skuCode) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer getStockBalance(Integer prodId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<Integer, List<Sku>> getSkusByProdId(List<Integer> prodIds) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Page<Sku> getSkusByProdIdPage(String prodId, Page<Sku> page) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long addProductImg(ProductImg productImg) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public long updateProductImg(ProductImg productImg) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean delProductImg(Long prodImgId) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean putawayProduct(Long prodId) {
+	public boolean delProductImgByProdId(Long prodId) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean batchPutawayProduct(List<Long> idList) {
+	public ProductImg getProductImgByPrimaryKey(Long prodImgId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<ProductImg> getProductImgByProdId(Long prodId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Page<ProductImg> getProductImgByProdIdOfPage(long prodId,
+			Page<ProductImg> page) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int addProduct(Product product) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int editProductById(Product product) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean putawayProduct(Integer prodId) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean cancelAuditProduct(Long prodId) {
+	public boolean batchPutawayProduct(List<Integer> idList) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean downawayProductByProdId(Long prodId, String optName) {
+	public boolean cancelAuditProduct(Integer prodId) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean batchDownawayProduct(List<Long> idList, String optName) {
+	public boolean downawayProductByProdId(Integer prodId, String optName) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean putawayProductBySys(Long prodId, String auditName) {
+	public boolean batchDownawayProduct(List<Integer> idList, String optName) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean batchPutawayProductBySys(List<Long> idList, String auditName) {
+	public boolean putawayProductByBoss(Integer prodId, String auditName) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean delProduct(Long prodId, String optName) {
+	public boolean batchPutawayProductByBoss(List<Integer> idList,
+			String auditName) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean batchdelProduct(List<Long> idList, String optName) {
+	public boolean delProduct(Integer prodId, String optName) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean batchSuspendSaleProduct(Long storeId, List<Long> idList,
+	public boolean batchdelProduct(List<Integer> idList, String optName) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean batchSuspendSaleProduct(Integer sellerId,
+			List<Integer> idList, String optName) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean batchOpenSaleProduct(Integer sellerId, List<Integer> idList,
 			String optName) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean batchOpenSaleProduct(Long toreId, List<Long> idList,
-			String optName) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public Product getProductById(Long prodId) {
+	public Product getProductById(Integer prodId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -102,14 +215,14 @@ public class ProductServiceImpl implements IProductService {
 	}
 
 	@Override
-	public Page<Product> getSaleProductPage(ProductCondition productCondition,
+	public Page<Product> searchOnlineProduct(ProductCondition productCondition,
 			String sortField, String sortDirection, Page<Product> page) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Page<Product> getBalanceProductPage(
+	public Page<Product> searchAuditProductPage(
 			ProductCondition productCondition, String sortField,
 			String sortDirection, Page<Product> page) {
 		// TODO Auto-generated method stub
@@ -117,14 +230,29 @@ public class ProductServiceImpl implements IProductService {
 	}
 
 	@Override
-	public Page<Product> getProductPage(ProductCondition productCondition,
-			String sortField, String sortDirection, Page<Product> page) {
+	public Page<Product> searchStockProductPage(
+			ProductCondition productCondition, String sortField,
+			String sortDirection, Page<Product> page) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Long> getProductByStoreId(Long storeId) {
+	public Page<Product> searchProductByConditionPage(
+			ProductCondition productCondition, String sortField,
+			String sortDirection, Page<Product> page) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Product> getProductBysellerId(Integer sellerId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Integer> getProductIdsBysellerId(Integer sellerId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
