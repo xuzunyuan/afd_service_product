@@ -30,4 +30,6 @@
     <dubbo:service owner="lgc" timeout="2000" interface="com.afd.service.product.ISpecService" loadbalance="random" ref="specService" />
 	
 
+    <dubbo:service owner="hkM" timeout="2000" interface="com.afd.service.product.IProductService" loadbalance="random" ref="productService" />
+
 </beans>

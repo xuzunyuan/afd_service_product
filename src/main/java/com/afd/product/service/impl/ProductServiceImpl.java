@@ -3,6 +3,8 @@ package com.afd.product.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.stereotype.Service;
+
 import com.afd.common.mybatis.Page;
 import com.afd.model.product.Product;
 import com.afd.model.product.ProductImg;
@@ -10,6 +12,7 @@ import com.afd.model.product.Sku;
 import com.afd.param.product.ProductCondition;
 import com.afd.service.product.IProductService;
 
+@Service("productService")
 public class ProductServiceImpl implements IProductService {
 
 	@Override
