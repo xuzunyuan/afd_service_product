@@ -226,4 +226,118 @@
       update_by_name = #{updateByName,jdbcType=VARCHAR}
     where sku_id = #{skuId,jdbcType=INTEGER}
   </update>
+  
+  <insert id="batchInsertSkus" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="skuId">
+  	INSERT INTO 
+  	<trim prefix="(" suffix=")" suffixOverrides="," >
+        prod_id,prod_code,sku_code,
+        <if test="skuImgUrl != null" >
+        sku_img_url,
+      </if>
+      stock_balance,
+      
+      
+      <if test="skuSpecId != null" >
+        sku_spec_id,
+      </if>
+      <if test="skuSpecName != null" >
+        sku_spec_name,
+      </if>
+        market_price,sale_price,
+      <if test="skuType != null" >
+        sku_type,
+      </if>
+      sku_status,sort_rank,create_date,create_by_name,
+      <if test="lastUpdateDate != null" >
+        last_update_date,
+      </if>
+      <if test="updateByName != null" >
+        update_by_name,
+      </if>
+    </trim>
+  	 VALUES 
+  	  <foreach collection="list" item = "item" separator=",">
+  	  	(#{item.prodId,jdbcType=INTEGER},
+  	  	#{item.prodCode,jdbcType=VARCHAR},
+  	  	#{item.skuCode,jdbcType=VARCHAR},
+  	  	<if test="#{item.skuImgUrl} != null">
+  	  		#{item.skuImgUrl,jdbcType=VARCHAR},
+  	  	</if>
+  	  	#{item.stockBalance,jdbcType=INTEGER},
+  	  	#{item.marketPrice,jdbcType=DECIMAL},
+  	  	#{item.salePrice,jdbcType=DECIMAL},
+  	  	<if test="#{item.skuType} != null">
+  	  		#{item.skuType,jdbcType=CHAR},
+  	  	</if>
+  	  	#{item.skuStatus,jdbcType=CHAR},
+  	  	#{item.sortRank,jdbcType=TINYINT},
+  	  	#{item.createDate,jdbcType=TIMESTAMP},
+  	  	#{item.createByName,jdbcType=VARCHAR}, 
+  	  	<if test="#{item.lastUpdateDate} != null">
+  	  		#{item.lastUpdateDate,jdbcType=TIMESTAMP},
+  	  	</if>
+  	  	<if test="#{item.updateByName} != null">
+  	  		#{item.updateByName,jdbcType=VARCHAR}
+  	  	</if>
+  	  	)
+  	  </foreach>
+  </insert>
+
+  <update id="batchEditSkus" parameterType="java.util.List">
+	BEGIN
+		<foreach collection="list" item="item" index="index"  >
+			UPDATE T_SKU 
+			<set> 
+				SKU_SPEC_ID = #{item.skuSpecId,jdbcType=VARCHAR},
+				SKU_SPEC_NAME = #{item.skuSpecName,jdbcType=VARCHAR},
+				PROD_CODE = #{item.prodCode,jdbcType=VARCHAR},
+				SKU_CODE = #{item.skuCode,jdbcType=VARCHAR},
+				SKU_IMG_URL = #{item.skuImgUrl,jdbcType=VARCHAR},
+				STOCK_BALANCE = #{item.stockBalance,jdbcType=DECIMAL},
+				MARKET_PRICE = #{item.marketPrice,jdbcType=DECIMAL},
+				SALE_PRICE = #{item.salePrice,jdbcType=DECIMAL},
+				SKU_TYPE = #{item.skuType,jdbcType=CHAR},
+				SKU_STATUS = #{item.skuStatus,jdbcType=CHAR},
+				SORT_RANK = #{item.sortRank,jdbcType=DECIMAL},
+				CREATE_DATE = #{item.createDate,jdbcType=TIMESTAMP},
+				CREATE_BY_NAME = #{item.createByName,jdbcType=VARCHAR},
+				LAST_UPDATE_DATE = #{item.lastUpdateDate,jdbcType=TIMESTAMP},
+				UPDATE_BY_NAME = #{item.updateByName,jdbcType=VARCHAR},
+			</set>
+			WHERE SKU_ID=#{item.skuId};
+		</foreach>
+		END;
+  </update>
+
+  <select id="getSkusByProdId" resultMap="BaseResultMap">
+  		SELECT
+			<include refid="Base_Column_List"/>
+		FROM 
+			t_sku
+		WHERE 
+			prod_id = #{prodId,jdbcType=INTEGER} 
+			AND
+			sku_status = 1 order by sku_spec_id
+  </select>
+  
+  <select id="getSkuBySkuCode" resultMap="BaseResultMap">
+  		SELECT 
+			<include refid="Base_Column_List"/>
+		FROM
+		 	t_sku
+		WHERE
+		 sku_code = #{skuCode,jdbcType=VARCHAR} 
+  </select>
+  
+  <select id="getSkusBySkuIds" resultMap="BaseResultMap">
+  	  	SELECT
+			<include refid="Base_Column_List"/>
+		FROM 
+			t_sku
+		WHERE sku_id IN
+  		<foreach collection="idList" item="item" open="(" separator="," close=")">
+  			#{item}
+  		</foreach>
+  </select>
+  
 </mapper>

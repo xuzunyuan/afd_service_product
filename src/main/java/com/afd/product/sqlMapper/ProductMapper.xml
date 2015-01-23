@@ -32,12 +32,33 @@
   <resultMap id="ResultMapWithBLOBs" type="com.afd.model.product.Product" extends="BaseResultMap" >
     <result column="detail" property="detail" jdbcType="LONGVARCHAR" />
   </resultMap>
+  
+   <resultMap type="com.afd.model.product.Product" id="ResultMapWithBalance" extends="BaseResultMap">
+	<result column="SALE_PRICE" property="salePrice" jdbcType="DECIMAL" />
+	<result column="MARKET_PRICE" property="marketPrice" jdbcType="DECIMAL" />
+	<result column="STOCK_BALANCE" property="stockBalance" jdbcType="DECIMAL" />
+  </resultMap>
+ 
+ 
   <sql id="Base_Column_List" >
     prod_id, prod_code, bc_code, name, title, subtitle, bc_id, seller_id, art_no, brand_id, 
     brand_name, type, status, brief, weight, volume, attr_value_id, attr_value_name, 
     expire_date, create_date, last_update_date, audit_status, last_audit_name, last_audit_date, 
     material, source_area
   </sql>
+  
+  <sql id="Part_Column_List">
+	p.PROD_ID,p.PROD_CODE, p.TITLE, p.STORE_ID,
+	p.TYPE, p.STATUS,p.AUDIT_STATUS,p.AUDIT_COMMENT,
+	p.IS_SW_PROD, p.IS_REC,p.ON_DATE,
+	p.ON_REC_DATE,p.ON_SW_DATE,p.LAST_UPDATE_DATE,P.CREATE_DATE
+  </sql>
+ 
+  <sql id="Part_Column_List2">
+ 	p.PROD_ID,p.PROD_CODE,p.TITLE,p.BC_ID, p.STORE_ID,p.BRAND_NAME,p.TYPE,
+	p.STATUS,p.ATTR_VALUE_NAME,p.AUDIT_STATUS,p.AUDIT_COMMENT,p.LAST_UPDATE_DATE
+ </sql>
+ 
   <sql id="Blob_Column_List" >
     detail
   </sql>
@@ -381,4 +402,165 @@
       source_area = #{sourceArea,jdbcType=VARCHAR}
     where prod_id = #{prodId,jdbcType=INTEGER}
   </update>
+  
+   <update id="updateProdByCondition">
+    update t_product
+    <set >
+      <if test="prodCode != null" >
+        prod_code = #{product.prodCode,jdbcType=VARCHAR},
+      </if>
+      <if test="bcCode != null" >
+        bc_code = #{product.bcCode,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{product.name,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null" >
+        title = #{product.title,jdbcType=VARCHAR},
+      </if>
+      <if test="subtitle != null" >
+        subtitle = #{product.subtitle,jdbcType=VARCHAR},
+      </if>
+      <if test="bcId != null" >
+        bc_id = #{product.bcId,jdbcType=INTEGER},
+      </if>
+      <if test="sellerId != null" >
+        seller_id = #{product.sellerId,jdbcType=INTEGER},
+      </if>
+      <if test="artNo != null" >
+        art_no = #{product.artNo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandId != null" >
+        brand_id = #{product.brandId,jdbcType=INTEGER},
+      </if>
+      <if test="brandName != null" >
+        brand_name = #{product.brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{product.type,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        status = #{product.status,jdbcType=CHAR},
+      </if>
+      <if test="brief != null" >
+        brief = #{brief,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null" >
+        weight = #{product.weight,jdbcType=DECIMAL},
+      </if>
+      <if test="volume != null" >
+        volume = #{product.volume,jdbcType=VARCHAR},
+      </if>
+      <if test="attrValueId != null" >
+        attr_value_id = #{product.attrValueId,jdbcType=VARCHAR},
+      </if>
+      <if test="attrValueName != null" >
+        attr_value_name = #{product.attrValueName,jdbcType=VARCHAR},
+      </if>
+      <if test="expireDate != null" >
+        expire_date = #{product.expireDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{product.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateDate != null" >
+        last_update_date = #{product.lastUpdateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditStatus != null" >
+        audit_status = #{product.auditStatus,jdbcType=CHAR},
+      </if>
+      <if test="lastAuditName != null" >
+        last_audit_name = #{product.lastAuditName,jdbcType=VARCHAR},
+      </if>
+      <if test="lastAuditDate != null" >
+        last_audit_date = #{product.lastAuditDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="material != null" >
+        material = #{product.material,jdbcType=VARCHAR},
+      </if>
+      <if test="sourceArea != null" >
+        source_area = #{product.sourceArea,jdbcType=VARCHAR},
+      </if>
+      <if test="detail != null" >
+        detail = #{product.detail,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where prod_id IN
+    	<foreach collection="idList" item="item" open="(" separator="," close=")">
+  			#{item}
+  		</foreach>
+   </update>
+   
+   <select id="getProductByProdCode" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+       select 
+	    <include refid="Base_Column_List" />
+	    ,
+	    <include refid="Blob_Column_List" />
+	    from t_product
+	    where prod_id = #{prodId,jdbcType=VARCHAR}
+   </select>
+   
+   <select id="searchProductByCondition" resultMap="ResultMapWithBalance" >
+		select MIN(s.SALE_PRICE) SALE_PRICE,SUM(s.STOCK_BALANCE) STOCK_BALANCE,<include refid="Part_Column_List"/>
+		from T_SKU s,T_PRODUCT p
+		<where>
+		 	p.PROD_ID = s.PROD_ID
+			<if test="productCondition.storeId !=null">
+				and p.STORE_ID = #{productCondition.storeId}
+			</if>
+			<if test="productCondition.title !=null and productCondition.title !=''">
+				<![CDATA[and  LOWER(p.title) like LOWER('%'||#{productCondition.title}||'%')]]>
+			</if>
+			<if test="productCondition.startDate != null">
+				and p.CREATE_DATE &gt;= #{productCondition.startDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="productCondition.endDate != null">
+				and p.CREATE_DATE &lt;= #{productCondition.endDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="productCondition.status !=null">
+				and p.STATUS &lt;&gt; #{productCondition.status} 
+			</if>
+			<if test="productCondition.auditStatus !=null">
+				and p.AUDIT_STATUS  &lt; #{productCondition.auditStatus}
+			</if>
+				and p.status &lt;&gt; 2 and s.SKU_STATUS &lt;&gt; 2
+			group by  <include refid="Part_Column_List"/>
+			order by 
+			<if test="sortDirection !=null and sortDirection == 1">
+				SALE_PRICE asc,
+			</if>
+			<if test="sortDirection !=null and sortDirection == 0">
+				SALE_PRICE desc,
+			</if>
+				p.CREATE_DATE desc
+	  </where>
+   </select>
+   
+   <select id="getOnlineProductBySellerId" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+   		select 
+	    <include refid="Base_Column_List" />
+	    ,
+	    <include refid="Blob_Column_List" />
+	    from t_product
+	    where seller_id = #{sellerId,jdbcType=VARCHAR}
+   </select>
+   
+   <select id="getProductIdsBySellerId" parameterType="java.lang.Integer">
+   		select 
+   			prod_id 
+   		from t_product
+	    where seller_id = #{sellerId,jdbcType=VARCHAR}
+	     	and status = 3 and audit_status = 1
+   </select>
+   
+   <select id="getProductsByProdIds" parameterType="java.util.List">
+      	select 
+   			<include refid="Base_Column_List" />
+   		from t_product
+		where status = 3 and audit_status = 1
+		    and prod_in in 
+	    	<foreach collection="idList" item="item" open="(" separator="," close=")">
+	  			#{item}
+	  		</foreach>
+   </select>
 </mapper>

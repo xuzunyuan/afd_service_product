@@ -133,4 +133,13 @@
       create_date = #{createDate,jdbcType=TIMESTAMP}
     where prod_img_id = #{prodImgId,jdbcType=INTEGER}
   </update>
+   
+  
+  <select id="selectProductImgByProdId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_product_img
+    where prod_id = #{prod_id,jdbcType=INTEGER} and img_status = #{imgStatus,jdbcType=CHAR}
+  </select>
+  
 </mapper>
