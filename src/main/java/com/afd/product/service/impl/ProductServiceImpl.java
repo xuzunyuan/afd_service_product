@@ -258,6 +258,8 @@ public class ProductServiceImpl implements IProductService {
 	@Override
 	public Page<Product> searchOnlineProduct(ProductCondition productCondition,
 			String sortField, String sortDirection, Page<Product> page) {
+		productCondition.setStatus(ProductConstants.PROD_STATUS_ON);
+//		productCondition.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_PASS);
 		page.setResult(this.productMapper.searchProductByCondition(productCondition,sortField,sortDirection,page));
 		return page;
 	}
@@ -278,7 +280,8 @@ public class ProductServiceImpl implements IProductService {
 			String sortDirection, Page<Product> page) {
 		
 		productCondition.setStatus(ProductConstants.PROD_STATUS_NORMAL);
-		page.setResult(this.productMapper.searchProductByCondition(productCondition,sortField,sortDirection,page));
+		List<Product> list = this.productMapper.searchProductByCondition(productCondition,sortField,sortDirection,page);
+		page.setResult(list);
 		return page;
 	}
 
