@@ -540,12 +540,12 @@
 	     	and status = 3 and audit_status = 1
    </select>
    
-   <select id="getProductsByProdIds" parameterType="java.util.List">
+   <select id="getProductsByProdIds" resultMap="BaseResultMap" parameterType="java.util.List">
       	select 
    			<include refid="Base_Column_List" />
    		from t_product
 		where status = 3 and audit_status = 1
-		    and prod_in in 
+		    and prod_id in 
 	    	<foreach collection="idList" item="item" open="(" separator="," close=")">
 	  			#{item}
 	  		</foreach>

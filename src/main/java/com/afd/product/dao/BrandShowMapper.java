@@ -1,5 +1,9 @@
 package com.afd.product.dao;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.afd.model.product.BrandShow;
 
 public interface BrandShowMapper {
@@ -14,4 +18,6 @@ public interface BrandShowMapper {
     int updateByPrimaryKeySelective(BrandShow record);
 
     int updateByPrimaryKey(BrandShow record);
+    
+    List<BrandShow> getBrandShowByIds(@Param("brandShowIds") List<Long> brandShowIds);
 }

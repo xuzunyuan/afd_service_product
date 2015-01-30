@@ -252,4 +252,14 @@
       s_r_a_id = #{sRAId,jdbcType=INTEGER}
     where brand_show_id = #{brandShowId,jdbcType=INTEGER}
   </update>
+  
+  <select id="getBrandShowByIds" resultMap="BaseResultMap">
+	select 
+	<include refid="Base_Column_List" />
+	from t_brand_show
+	where brand_show_id in 
+	<foreach collection="brandShowIds" item="brandShowId" open="(" separator="," close=")">
+		#{brandShowId}
+	</foreach>
+  </select>
 </mapper>
