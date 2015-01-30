@@ -21,7 +21,7 @@ public interface SkuMapper {
 
     int updateByPrimaryKey(Sku record);
 
-	boolean batchInsertSkus(List<Sku> skus);
+	boolean batchInsertSkus(@Param("list") List<Sku> skus);
 
 	@Update("update t_sku set sku_status= #{1} where sku_id = #{0}")
 	boolean removeSkuById(Integer skuId, String skuStatus);
