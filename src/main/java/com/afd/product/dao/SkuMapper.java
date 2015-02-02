@@ -2,6 +2,7 @@ package com.afd.product.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
@@ -20,7 +21,7 @@ public interface SkuMapper {
 
     int updateByPrimaryKey(Sku record);
 
-	boolean batchInsertSkus(List<Sku> skus);
+	boolean batchInsertSkus(@Param("list") List<Sku> skus);
 
 	@Update("update t_sku set sku_status= #{1} where sku_id = #{0}")
 	boolean removeSkuById(Integer skuId, String skuStatus);
@@ -34,7 +35,7 @@ public interface SkuMapper {
 	@Select("select sum(stock_balance) from t_sku where prod_id = #{0}")
 	Integer getStockBalance(Integer prodId);
 
-	List<Sku> getSkusBySkuIds(List<Integer> idList);
+	List<Sku> getSkusBySkuIds(@Param("idList")List<Integer> idList);
 	
 	
 }

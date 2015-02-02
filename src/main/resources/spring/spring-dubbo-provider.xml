@@ -31,5 +31,5 @@
 	
 
     <dubbo:service owner="hkM" timeout="2000" interface="com.afd.service.product.IProductService" loadbalance="random" ref="productService" />
-
+	<dubbo:service owner="" timeout="2000" interface="com.afd.service.product.IBrandShowService" loadbalance="random" ref="brandShowService" />
 </beans>
