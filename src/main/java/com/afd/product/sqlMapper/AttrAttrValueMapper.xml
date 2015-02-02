@@ -140,6 +140,13 @@
     where P_A_AV_ID = #{aAvId,jdbcType=DECIMAL}
   </delete>
   
+  <select id="getAttrAttrValueByAttrId" parameterType="java.lang.Long" resultMap="ExtResultMap">
+    select aav.A_AV_ID, aav.ATTR_ID, aav.ATTR_VALUE_ID, aav.DISPLAY_ORDER, aav.P_A_AV_ID, aav.HAS_SUB, av.ATTR_VALUE_NAME, av.PINYIN
+    from T_ATTR_ATTR_VALUE aav, T_ATTRIBUTE_VALUE av
+    where ATTR_ID = #{attrId,jdbcType=DECIMAL} and aav.ATTR_VALUE_ID=av.ATTR_VALUE_ID
+    order by aav.A_AV_ID desc
+  </select>
+  
   <select id="getAttrAttrValueByPAAvIdAndAVId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -202,6 +209,5 @@
     delete from T_ATTR_ATTR_VALUE
     where ATTR_VALUE_ID = #{attrValueId,jdbcType=DECIMAL}
   </delete>
-  
   
 </mapper>
