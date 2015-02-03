@@ -9,6 +9,7 @@
     <result column="banner_img" property="bannerImg" jdbcType="VARCHAR" />
     <result column="bg_color" property="bgColor" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="CHAR" />
     <result column="create_by_date" property="createByDate" jdbcType="TIMESTAMP" />
     <result column="audit_date" property="auditDate" jdbcType="TIMESTAMP" />
     <result column="audit_by_name" property="auditByName" jdbcType="VARCHAR" />
@@ -23,7 +24,7 @@
   </resultMap>
   
   <sql id="Base_Column_List" >
-    brand_show_id, seller_id, brand_id, title, banner_img, bg_color, type, create_by_date, 
+    brand_show_id, seller_id, brand_id, title, banner_img, bg_color, type,status, create_by_date, 
     audit_date, audit_by_name, audit_content, start_date, end_date, end_by_date, end_by_name, 
     end_by_id, buy_limit, s_r_a_id
   </sql>
@@ -43,14 +44,14 @@
   <insert id="insert" parameterType="com.afd.model.product.BrandShow" useGeneratedKeys="true" keyProperty="brandShowId" >
     insert into t_brand_show (seller_id, brand_id, 
       title, banner_img, bg_color, 
-      type, create_by_date, audit_date, 
+      type,status, create_by_date, audit_date, 
       audit_by_name, audit_content, start_date, 
       end_date, end_by_date, end_by_name, 
       end_by_id, buy_limit, s_r_a_id
       )
     values (#{sellerId,jdbcType=INTEGER}, #{brandId,jdbcType=INTEGER}, 
       #{title,jdbcType=VARCHAR}, #{bannerImg,jdbcType=VARCHAR}, #{bgColor,jdbcType=VARCHAR}, 
-      #{type,jdbcType=CHAR}, #{createByDate,jdbcType=TIMESTAMP}, #{auditDate,jdbcType=TIMESTAMP}, 
+      #{type,jdbcType=CHAR},#{status,jdbcType=CHAR}, #{createByDate,jdbcType=TIMESTAMP}, #{auditDate,jdbcType=TIMESTAMP}, 
       #{auditByName,jdbcType=VARCHAR}, #{auditContent,jdbcType=VARCHAR}, #{startDate,jdbcType=TIMESTAMP}, 
       #{endDate,jdbcType=TIMESTAMP}, #{endByDate,jdbcType=TIMESTAMP}, #{endByName,jdbcType=VARCHAR}, 
       #{endById,jdbcType=INTEGER}, #{buyLimit,jdbcType=SMALLINT}, #{sRAId,jdbcType=INTEGER}
@@ -80,6 +81,9 @@
       </if>
       <if test="type != null" >
         type,
+      </if>
+       <if test="status != null" >
+        status,
       </if>
       <if test="createByDate != null" >
         create_by_date,
@@ -136,6 +140,9 @@
       </if>
       <if test="type != null" >
         #{type,jdbcType=CHAR},
+      </if>
+       <if test="status != null" >
+        #{status,jdbcType=CHAR},
       </if>
       <if test="createByDate != null" >
         #{createByDate,jdbcType=TIMESTAMP},
@@ -194,6 +201,9 @@
       <if test="type != null" >
         type = #{type,jdbcType=CHAR},
       </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
       <if test="createByDate != null" >
         create_by_date = #{createByDate,jdbcType=TIMESTAMP},
       </if>
@@ -239,6 +249,7 @@
       banner_img = #{bannerImg,jdbcType=VARCHAR},
       bg_color = #{bgColor,jdbcType=VARCHAR},
       type = #{type,jdbcType=CHAR},
+      status = #{status,jdbcType=CHAR},
       create_by_date = #{createByDate,jdbcType=TIMESTAMP},
       audit_date = #{auditDate,jdbcType=TIMESTAMP},
       audit_by_name = #{auditByName,jdbcType=VARCHAR},
@@ -253,7 +264,7 @@
     where brand_show_id = #{brandShowId,jdbcType=INTEGER}
   </update>
   
-  <select id="getBrandShowByIds" resultMap="BaseResultMap">
+  <select id="getBrandShowByIds"  parameterType="com.afd.model.product.BrandShow"  resultMap="BaseResultMap">
 	select 
 	<include refid="Base_Column_List" />
 	from t_brand_show
@@ -261,5 +272,16 @@
 	<foreach collection="brandShowIds" item="brandShowId" open="(" separator="," close=")">
 		#{brandShowId}
 	</foreach>
+  </select>
+  
+  <select id="getValidBrandShows" parameterType="com.afd.model.product.BrandShow" resultMap="BaseResultMap">
+	select 
+	<include refid="Base_Column_List" />
+	from t_brand_show
+	<where>
+	<if test="status != null" >
+        status = #{status,jdbcType=CHAR}
+    </if>
+	</where>
   </select>
 </mapper>
