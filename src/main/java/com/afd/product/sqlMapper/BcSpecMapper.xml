@@ -22,7 +22,7 @@
     select 
     <include refid="Base_Column_List" />
     from t_bc_spec
-    where bc_spec_id = #{bcSpecId,jdbcType=Long}
+    where bc_spec_id = #{bcSpecId,jdbcType=DECIMAL}
   </select>
   
   <delete id="deleteBcSpecById" parameterType="java.lang.Long" >

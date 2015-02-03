@@ -118,9 +118,7 @@
   
   <delete id="deleteSubAttrAttrValueByAttrId" parameterType="java.lang.Long">
     delete from T_ATTR_ATTR_VALUE
-    where P_A_AV_ID in (select A_AV_ID 
-    from T_ATTR_ATTR_VALUE
-    where ATTR_ID = #{attrId,jdbcType=DECIMAL})
+    where P_A_AV_ID in (select * from (select A_AV_ID from T_ATTR_ATTR_VALUE where ATTR_ID = #{attrId,jdbcType=DECIMAL}) t)
   </delete>
   
   <delete id="deleteAttrAttrValueByAttrId" parameterType="java.lang.Long">

@@ -133,7 +133,7 @@
     where bc_attr_id = #{bcAttrId,jdbcType=DECIMAL}
   </update>
   
-  <select id="getMaxOrder" resultType="java.lang.Long" parameterType="java.lang.Long" >
+  <select id="getMaxOrder" resultType="java.lang.Integer" >
     select max(DISPLAY_ORDER) from T_BC_ATTRIBUTE where BC_ID = #{bcId,jdbcType=DECIMAL} and status='1'
   </select>
   

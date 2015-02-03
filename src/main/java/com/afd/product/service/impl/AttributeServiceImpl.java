@@ -67,9 +67,10 @@ public class AttributeServiceImpl implements IAttributeService {
 				List<AttrAttrValueVO> attrAttrValues = this.attrAttrValueMapper.getAttrAttrValueByAttrId(attrId);
 				if(attrAttrValues!=null && attrAttrValues.size()>0){
 					this.attrAttrValueMapper.deleteSubAttrAttrValueByAttrId(attrId);
+					
+					//删除属性属性关系表中引用该属性的所有关系
+					this.attrAttrValueMapper.deleteAttrAttrValueByAttrId(attrId);
 				}
-				//删除属性属性关系表中引用该属性的所有关系
-				this.attrAttrValueMapper.deleteAttrAttrValueByAttrId(attrId);
 			}
 		}else{
 			result = -1;
