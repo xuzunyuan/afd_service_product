@@ -8,7 +8,7 @@
         http://code.alibabatech.com/schema/dubbo/dubbo.xsd
         ">
         
-    <dubbo:application name="afd_service"/>
+   <!--  <dubbo:application name="afd_service"/> -->
   
   	<!-- 广播中心地址 -->
 	<dubbo:registry protocol="zookeeper" port="2181" address="192.168.1.19" />
