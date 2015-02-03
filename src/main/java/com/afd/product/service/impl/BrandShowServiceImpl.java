@@ -39,4 +39,9 @@ public class BrandShowServiceImpl implements IBrandShowService{
 		return this.brandShowDetailMapper.getBrandShowDetailsByIds(brandShowDetailIds);
 	}
 
+	@Override
+	public List<BrandShow> getValidBrandShows(BrandShow record) {
+		return this.brandShowMapper.getValidBrandShows(record);
+	}
+
 }
