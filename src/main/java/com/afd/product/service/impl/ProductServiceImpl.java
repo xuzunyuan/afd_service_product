@@ -167,7 +167,7 @@ public class ProductServiceImpl implements IProductService {
 	public boolean cancelAuditProduct(Integer prodId) {
 		Product product = new Product();
 		product.setProdId(prodId);
-		product.setAuditStatus(ProductConstants.PROD_AUDIT_NORMAL);
+		product.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_WAIT);
 		product.setLastUpdateDate(DateUtils.currentDate());
 		int i = this.productMapper.updateByPrimaryKeySelective(product);
 		return i > 0 ? true : false;
@@ -215,7 +215,7 @@ public class ProductServiceImpl implements IProductService {
 	public boolean delProduct(Integer prodId, String optName) {
 		Product product = new Product();
 		product.setProdId(prodId);
-		product.setAuditStatus(ProductConstants.PROD_AUDIT_NORMAL);
+		product.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_WAIT);
 		product.setStatus(ProductConstants.PROD_STATUS_REMOVE);
 		product.setLastUpdateDate(DateUtils.currentDate());
 		int i = this.productMapper.updateByPrimaryKeySelective(product);
@@ -225,7 +225,7 @@ public class ProductServiceImpl implements IProductService {
 	@Override
 	public boolean batchdelProduct(List<Integer> idList, String optName) {
 		Product product = new Product();
-		product.setAuditStatus(ProductConstants.PROD_AUDIT_NORMAL);
+		product.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_WAIT);
 		product.setStatus(ProductConstants.PROD_STATUS_REMOVE);
 		product.setLastUpdateDate(DateUtils.currentDate());
 		return this.productMapper.updateProdByCondition(idList,product);
@@ -269,7 +269,7 @@ public class ProductServiceImpl implements IProductService {
 			ProductCondition productCondition, String sortField,
 			String sortDirection, Page<Product> page) {
 		
-		productCondition.setStatus(ProductConstants.PROD_AUDIT_NORMAL);
+		productCondition.setStatus(ProductConstants.PROD_STATUS_ON);
 		page.setResult(this.productMapper.searchProductByCondition(productCondition,sortField,sortDirection,page));
 		return page;
 	}
@@ -279,7 +279,7 @@ public class ProductServiceImpl implements IProductService {
 			ProductCondition productCondition, String sortField,
 			String sortDirection, Page<Product> page) {
 		
-		productCondition.setStatus(ProductConstants.PROD_STATUS_NORMAL);
+		productCondition.setStatus(ProductConstants.PROD_STATUS_ON);
 		List<Product> list = this.productMapper.searchProductByCondition(productCondition,sortField,sortDirection,page);
 		page.setResult(list);
 		return page;
