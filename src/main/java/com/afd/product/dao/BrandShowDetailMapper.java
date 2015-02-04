@@ -1,9 +1,13 @@
 package com.afd.product.dao;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.afd.common.mybatis.Page;
+import com.afd.model.product.Attribute;
 import com.afd.model.product.BrandShowDetail;
 
 public interface BrandShowDetailMapper {
@@ -20,4 +24,8 @@ public interface BrandShowDetailMapper {
     int updateByPrimaryKey(BrandShowDetail record);
     
     List<BrandShowDetail> getBrandShowDetailsByIds(@Param("brandShowDetailIds") List<Long> brandShowDetailIds);
+    
+    BigDecimal getLowestPrice(@Param("bsid") Long bsid);
+    
+    List<BrandShowDetail> getBrandShowDetailByPage(@Param("cond") Map<?, ?> map, @Param(value = "page") Page<BrandShowDetail> page);
 }

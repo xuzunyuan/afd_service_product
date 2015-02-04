@@ -1,10 +1,14 @@
 package com.afd.product.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.afd.common.mybatis.Page;
 import com.afd.model.product.BrandShow;
 import com.afd.model.product.BrandShowDetail;
 import com.afd.product.dao.BrandShowDetailMapper;
@@ -43,5 +47,16 @@ public class BrandShowServiceImpl implements IBrandShowService{
 	public List<BrandShow> getValidBrandShows(BrandShow record) {
 		return this.brandShowMapper.getValidBrandShows(record);
 	}
+	
+	@Override
+	public BigDecimal getLowestPrice(Long bsid){
+		return this.brandShowDetailMapper.getLowestPrice(bsid);
+	}
+	
+	@Override
+	public Page<BrandShowDetail> getBrandShowDetailByPage(Map<?, ?> map,Page<BrandShowDetail> page){
 
+          page.setResult(this.brandShowDetailMapper.getBrandShowDetailByPage(map, page));
+		  return page;
+	}
 }

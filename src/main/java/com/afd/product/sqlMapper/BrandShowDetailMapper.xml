@@ -284,4 +284,22 @@
 		#{brandShowDetailId}
 	</foreach>
   </select>
+  
+  <select id="getLowestPrice" resultType="java.math.BigDecimal"  parameterType="java.lang.Long">
+  select
+	min(show_price)
+	from t_brand_show_detail
+	where  brand_show_id = #{bsid}
+  </select>
+  
+  <select id="getBrandShowDetailByPage" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+	from t_brand_show_detail
+	<where>
+	<if test="cond.bsid != null">
+			 brand_show_id = #{cond.bsid,jdbcType=DECIMAL}
+    </if>
+	</where>
+  </select>
 </mapper>
