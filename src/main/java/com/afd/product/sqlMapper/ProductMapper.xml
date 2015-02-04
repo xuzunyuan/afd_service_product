@@ -28,6 +28,7 @@
     <result column="last_audit_date" property="lastAuditDate" jdbcType="TIMESTAMP" />
     <result column="material" property="material" jdbcType="VARCHAR" />
     <result column="source_area" property="sourceArea" jdbcType="VARCHAR" />
+    <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.afd.model.product.Product" extends="BaseResultMap" >
     <result column="detail" property="detail" jdbcType="LONGVARCHAR" />
@@ -42,12 +43,12 @@
     prod_id, prod_code, bc_code, name, title, subtitle, bc_id, seller_id, art_no, brand_id, 
     brand_name, type, status, brief, weight, volume, attr_value_id, attr_value_name, 
     expire_date, create_date, last_update_date, audit_status, last_audit_name, last_audit_date, 
-    material, source_area
+    material, source_area,img_url
   </sql>
   
   <sql id="Search_Column_List">
 	 p.prod_id,p.prod_code,p.title,p.bc_id,p.brand_name,
-	 p.art_no, p.bc_id ,p.bc_code ,p.create_date
+	 p.art_no, p.bc_id ,p.bc_code ,p.create_date,p.img_url
   </sql>
  
   <sql id="Blob_Column_List" >
@@ -74,7 +75,7 @@
       volume, attr_value_id, attr_value_name, 
       expire_date, create_date, last_update_date, 
       audit_status, last_audit_name, last_audit_date, 
-      material, source_area, detail
+      material, source_area,img_url, detail
       )
     values (#{prodId,jdbcType=VARCHAR}, #{bcCode,jdbcType=VARCHAR}, 
       #{name,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{subtitle,jdbcType=VARCHAR}, 
@@ -84,7 +85,7 @@
       #{volume,jdbcType=VARCHAR}, #{attrValueId,jdbcType=VARCHAR}, #{attrValueName,jdbcType=VARCHAR}, 
       #{expireDate,jdbcType=TIMESTAMP}, #{createDate,jdbcType=TIMESTAMP}, #{lastUpdateDate,jdbcType=TIMESTAMP}, 
       #{auditStatus,jdbcType=CHAR}, #{lastAuditName,jdbcType=VARCHAR}, #{lastAuditDate,jdbcType=TIMESTAMP}, 
-      #{material,jdbcType=VARCHAR}, #{sourceArea,jdbcType=VARCHAR}, #{detail,jdbcType=LONGVARCHAR}
+      #{material,jdbcType=VARCHAR}, #{sourceArea,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, #{detail,jdbcType=LONGVARCHAR}
       )
   </insert>
   
@@ -169,6 +170,9 @@
       <if test="sourceArea != null" >
         source_area,
       </if>
+      <if test="imgUrl != null" >
+        img_url,
+      </if>
       <if test="detail != null" >
         detail,
       </if>
@@ -246,6 +250,9 @@
       </if>
       <if test="sourceArea != null" >
         #{sourceArea,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null" >
+        #{imgUrl,jdbcType=VARCHAR},
       </if>
       <if test="detail != null" >
         #{detail,jdbcType=LONGVARCHAR},
@@ -330,6 +337,9 @@
       <if test="sourceArea != null" >
         source_area = #{sourceArea,jdbcType=VARCHAR},
       </if>
+      <if test="imgUrl != null" >
+        img_url = #{imgUrl,jdbcType=VARCHAR},
+      </if>
       <if test="detail != null" >
         detail = #{detail,jdbcType=LONGVARCHAR},
       </if>
@@ -363,6 +373,7 @@
       last_audit_date = #{lastAuditDate,jdbcType=TIMESTAMP},
       material = #{material,jdbcType=VARCHAR},
       source_area = #{sourceArea,jdbcType=VARCHAR},
+      img_url = #{imgUrl,jdbcType=VARCHAR},
       detail = #{detail,jdbcType=LONGVARCHAR}
     where prod_id = #{prodId,jdbcType=INTEGER}
   </update>
@@ -392,7 +403,8 @@
       last_audit_name = #{lastAuditName,jdbcType=VARCHAR},
       last_audit_date = #{lastAuditDate,jdbcType=TIMESTAMP},
       material = #{material,jdbcType=VARCHAR},
-      source_area = #{sourceArea,jdbcType=VARCHAR}
+      source_area = #{sourceArea,jdbcType=VARCHAR},
+      img_url = #{imgUrl,jdbcType=VARCHAR},
     where prod_id = #{prodId,jdbcType=INTEGER}
   </update>
   
@@ -473,6 +485,9 @@
       </if>
       <if test="sourceArea != null" >
         source_area = #{product.sourceArea,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null" >
+        img_url = #{product.imgUrl,jdbcType=VARCHAR},
       </if>
       <if test="detail != null" >
         detail = #{product.detail,jdbcType=LONGVARCHAR},
