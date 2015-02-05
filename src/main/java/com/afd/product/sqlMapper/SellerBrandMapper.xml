@@ -214,7 +214,7 @@
 			brand_id = #{brandId,jdbcType=DECIMAL}
 		</if>
 		<if test="status!=null and status!=''">  
-			status = #{status,jdbcType=CHAR},
+			and status = #{status,jdbcType=CHAR}
 		</if>
 	</where>
   </select>
