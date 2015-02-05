@@ -27,7 +27,13 @@ public interface ProductMapper {
 
 	Product getProductByProdCode(String prodCode);
 
-	List<Product> searchProductByCondition(
+	List<Product> searchOnlineProductPage(
+			@Param("productCondition") ProductCondition productCondition,
+			@Param("sortField") String sortField,
+			@Param("sortDirection") String sortDirection,
+			@Param("page") Page<Product> page);
+	
+	List<Product> searchProductByConditionPage(
 			@Param("productCondition") ProductCondition productCondition,
 			@Param("sortField") String sortField,
 			@Param("sortDirection") String sortDirection,
@@ -38,5 +44,7 @@ public interface ProductMapper {
 	List<Integer> getProductIdsBySellerId(Integer sellerId);
 
 	List<Product> getProductsByProdIds(@Param("idList")List<Integer> idList);
+
+
 
 }

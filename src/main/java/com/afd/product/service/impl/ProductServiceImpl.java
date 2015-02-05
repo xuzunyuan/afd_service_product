@@ -256,11 +256,10 @@ public class ProductServiceImpl implements IProductService {
 	}
 
 	@Override
-	public Page<Product> searchOnlineProduct(ProductCondition productCondition,
+	public Page<Product> searchOnlineProductPage(ProductCondition productCondition,
 			String sortField, String sortDirection, Page<Product> page) {
 		productCondition.setStatus(ProductConstants.PROD_STATUS_ON);
-//		productCondition.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_PASS);
-		page.setResult(this.productMapper.searchProductByCondition(productCondition,sortField,sortDirection,page));
+		page.setResult(this.productMapper.searchOnlineProductPage(productCondition,sortField,sortDirection,page));
 		return page;
 	}
 
@@ -268,20 +267,9 @@ public class ProductServiceImpl implements IProductService {
 	public Page<Product> searchAuditProductPage(
 			ProductCondition productCondition, String sortField,
 			String sortDirection, Page<Product> page) {
-		
-		productCondition.setStatus(ProductConstants.PROD_STATUS_ON);
-		page.setResult(this.productMapper.searchProductByCondition(productCondition,sortField,sortDirection,page));
-		return page;
-	}
-
-	@Override
-	public Page<Product> searchStockProductPage(
-			ProductCondition productCondition, String sortField,
-			String sortDirection, Page<Product> page) {
-		
-		productCondition.setStatus(ProductConstants.PROD_STATUS_ON);
-		List<Product> list = this.productMapper.searchProductByCondition(productCondition,sortField,sortDirection,page);
-		page.setResult(list);
+		productCondition.setStatus(ProductConstants.PROD_STATUS_DOWN);
+		productCondition.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_NO_PASS);
+		page.setResult(this.productMapper.searchProductByConditionPage(productCondition,sortField,sortDirection,page));
 		return page;
 	}
 
@@ -289,7 +277,7 @@ public class ProductServiceImpl implements IProductService {
 	public Page<Product> searchProductByConditionPage(
 			ProductCondition productCondition, String sortField,
 			String sortDirection, Page<Product> page) {
-		page.setResult(this.productMapper.searchProductByCondition(productCondition,sortField,sortDirection,page));
+		page.setResult(this.productMapper.searchProductByConditionPage(productCondition,sortField,sortDirection,page));
 		return page;
 	}
 

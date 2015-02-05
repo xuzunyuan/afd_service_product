@@ -47,8 +47,8 @@
   </sql>
   
   <sql id="Search_Column_List">
-	 p.prod_id,p.prod_code,p.title,p.bc_id,p.brand_name,
-	 p.art_no, p.bc_id ,p.bc_code ,p.create_date,p.img_url
+	 p.prod_id,p.prod_code,p.title,p.brand_name,
+	 p.art_no, p.bc_id,p.bc_code ,p.create_date,p.img_url
   </sql>
  
   <sql id="Blob_Column_List" >
@@ -508,7 +508,7 @@
 	    where prod_id = #{prodId,jdbcType=VARCHAR}
    </select>
    
-   <select id="searchProductByCondition" resultMap="ResultMapWithPrice" >
+   <select id="searchProductByConditionPage" resultMap="ResultMapWithPrice" >
 	select <include refid="Search_Column_List" />, concat(min(s.market_price),' ~ ',max(s.market_price)) as market_price,
 		concat (min(s.sale_price),' ~ ',max(s.sale_price)) as sale_price
 	from t_product p ,t_sku s
@@ -531,6 +531,24 @@
 		</if>
 		<if test="productCondition.auditStatus !=null">
 			and p.AUDIT_STATUS = #{productCondition.auditStatus}
+		</if>
+		group by <include refid="Search_Column_List" />
+		order by
+		p.CREATE_DATE desc
+	</where>
+   </select>
+   
+   <select id="searchOnlineProductPage" resultMap="ResultMapWithPrice" >
+	select <include refid="Search_Column_List" />, concat(min(s.market_price),' ~ ',max(s.market_price)) as market_price,
+		concat (min(s.sale_price),' ~ ',max(s.sale_price)) as sale_price
+	from t_product p ,t_sku s
+	<where>
+		 p.prod_id = s.prod_id 
+		<if test="productCondition.sellerId !=null">
+			and p.SELLER_ID = #{productCondition.sellerId} and p.STATUS = 0 and p.AUDIT_STATUS &lt; 2
+		</if>
+		<if test="productCondition.title !=null and productCondition.title !=''">
+			<![CDATA[and  LOWER(p.title) like LOWER('%'||#{productCondition.title}||'%')]]>
 		</if>
 		group by <include refid="Search_Column_List" />
 		order by
