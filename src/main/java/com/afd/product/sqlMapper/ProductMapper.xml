@@ -90,14 +90,12 @@
   </insert>
   
 
-  <insert id="insertSelective" parameterType="com.afd.model.product.Product" >
-   	 <selectKey keyProperty="prodId" resultType="INTEGER" order="BEFORE">
-   		 <!-- select @@IDENTITY as prod_id -->
-        select LAST_INSERT_ID() 
-     </selectKey>
+  <insert id="insertSelective" parameterType="com.afd.model.product.Product" useGeneratedKeys="true" keyProperty="prodId">
     insert into t_product
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      prod_id,prod_code,
+      <if test="prodCode != null" >
+        prod_code,
+      </if>
       <if test="bcCode != null" >
         bc_code,
       </if>
@@ -178,7 +176,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-    	#{prodId,jdbcType=INTEGER}, #{bcCode,jdbcType=VARCHAR} || #{prodId,jdbcType=INTEGER},
+      <if test="prodCode != null" >
+        #{prodCode,jdbcType=VARCHAR},
+      </if>
       <if test="bcCode != null" >
         #{bcCode,jdbcType=VARCHAR},
       </if>
