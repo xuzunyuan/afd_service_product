@@ -1,19 +1,15 @@
 package com.afd.product.service.impl;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.afd.common.mybatis.Page;
 import com.afd.constants.SystemConstants;
-import com.afd.constants.product.ProductConstants;
 import com.afd.model.product.Brand;
 import com.afd.model.product.SellerBrand;
 import com.afd.product.dao.BrandMapper;
@@ -27,9 +23,6 @@ public class BrandServiceImpl implements IBrandService {
 	private BrandMapper brandMapper;
 	@Autowired
 	private SellerBrandMapper sellerBrandMapper;
-	
-	@Resource(name="redisTemplate")
-	private RedisTemplate<String, Serializable> redisTemplate;
 	
 	@Override
 	public List<Brand> getBrandsByName(String name) {
@@ -69,14 +62,6 @@ public class BrandServiceImpl implements IBrandService {
 		Long id = 0l;
 		if(this.brandMapper.insertBrand(brand)){
 			id = brand.getBrandId();
-			if(id > 0){
-				try {
-					//写入缓存
-					this.redisTemplate.opsForValue().set(ProductConstants.BRAND+brand.getBrandId(), brand);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		
 		return id;
@@ -84,16 +69,7 @@ public class BrandServiceImpl implements IBrandService {
 
 	@Override
 	public boolean updateByBrandId(Brand brand) {
-		boolean re = this.brandMapper.updateByBrandId(brand);
-		if(re){
-			try {
-				this.redisTemplate.delete(ProductConstants.BRAND+brand.getBrandId());;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-		return re;
+		return this.brandMapper.updateByBrandId(brand);
 	}
 
 	@Override
@@ -103,17 +79,11 @@ public class BrandServiceImpl implements IBrandService {
 		List<SellerBrand> sb = this.sellerBrandMapper.getSellerBrandByBrandId(brandId, SystemConstants.DB_STATUS_INVALID);
 		
 		if(sb==null || sb.isEmpty()){
-			Brand brand = this.brandMapper.getByBrandId(brandId);
+			Brand brand = new Brand();
+			brand.setBrandId(brandId);
 			brand.setStatus(SystemConstants.DB_STATUS_INVALID);
-			boolean re = this.brandMapper.updateByBrandId(brand);
 			
-			if(re){
-				try {
-					this.redisTemplate.delete(ProductConstants.BRAND+brandId);;
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}else{
+			if(!this.brandMapper.updateByBrandId(brand)){
 				result = 0;
 			}
 		}else{
@@ -125,20 +95,7 @@ public class BrandServiceImpl implements IBrandService {
 
 	@Override
 	public Brand getByBrandId(Long brandId) {
-		Brand brand = null;
-		
-		try {
-			//先从缓存中获取
-			brand = (Brand) this.redisTemplate.opsForValue().get(ProductConstants.BRAND+brandId);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		if(brand == null){
-			brand = this.brandMapper.getByBrandId(brandId);
-		}
-		
-		return brand;
+		return this.brandMapper.getByBrandId(brandId);
 	}
 
 	@Override
