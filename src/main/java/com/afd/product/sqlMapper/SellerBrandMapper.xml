@@ -17,175 +17,44 @@
     <result column="trademark_cert" property="trademarkCert" jdbcType="VARCHAR" />
     <result column="other_cert" property="otherCert" jdbcType="VARCHAR" />
     <result column="auth_cert" property="authCert" jdbcType="VARCHAR" />
+    <result column="login_name" property="loginName" jdbcType="VARCHAR" />
+    <result column="co_name" property="coName" jdbcType="VARCHAR" />
   </resultMap>
+  
   <sql id="Base_Column_List" >
     seller_brand_id, seller_id, brand_id, submit_date, status, audit_status, audit_date, 
     audit_by_name, audit_content, auth_start_date, auth_end_date, categories, trademark_cert, 
-    other_cert, auth_cert
+    other_cert, auth_cert, login_name, co_name
   </sql>
+  
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
     <include refid="Base_Column_List" />
     from t_seller_brand
     where seller_brand_id = #{sellerBrandId,jdbcType=INTEGER}
   </select>
+  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
     delete from t_seller_brand
     where seller_brand_id = #{sellerBrandId,jdbcType=INTEGER}
   </delete>
+  
   <insert id="insert" parameterType="com.afd.model.product.SellerBrand" useGeneratedKeys="true" keyProperty="sellerBrandId" >
     insert into t_seller_brand (seller_id, brand_id, 
       submit_date, status, audit_status, 
       audit_date, audit_by_name, audit_content, 
       auth_start_date, auth_end_date, categories, 
-      trademark_cert, other_cert, auth_cert
+      trademark_cert, other_cert, auth_cert, login_name, co_name
       )
     values (#{sellerId,jdbcType=INTEGER}, #{brandId,jdbcType=INTEGER}, 
       #{submitDate,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR}, #{auditStatus,jdbcType=CHAR}, 
       #{auditDate,jdbcType=TIMESTAMP}, #{auditByName,jdbcType=VARCHAR}, #{auditContent,jdbcType=VARCHAR}, 
       #{authStartDate,jdbcType=TIMESTAMP}, #{authEndDate,jdbcType=TIMESTAMP}, #{categories,jdbcType=VARCHAR}, 
-      #{trademarkCert,jdbcType=VARCHAR}, #{otherCert,jdbcType=VARCHAR}, #{authCert,jdbcType=VARCHAR}
+      #{trademarkCert,jdbcType=VARCHAR}, #{otherCert,jdbcType=VARCHAR}, #{authCert,jdbcType=VARCHAR},
+      #{loginName,jdbcType=VARCHAR}, #{coName,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.afd.model.product.SellerBrand"  useGeneratedKeys="true" keyProperty="sellerBrandId" >
-    insert into t_seller_brand
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="sellerId != null" >
-        seller_id,
-      </if>
-      <if test="brandId != null" >
-        brand_id,
-      </if>
-      <if test="submitDate != null" >
-        submit_date,
-      </if>
-      <if test="status != null" >
-        status,
-      </if>
-      <if test="auditStatus != null" >
-        audit_status,
-      </if>
-      <if test="auditDate != null" >
-        audit_date,
-      </if>
-      <if test="auditByName != null" >
-        audit_by_name,
-      </if>
-      <if test="auditContent != null" >
-        audit_content,
-      </if>
-      <if test="authStartDate != null" >
-        auth_start_date,
-      </if>
-      <if test="authEndDate != null" >
-        auth_end_date,
-      </if>
-      <if test="categories != null" >
-        categories,
-      </if>
-      <if test="trademarkCert != null" >
-        trademark_cert,
-      </if>
-      <if test="otherCert != null" >
-        other_cert,
-      </if>
-      <if test="authCert != null" >
-        auth_cert,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="sellerId != null" >
-        #{sellerId,jdbcType=INTEGER},
-      </if>
-      <if test="brandId != null" >
-        #{brandId,jdbcType=INTEGER},
-      </if>
-      <if test="submitDate != null" >
-        #{submitDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="status != null" >
-        #{status,jdbcType=CHAR},
-      </if>
-      <if test="auditStatus != null" >
-        #{auditStatus,jdbcType=CHAR},
-      </if>
-      <if test="auditDate != null" >
-        #{auditDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="auditByName != null" >
-        #{auditByName,jdbcType=VARCHAR},
-      </if>
-      <if test="auditContent != null" >
-        #{auditContent,jdbcType=VARCHAR},
-      </if>
-      <if test="authStartDate != null" >
-        #{authStartDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="authEndDate != null" >
-        #{authEndDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="categories != null" >
-        #{categories,jdbcType=VARCHAR},
-      </if>
-      <if test="trademarkCert != null" >
-        #{trademarkCert,jdbcType=VARCHAR},
-      </if>
-      <if test="otherCert != null" >
-        #{otherCert,jdbcType=VARCHAR},
-      </if>
-      <if test="authCert != null" >
-        #{authCert,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.SellerBrand" >
-    update t_seller_brand
-    <set >
-      <if test="sellerId != null" >
-        seller_id = #{sellerId,jdbcType=INTEGER},
-      </if>
-      <if test="brandId != null" >
-        brand_id = #{brandId,jdbcType=INTEGER},
-      </if>
-      <if test="submitDate != null" >
-        submit_date = #{submitDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="status != null" >
-        status = #{status,jdbcType=CHAR},
-      </if>
-      <if test="auditStatus != null" >
-        audit_status = #{auditStatus,jdbcType=CHAR},
-      </if>
-      <if test="auditDate != null" >
-        audit_date = #{auditDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="auditByName != null" >
-        audit_by_name = #{auditByName,jdbcType=VARCHAR},
-      </if>
-      <if test="auditContent != null" >
-        audit_content = #{auditContent,jdbcType=VARCHAR},
-      </if>
-      <if test="authStartDate != null" >
-        auth_start_date = #{authStartDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="authEndDate != null" >
-        auth_end_date = #{authEndDate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="categories != null" >
-        categories = #{categories,jdbcType=VARCHAR},
-      </if>
-      <if test="trademarkCert != null" >
-        trademark_cert = #{trademarkCert,jdbcType=VARCHAR},
-      </if>
-      <if test="otherCert != null" >
-        other_cert = #{otherCert,jdbcType=VARCHAR},
-      </if>
-      <if test="authCert != null" >
-        auth_cert = #{authCert,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where seller_brand_id = #{sellerBrandId,jdbcType=INTEGER}
-  </update>
+  
   <update id="updateByPrimaryKey" parameterType="com.afd.model.product.SellerBrand" >
     update t_seller_brand
     set seller_id = #{sellerId,jdbcType=INTEGER},
@@ -202,6 +71,8 @@
       trademark_cert = #{trademarkCert,jdbcType=VARCHAR},
       other_cert = #{otherCert,jdbcType=VARCHAR},
       auth_cert = #{authCert,jdbcType=VARCHAR}
+      login_name = #{loginName,jdbcType=VARCHAR},
+      co_name = #{coName,jdbcType=VARCHAR}
     where seller_brand_id = #{sellerBrandId,jdbcType=INTEGER}
   </update>
   
