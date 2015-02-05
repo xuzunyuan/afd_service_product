@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,32 @@ public class BrandServiceImpl implements IBrandService {
 	@Resource(name="redisTemplate")
 	private RedisTemplate<String, Serializable> redisTemplate;
 	
+	@Override
+	public List<Brand> getBrandsByName(String name) {
+		List<Brand> brands = null;
+		
+		if(StringUtils.isNotEmpty(name)){
+			brands = this.brandMapper.getBrandsByName(name);
+		}
+		
+		return brands;
+	}
+
+	@Override
+	public Brand getBrandByName(String name) {
+		Brand brand = null;
+		
+		if(StringUtils.isNotEmpty(name)){
+			brand = this.getBrandByName(name, null, SystemConstants.DB_STATUS_INVALID);
+			
+			if(brand == null){
+				brand = this.getBrandByName(null, name, SystemConstants.DB_STATUS_INVALID);
+			}
+		}
+		
+		return brand;
+	}
+
 	@Override
 	public Page<Brand> getBrandsByPage(Map<?, ?> map, Page<Brand> page) {
 		page.setResult(this.brandMapper.getBrandsByPage(map, page));

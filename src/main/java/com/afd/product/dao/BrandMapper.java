@@ -19,6 +19,8 @@ public interface BrandMapper {
 	
 	Brand getByBrandId(Long brandId);
 	
+	public List<Brand> getBrandsByName(@Param(value = "name") String name);
+	
 	/**
 	 * @param brandName 中文名 精确匹配
 	 * @param brandEname 英文名  精确匹配

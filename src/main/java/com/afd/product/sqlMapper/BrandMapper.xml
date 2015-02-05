@@ -172,4 +172,17 @@
 	</where>
   </select>
   
+  <select id="getBrandsByName" resultMap="BaseResultMap"> 
+	select 
+    <include refid="Base_Column_List" />
+    from T_BRAND
+    <where> 
+		<if test="name!=null and name!=''" >
+			<bind name="name" value="'%' + name + '%'" />
+			BRAND_NAME LIKE #{name} or LOWER(BRAND_ENAME) LIKE #{brandEname} and STATUS = 1
+		</if>
+		ORDER BY BRAND_ID
+	</where>
+  </select>
+  
 </mapper>
