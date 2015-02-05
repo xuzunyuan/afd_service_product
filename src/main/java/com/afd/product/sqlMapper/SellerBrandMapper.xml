@@ -33,26 +33,23 @@
     delete from t_seller_brand
     where seller_brand_id = #{sellerBrandId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.afd.model.product.SellerBrand" >
-    insert into t_seller_brand (seller_brand_id, seller_id, brand_id, 
+  <insert id="insert" parameterType="com.afd.model.product.SellerBrand" useGeneratedKeys="true" keyProperty="sellerBrandId" >
+    insert into t_seller_brand (seller_id, brand_id, 
       submit_date, status, audit_status, 
       audit_date, audit_by_name, audit_content, 
       auth_start_date, auth_end_date, categories, 
       trademark_cert, other_cert, auth_cert
       )
-    values (#{sellerBrandId,jdbcType=INTEGER}, #{sellerId,jdbcType=INTEGER}, #{brandId,jdbcType=INTEGER}, 
+    values (#{sellerId,jdbcType=INTEGER}, #{brandId,jdbcType=INTEGER}, 
       #{submitDate,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR}, #{auditStatus,jdbcType=CHAR}, 
       #{auditDate,jdbcType=TIMESTAMP}, #{auditByName,jdbcType=VARCHAR}, #{auditContent,jdbcType=VARCHAR}, 
       #{authStartDate,jdbcType=TIMESTAMP}, #{authEndDate,jdbcType=TIMESTAMP}, #{categories,jdbcType=VARCHAR}, 
       #{trademarkCert,jdbcType=VARCHAR}, #{otherCert,jdbcType=VARCHAR}, #{authCert,jdbcType=VARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.afd.model.product.SellerBrand" >
+  <insert id="insertSelective" parameterType="com.afd.model.product.SellerBrand"  useGeneratedKeys="true" keyProperty="sellerBrandId" >
     insert into t_seller_brand
     <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="sellerBrandId != null" >
-        seller_brand_id,
-      </if>
       <if test="sellerId != null" >
         seller_id,
       </if>
@@ -97,9 +94,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="sellerBrandId != null" >
-        #{sellerBrandId,jdbcType=INTEGER},
-      </if>
       <if test="sellerId != null" >
         #{sellerId,jdbcType=INTEGER},
       </if>
