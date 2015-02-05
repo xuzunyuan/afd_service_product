@@ -518,7 +518,7 @@
 			and p.SELLER_ID = #{productCondition.sellerId}
 		</if>
 		<if test="productCondition.title !=null and productCondition.title !=''">
-			<![CDATA[and  LOWER(p.title) like LOWER('%'||#{productCondition.title}||'%')]]>
+			and  LOWER(p.title) like LOWER(CONCAT('%',#{productCondition.title},'%'))
 		</if>
 		<if test="productCondition.startDate != null">
 			and p.CREATE_DATE &gt;= #{productCondition.startDate,jdbcType=TIMESTAMP}
@@ -548,7 +548,7 @@
 			and p.SELLER_ID = #{productCondition.sellerId} and p.STATUS = 0 and p.AUDIT_STATUS &lt; 2
 		</if>
 		<if test="productCondition.title !=null and productCondition.title !=''">
-			<![CDATA[and  LOWER(p.title) like LOWER('%'||#{productCondition.title}||'%')]]>
+			and  LOWER(p.title) like LOWER(CONCAT('%',#{productCondition.title},'%'))
 		</if>
 		group by <include refid="Search_Column_List" />
 		order by
