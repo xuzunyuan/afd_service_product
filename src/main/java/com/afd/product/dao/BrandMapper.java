@@ -1,7 +1,11 @@
 package com.afd.product.dao;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Param;
 
+import com.afd.common.mybatis.Page;
 import com.afd.model.product.Brand;
 
 public interface BrandMapper {
@@ -22,4 +26,6 @@ public interface BrandMapper {
 	 * @return
 	 */
 	Brand getBrandByName(@Param(value = "brandName") String brandName, @Param(value = "brandEname") String brandEname, @Param(value = "status") String status);
+	
+	public List<Brand> getBrandsByPage(@Param("cond") Map<?, ?> map, @Param(value = "page") Page<Brand> page);
 }

@@ -118,11 +118,8 @@
       <if test="status != null">
         ,STATUS = #{status,jdbcType=CHAR}
       </if>
-      <if test="brandStatus != null">
-        ,BRAND_STATUS = #{brandStatus,jdbcType=CHAR}
-      </if>
-      <if test="createName != null">
-        ,CREATE_BY_NAME = #{createName,jdbcType=VARCHAR}
+      <if test="createByName != null">
+        ,CREATE_BY_NAME = #{createByName,jdbcType=VARCHAR}
       </if>
       <if test="pinyin != null">
         ,PINYIN = #{pinyin,jdbcType=VARCHAR}
@@ -143,6 +140,34 @@
 		</if>
 		<if test="status != null">
 			and STATUS = #{status,jdbcType=CHAR}
+		</if>
+	</where>
+  </select>
+  
+  <select id="getBrandsByPage" resultMap="BaseResultMap"> 
+	select 
+    <include refid="Base_Column_List" />
+    from T_BRAND
+    <where> 
+		<if test="cond.brandName != null and cond.brandName!=''" >
+			<bind name="brandName" value="'%' + cond.brandName + '%'" />
+			BRAND_NAME LIKE #{brandName} 
+		</if>
+		<if test="cond.brandEname!=null and cond.brandEname!=''">  
+			<bind name="brandEname" value="'%' + cond.brandEname + '%'" />
+			and LOWER(BRAND_ENAME) LIKE #{brandEname} 
+		</if>
+		<if test="cond.startDt != null" >
+		 	and CREATE_DATE &gt;= #{cond.startDt,jdbcType=TIMESTAMP}
+	    </if>
+	    <if test="cond.endDt != null" >
+		 	and CREATE_DATE &lt;= #{cond.endDt,jdbcType=TIMESTAMP}
+	    </if>
+		<if test="cond.status != null">
+			and STATUS = #{cond.status,jdbcType=CHAR}
+		</if>
+		<if test="cond.createDate != null">
+			ORDER BY BRAND_ID ${cond.createDate}
 		</if>
 	</where>
   </select>

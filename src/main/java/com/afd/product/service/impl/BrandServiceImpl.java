@@ -2,6 +2,7 @@ package com.afd.product.service.impl;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import com.afd.common.mybatis.Page;
 import com.afd.constants.SystemConstants;
 import com.afd.constants.product.ProductConstants;
 import com.afd.model.product.Brand;
@@ -28,6 +30,13 @@ public class BrandServiceImpl implements IBrandService {
 	@Resource(name="redisTemplate")
 	private RedisTemplate<String, Serializable> redisTemplate;
 	
+	@Override
+	public Page<Brand> getBrandsByPage(Map<?, ?> map, Page<Brand> page) {
+		page.setResult(this.brandMapper.getBrandsByPage(map, page));
+		
+		return page;
+	}
+
 	@Override
 	public Long insertBrand(Brand brand) {
 		Long id = 0l;
