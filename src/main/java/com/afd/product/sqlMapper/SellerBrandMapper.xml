@@ -164,7 +164,7 @@
     	)
   </select>
   
-  <resultMap id="ExtResultMap" extends="BaseResultMap">
+  <resultMap id="ExtResultMap" extends="BaseResultMap" type="com.afd.model.product.SellerBrand">
   	<result column="brand_name" property="brandName" jdbcType="VARCHAR" />
     <result column="brand_ename" property="brandEname" jdbcType="VARCHAR" />
     <result column="logo_url" property="logoUrl" jdbcType="VARCHAR" />
