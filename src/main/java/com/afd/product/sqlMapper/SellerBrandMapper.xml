@@ -70,9 +70,64 @@
       categories = #{categories,jdbcType=VARCHAR},
       trademark_cert = #{trademarkCert,jdbcType=VARCHAR},
       other_cert = #{otherCert,jdbcType=VARCHAR},
-      auth_cert = #{authCert,jdbcType=VARCHAR}
+      auth_cert = #{authCert,jdbcType=VARCHAR},
       login_name = #{loginName,jdbcType=VARCHAR},
       co_name = #{coName,jdbcType=VARCHAR}
+    where seller_brand_id = #{sellerBrandId,jdbcType=INTEGER}
+  </update>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.SellerBrand" >
+    update t_seller_brand
+    <set >
+      <if test="sellerId != null" >
+        seller_id = #{sellerId,jdbcType=INTEGER},
+      </if>
+      <if test="brandId != null" >
+        brand_id = #{brandId,jdbcType=INTEGER},
+      </if>
+      <if test="submitDate != null" >
+        submit_date = #{submitDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=CHAR},
+      </if>
+      <if test="auditStatus != null" >
+        audit_status = #{auditStatus,jdbcType=CHAR},
+      </if>
+      <if test="auditDate != null" >
+        audit_date = #{auditDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="auditByName != null" >
+        audit_by_name = #{auditByName,jdbcType=VARCHAR},
+      </if>
+      <if test="auditContent != null" >
+        audit_content = #{auditContent,jdbcType=VARCHAR},
+      </if>
+      <if test="authStartDate != null" >
+        auth_start_date = #{authStartDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="authEndDate != null" >
+        auth_end_date = #{authEndDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="categories != null" >
+        categories = #{categories,jdbcType=VARCHAR},
+      </if>
+      <if test="trademarkCert != null" >
+        trademark_cert = #{trademarkCert,jdbcType=VARCHAR},
+      </if>
+      <if test="otherCert != null" >
+        other_cert = #{otherCert,jdbcType=VARCHAR},
+      </if>
+      <if test="authCert != null" >
+        auth_cert = #{authCert,jdbcType=VARCHAR},
+      </if>
+      <if test="loginName != null" >
+        login_name = #{loginName,jdbcType=VARCHAR},
+      </if>
+      <if test="coName != null" >
+        co_name = #{coName,jdbcType=VARCHAR},
+      </if>
+    </set>
     where seller_brand_id = #{sellerBrandId,jdbcType=INTEGER}
   </update>
   
