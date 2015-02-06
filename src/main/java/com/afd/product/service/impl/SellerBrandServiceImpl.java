@@ -7,11 +7,15 @@ package com.afd.product.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.afd.common.mybatis.Page;
+import com.afd.common.util.DateUtils;
+import com.afd.constants.product.ProductConstants.SellerBrand$Status;
 import com.afd.model.product.Brand;
 import com.afd.model.product.SellerBrand;
+import com.afd.product.dao.SellerBrandMapper;
 import com.afd.service.product.ISellerBrandService;
 
 /**
@@ -22,11 +26,12 @@ import com.afd.service.product.ISellerBrandService;
  */
 @Service("sellerBrandService")
 public class SellerBrandServiceImpl implements ISellerBrandService {
+	@Autowired
+	SellerBrandMapper sellerBrandMapper;
 
 	@Override
 	public SellerBrand getSellerBrandById(int id) {
-		// TODO Auto-generated method stub
-		return null;
+		return sellerBrandMapper.selectByPrimaryKey(id);
 	}
 
 	@Override
@@ -43,8 +48,19 @@ public class SellerBrandServiceImpl implements ISellerBrandService {
 
 	@Override
 	public int applySellerBrand(SellerBrand sellerBrand) {
-		// TODO Auto-generated method stub
-		return 0;
+		// 校验卖家是否已申请该品牌
+		if (existSellerBrand(sellerBrand.getSellerId(),
+				sellerBrand.getBrandId()))
+			return -1;
+
+		sellerBrand.setStatus(SellerBrand$Status.WAIT_AUDIT); // 初始状态待审核
+		sellerBrand.setSubmitDate(DateUtils.currentDate());
+
+		if (sellerBrandMapper.insert(sellerBrand) == 0) {
+			return 0;
+		}
+
+		return sellerBrand.getSellerBrandId();
 	}
 
 	@Override
