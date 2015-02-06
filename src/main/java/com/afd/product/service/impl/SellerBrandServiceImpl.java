@@ -36,14 +36,12 @@ public class SellerBrandServiceImpl implements ISellerBrandService {
 
 	@Override
 	public List<SellerBrand> getSellerBrandList(int sellerId) {
-		// TODO Auto-generated method stub
-		return null;
+		return sellerBrandMapper.selectSellerBrandList(sellerId);
 	}
 
 	@Override
 	public List<Brand> getValidBrandListOfSeller(int sellerId) {
-		// TODO Auto-generated method stub
-		return null;
+		return sellerBrandMapper.selectValidBrandOfSeller(sellerId);
 	}
 
 	@Override
@@ -65,33 +63,63 @@ public class SellerBrandServiceImpl implements ISellerBrandService {
 
 	@Override
 	public int updateApplySellerBrand(SellerBrand sellerBrand) {
-		// TODO Auto-generated method stub
-		return 0;
+		sellerBrand.setStatus(SellerBrand$Status.WAIT_AUDIT); // 初始状态待审核
+		sellerBrand.setSubmitDate(DateUtils.currentDate());
+
+		return sellerBrandMapper.updateByPrimaryKeySelective(sellerBrand);
 	}
 
 	@Override
 	public Page<SellerBrand> queryWaitAuditApplyByPage(
 			Map<String, Object> cond, int... page) {
-		// TODO Auto-generated method stub
-		return null;
+		Page<SellerBrand> p = new Page<SellerBrand>();
+
+		if (page != null) {
+			p.setCurrentPageNo(page[0]);
+
+			if (page.length > 1) {
+				p.setPageSize(1);
+			}
+		}
+
+		List<SellerBrand> result = sellerBrandMapper
+				.queryWaitAurditApplyByPage(cond, p);
+		p.setResult(result);
+
+		return p;
 	}
 
 	@Override
-	public int passApply(int sellerBrandId, String auditor, String opinion) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int passApply(String auditor, String opinion, int... sellerBrandId) {
+		int ret = 1;
+
+		for (int id : sellerBrandId) {
+			if (sellerBrandMapper.updateAuditStatus(id,
+					SellerBrand$Status.VALID, DateUtils.currentDate(), auditor,
+					opinion) == 0)
+				ret = 0;
+		}
+
+		return ret;
 	}
 
 	@Override
-	public int rejectApply(int sellerBrandId, String auditor, String opinion) {
-		// TODO Auto-generated method stub
-		return 0;
+	public int rejectApply(String auditor, String opinion, int... sellerBrandId) {
+		int ret = 1;
+
+		for (int id : sellerBrandId) {
+			if (sellerBrandMapper.updateAuditStatus(id,
+					SellerBrand$Status.REJECT, DateUtils.currentDate(),
+					auditor, opinion) == 0)
+				ret = 0;
+		}
+
+		return ret;
 	}
 
 	@Override
 	public boolean existSellerBrand(int sellerId, int brandId) {
-		// TODO Auto-generated method stub
-		return false;
+		return sellerBrandMapper.selectBySellerAndBrand(sellerId, brandId) != null;
 	}
 
 }

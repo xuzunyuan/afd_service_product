@@ -131,6 +131,7 @@
     where seller_brand_id = #{sellerBrandId,jdbcType=INTEGER}
   </update>
   
+  <!-- 扩展 -->
   <select id="getSellerBrandByBrandId" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
@@ -144,4 +145,70 @@
 		</if>
 	</where>
   </select>
+  
+  <select id="selectValidBrandOfSeller" resultMap="com.afd.product.dao.BrandMapper.BaseResultMap">
+    select 
+    <include refid="com.afd.product.dao.BrandMapper.Base_Column_List" />
+    from t_brand
+    where exists
+    	(select 1 
+    		from t_seller_brand 
+    		where t_seller_brand.brand_id = t_brand.brand_id 
+    			and t_seller_brand.seller_id = #{sellerId,jdbcType=INTEGER}
+    			and t_seller_brand.status = '1'
+    	)
+  </select>
+  
+  <resultMap id="ExtResultMap" extends="BaseResultMap">
+  	<result column="brand_name" property="brandName" jdbcType="VARCHAR" />
+    <result column="brand_ename" property="brandEname" jdbcType="VARCHAR" />
+    <result column="logo_url" property="logoUrl" jdbcType="VARCHAR" />
+    <result column="brand_abbr" property="brandAbbr" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <select id="selectSellerBrandList" resultMap="ExtResultMap">
+    select 
+    	t1.seller_brand_id, t1.seller_id, t1.brand_id, t1.submit_date, t1.status, t1.audit_status, t1.audit_date, 
+	    t1.audit_by_name, t1.audit_content, t1.auth_start_date, t1.auth_end_date, t1.categories, t1.trademark_cert, 
+	    t1.other_cert, t1.auth_cert, t1.login_name, t1.co_name, 
+	    t2.brand_name, t2.brand_ename, t2.logo_url, t2.brand_abbr
+    from t_seller_brand t1, t_brand t2
+    where t1.brand_id = t2.brand_id
+    	and t1.seller_id = #{sellerId,jdbcType=INTEGER}
+    	and t1.status != '0'
+    order by t1.seller_brand_id desc
+  </select>
+  
+  <select id="queryWaitAurditApplyByPage" resultMap="ExtResultMap">
+    select 
+    	t1.seller_brand_id, t1.seller_id, t1.brand_id, t1.submit_date, t1.status, t1.audit_status, t1.audit_date, 
+	    t1.audit_by_name, t1.audit_content, t1.auth_start_date, t1.auth_end_date, t1.categories, t1.trademark_cert, 
+	    t1.other_cert, t1.auth_cert, t1.login_name, t1.co_name, 
+	    t2.brand_name, t2.brand_ename, t2.logo_url, t2.brand_abbr
+    from t_seller_brand t1, t_brand t2
+    where t1.brand_id = t2.brand_id
+    	and t1.status == '2'
+    	<if test="cond.loginName != null" >
+		 	 <bind name="loginName" value="'%' + cond.loginName + '%'" />
+		 	 and t1.login_name like #{loginName,jdbcType=VARCHAR} 
+		</if>
+		<if test="cond.coName != null" >
+		 	 <bind name="coName" value="'%' + cond.coName + '%'" />
+		 	 and t1.co_name like #{coName,jdbcType=VARCHAR} 
+		</if>
+		<if test="cond.brandName != null" >
+		 	 <bind name="brandName" value="'%' + cond.brandName + '%'" />
+		 	 and (t2.brand_ename like #{brandName,jdbcType=VARCHAR} 
+		 	 	or t2.brand_ename like #{brandName,jdbcType=VARCHAR} 
+		 	 	)
+		</if>
+		<if test="cond.startDt != null" >
+		 	 and t1.submit_date &gt;= #{cond.startDt,jdbcType=TIMESTAMP}
+	    </if>
+	    <if test="cond.endDt != null" >
+		 	 and t1.submit_date &lt; #{cond.endDt,jdbcType=TIMESTAMP}
+	    </if>
+    order by t1.submit_date desc
+  </select>
+ 
 </mapper>
