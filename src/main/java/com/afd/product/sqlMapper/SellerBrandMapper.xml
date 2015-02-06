@@ -11,6 +11,7 @@
     <result column="audit_date" property="auditDate" jdbcType="TIMESTAMP" />
     <result column="audit_by_name" property="auditByName" jdbcType="VARCHAR" />
     <result column="audit_content" property="auditContent" jdbcType="VARCHAR" />
+    <result column="auth_type" property="authType" jdbcType="CHAR" />
     <result column="auth_start_date" property="authStartDate" jdbcType="TIMESTAMP" />
     <result column="auth_end_date" property="authEndDate" jdbcType="TIMESTAMP" />
     <result column="categories" property="categories" jdbcType="VARCHAR" />
@@ -23,7 +24,7 @@
   
   <sql id="Base_Column_List" >
     seller_brand_id, seller_id, brand_id, submit_date, status, audit_status, audit_date, 
-    audit_by_name, audit_content, auth_start_date, auth_end_date, categories, trademark_cert, 
+    audit_by_name, audit_content, auth_type, auth_start_date, auth_end_date, categories, trademark_cert, 
     other_cert, auth_cert, login_name, co_name
   </sql>
   
@@ -42,13 +43,13 @@
   <insert id="insert" parameterType="com.afd.model.product.SellerBrand" useGeneratedKeys="true" keyProperty="sellerBrandId" >
     insert into t_seller_brand (seller_id, brand_id, 
       submit_date, status, audit_status, 
-      audit_date, audit_by_name, audit_content, 
+      audit_date, audit_by_name, audit_content, auth_type, 
       auth_start_date, auth_end_date, categories, 
       trademark_cert, other_cert, auth_cert, login_name, co_name
       )
     values (#{sellerId,jdbcType=INTEGER}, #{brandId,jdbcType=INTEGER}, 
       #{submitDate,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR}, #{auditStatus,jdbcType=CHAR}, 
-      #{auditDate,jdbcType=TIMESTAMP}, #{auditByName,jdbcType=VARCHAR}, #{auditContent,jdbcType=VARCHAR}, 
+      #{auditDate,jdbcType=TIMESTAMP}, #{auditByName,jdbcType=VARCHAR}, #{auditContent,jdbcType=VARCHAR}, #{authType,jdbcType=CHAR},  
       #{authStartDate,jdbcType=TIMESTAMP}, #{authEndDate,jdbcType=TIMESTAMP}, #{categories,jdbcType=VARCHAR}, 
       #{trademarkCert,jdbcType=VARCHAR}, #{otherCert,jdbcType=VARCHAR}, #{authCert,jdbcType=VARCHAR},
       #{loginName,jdbcType=VARCHAR}, #{coName,jdbcType=VARCHAR}
@@ -65,6 +66,7 @@
       audit_date = #{auditDate,jdbcType=TIMESTAMP},
       audit_by_name = #{auditByName,jdbcType=VARCHAR},
       audit_content = #{auditContent,jdbcType=VARCHAR},
+      auth_type = #{authType,jdbcType=CHAR},
       auth_start_date = #{authStartDate,jdbcType=TIMESTAMP},
       auth_end_date = #{authEndDate,jdbcType=TIMESTAMP},
       categories = #{categories,jdbcType=VARCHAR},
@@ -102,6 +104,9 @@
       </if>
       <if test="auditContent != null" >
         audit_content = #{auditContent,jdbcType=VARCHAR},
+      </if>
+      <if test="authType != null" >
+        auth_type = #{authType,jdbcType=CHAR},
       </if>
       <if test="authStartDate != null" >
         auth_start_date = #{authStartDate,jdbcType=TIMESTAMP},
@@ -169,7 +174,7 @@
   <select id="selectSellerBrandList" resultMap="ExtResultMap">
     select 
     	t1.seller_brand_id, t1.seller_id, t1.brand_id, t1.submit_date, t1.status, t1.audit_status, t1.audit_date, 
-	    t1.audit_by_name, t1.audit_content, t1.auth_start_date, t1.auth_end_date, t1.categories, t1.trademark_cert, 
+	    t1.audit_by_name, t1.audit_content, t1.auth_type, t1.auth_start_date, t1.auth_end_date, t1.categories, t1.trademark_cert, 
 	    t1.other_cert, t1.auth_cert, t1.login_name, t1.co_name, 
 	    t2.brand_name, t2.brand_ename, t2.logo_url, t2.brand_abbr
     from t_seller_brand t1, t_brand t2
@@ -182,7 +187,7 @@
   <select id="queryWaitAurditApplyByPage" resultMap="ExtResultMap">
     select 
     	t1.seller_brand_id, t1.seller_id, t1.brand_id, t1.submit_date, t1.status, t1.audit_status, t1.audit_date, 
-	    t1.audit_by_name, t1.audit_content, t1.auth_start_date, t1.auth_end_date, t1.categories, t1.trademark_cert, 
+	    t1.audit_by_name, t1.audit_content, t1.auth_type, t1.auth_start_date, t1.auth_end_date, t1.categories, t1.trademark_cert, 
 	    t1.other_cert, t1.auth_cert, t1.login_name, t1.co_name, 
 	    t2.brand_name, t2.brand_ename, t2.logo_url, t2.brand_abbr
     from t_seller_brand t1, t_brand t2
