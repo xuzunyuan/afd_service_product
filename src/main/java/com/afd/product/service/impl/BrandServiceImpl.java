@@ -40,10 +40,10 @@ public class BrandServiceImpl implements IBrandService {
 		Brand brand = null;
 		
 		if(StringUtils.isNotEmpty(name)){
-			brand = this.getBrandByName(name, null, SystemConstants.DB_STATUS_INVALID);
+			brand = this.getBrandByName(name, null, SystemConstants.DB_STATUS_VALID);
 			
 			if(brand == null){
-				brand = this.getBrandByName(null, name, SystemConstants.DB_STATUS_INVALID);
+				brand = this.getBrandByName(null, name, SystemConstants.DB_STATUS_VALID);
 			}
 		}
 		

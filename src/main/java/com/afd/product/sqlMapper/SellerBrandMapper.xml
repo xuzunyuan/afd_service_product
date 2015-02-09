@@ -192,7 +192,7 @@
 	    t2.brand_name, t2.brand_ename, t2.logo_url, t2.brand_abbr
     from t_seller_brand t1, t_brand t2
     where t1.brand_id = t2.brand_id
-    	and t1.status == '2'
+    	and t1.status = '2'
     	<if test="cond.loginName != null" >
 		 	 <bind name="loginName" value="'%' + cond.loginName + '%'" />
 		 	 and t1.login_name like #{loginName,jdbcType=VARCHAR} 
@@ -203,7 +203,7 @@
 		</if>
 		<if test="cond.brandName != null" >
 		 	 <bind name="brandName" value="'%' + cond.brandName + '%'" />
-		 	 and (t2.brand_ename like #{brandName,jdbcType=VARCHAR} 
+		 	 and (t2.brand_name like #{brandName,jdbcType=VARCHAR} 
 		 	 	or t2.brand_ename like #{brandName,jdbcType=VARCHAR} 
 		 	 	)
 		</if>
