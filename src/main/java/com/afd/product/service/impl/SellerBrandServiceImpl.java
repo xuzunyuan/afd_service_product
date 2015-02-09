@@ -17,6 +17,8 @@ import com.afd.model.product.Brand;
 import com.afd.model.product.SellerBrand;
 import com.afd.product.dao.SellerBrandMapper;
 import com.afd.service.product.ISellerBrandService;
+import com.afd.service.seller.ISellerLoginService;
+import com.afd.service.seller.ISellerService;
 
 /**
  * 卖家品牌服务
@@ -28,6 +30,12 @@ import com.afd.service.product.ISellerBrandService;
 public class SellerBrandServiceImpl implements ISellerBrandService {
 	@Autowired
 	SellerBrandMapper sellerBrandMapper;
+
+	@Autowired
+	ISellerLoginService sellerLoginService;
+
+	@Autowired
+	ISellerService sellerService;
 
 	@Override
 	public SellerBrand getSellerBrandById(int id) {
@@ -53,6 +61,11 @@ public class SellerBrandServiceImpl implements ISellerBrandService {
 
 		sellerBrand.setStatus(SellerBrand$Status.WAIT_AUDIT); // 初始状态待审核
 		sellerBrand.setSubmitDate(DateUtils.currentDate());
+
+		sellerBrand.setLoginName(sellerLoginService.getLoginBySellerId(
+				sellerBrand.getSellerId()).getLoginName());
+		sellerBrand.setCoName(sellerService.getSellerById(
+				sellerBrand.getSellerId()).getCoName());
 
 		if (sellerBrandMapper.insert(sellerBrand) == 0) {
 			return 0;
