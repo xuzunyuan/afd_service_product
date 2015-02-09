@@ -247,7 +247,10 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public Product getProductById(Integer prodId) {
-		return this.productMapper.selectByPrimaryKey(prodId);
+		Product product = this.productMapper.selectByPrimaryKey(prodId);
+		List<Sku> skus = this.skuMapper.getSkusByProdId(prodId);
+		product.setSkus(skus);
+		return product;
 	}
 
 	@Override
