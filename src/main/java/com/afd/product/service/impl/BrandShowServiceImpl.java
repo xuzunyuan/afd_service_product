@@ -5,11 +5,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.ibatis.annotations.Param;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.afd.common.mybatis.Page;
+import com.afd.constants.product.ProductConstants;
 import com.afd.model.product.BrandShow;
 import com.afd.model.product.BrandShowDetail;
 import com.afd.product.dao.BrandShowDetailMapper;
@@ -19,10 +24,15 @@ import com.afd.service.product.IBrandShowService;
 @Service("brandShowService")
 public class BrandShowServiceImpl implements IBrandShowService{
 
+	private static final Logger log = LoggerFactory.getLogger(BrandShowServiceImpl.class);
+	
 	@Autowired
 	private BrandShowMapper brandShowMapper;
 	@Autowired
 	private BrandShowDetailMapper brandShowDetailMapper;
+	@Autowired
+	@Qualifier("redisTemplate")
+	private RedisTemplate<String, String> redisTemplate;
 	
 	@Override
 	public BrandShow getBrandShowById(Long brandShowId) {
@@ -41,7 +51,37 @@ public class BrandShowServiceImpl implements IBrandShowService{
 
 	@Override
 	public List<BrandShowDetail> getBrandShowDetailsByIds(List<Long> brandShowDetailIds) {
-		return this.brandShowDetailMapper.getBrandShowDetailsByIds(brandShowDetailIds);
+		List<BrandShowDetail> bsds = this.brandShowDetailMapper.getBrandShowDetailsByIds(brandShowDetailIds);
+		if(null != bsds && bsds.size() != 0) {
+			for(BrandShowDetail bsd : bsds) {
+				Long stock = 0l;
+				if(null == bsd.getShowBalance() || bsd.getShowBalance() <= 0) {
+					bsd.setShowBalance(0l);
+					stock = 0l;
+				} else if (null == bsd.getSaleAmount() || bsd.getSaleAmount() <= 0) {
+					bsd.setSaleAmount(0l);
+					stock = bsd.getShowBalance();
+				} else {
+					stock = bsd.getShowBalance() - bsd.getSaleAmount();
+				}
+				try {
+					String strStock = this.redisTemplate.opsForValue().get(ProductConstants.CACHE_PERFIX_INVENTORY + bsd.getbSDId());
+					if(StringUtils.isBlank(strStock) || "null".equals(strStock)) {
+						strStock = stock + "";
+						this.redisTemplate.opsForValue().set(ProductConstants.CACHE_PERFIX_INVENTORY + bsd.getbSDId(), strStock);
+					} else {
+						stock = Long.parseLong(strStock);
+						Long saleAmount = bsd.getShowBalance() - stock;
+						if(saleAmount >= 0) {
+							bsd.setSaleAmount(saleAmount);
+						}
+					}
+				} catch (Exception e) {
+					log.error(e.getMessage(), e);
+				}
+			}
+		}
+		return bsds;
 	}
 
 	@Override
