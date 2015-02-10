@@ -28,4 +28,6 @@ public interface BrandShowDetailMapper {
     BigDecimal getLowestPrice(@Param("bsid") Long bsid);
     
     List<BrandShowDetail> getBrandShowDetailByPage(@Param("cond") Map<?, ?> map, @Param(value = "page") Page<BrandShowDetail> page);
+
+	void addStock(@Param("bsdId") Long bsdId, @Param("stock") Long stock);
 }

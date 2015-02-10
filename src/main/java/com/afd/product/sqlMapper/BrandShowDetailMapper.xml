@@ -302,4 +302,11 @@
     </if>
 	</where>
   </select>
+  <update id="addStock">
+      update t_brand_show_detail t
+      set t.sale_amount = case when t.sale_amount is null then -#{stock,jdbcType=DECIMAL} 
+   									else t.sale_amount - #{stock,jdbcType=DECIMAL} 
+   								end
+		where t.b_s_d_id = #{bsdId,jdbcType=DECIMAL}
+  </update>
 </mapper>

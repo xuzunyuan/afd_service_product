@@ -3,6 +3,7 @@ package com.afd.product.service.impl;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,5 +59,19 @@ public class BrandShowServiceImpl implements IBrandShowService{
 
           page.setResult(this.brandShowDetailMapper.getBrandShowDetailByPage(map, page));
 		  return page;
+	}
+
+	/**
+	 * minus saled amount
+	 * @param stockMap
+	 */
+	public void addStock(Map<Long, Long> stockMap) {
+		if(null != stockMap && stockMap.size() > 0) {
+			for(Entry<Long,Long> entry : stockMap.entrySet()) {
+				Long bsdId = entry.getKey();
+				Long stock = entry.getValue();
+				this.brandShowDetailMapper.addStock(bsdId,stock);
+			}
+		}
 	}
 }
