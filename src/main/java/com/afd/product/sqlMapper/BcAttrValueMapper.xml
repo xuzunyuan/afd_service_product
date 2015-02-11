@@ -210,7 +210,7 @@
   <select id="getBcAttrValueByPBcAvId" resultMap="ExtResultMap" >
     select bca.bc_av_id, bca.bc_attr_id, bca.attr_value_id, bca.p_bc_av_id, 
     bca.is_sub_attr, bca.icon, bca.display_order, bca.status, 
-    bca.bc_id, bca.is_filter, bca.is_mobile_display, bca.m_display_position, av.attr_value_name, av.pinyin
+    bca.bc_id, bca.is_filter, bca.is_mobile_display, av.attr_value_name, av.pinyin
     from t_bc_attr_value bca, t_attribute_value av
     <where> 
 		<if test="pBcAvId !=null">  
