@@ -105,6 +105,7 @@ public class BrandShowServiceImpl implements IBrandShowService{
 	 * minus saled amount
 	 * @param stockMap
 	 */
+	@Override
 	public void addStock(Map<Long, Long> stockMap) {
 		if(null != stockMap && stockMap.size() > 0) {
 			for(Entry<Long,Long> entry : stockMap.entrySet()) {
