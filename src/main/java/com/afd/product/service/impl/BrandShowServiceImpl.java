@@ -41,7 +41,33 @@ public class BrandShowServiceImpl implements IBrandShowService{
 
 	@Override
 	public BrandShowDetail getBrandShowDetailById(Long brandShowDetailId) {
-		return this.brandShowDetailMapper.selectByPrimaryKey(brandShowDetailId.intValue());
+		BrandShowDetail bsd = this.brandShowDetailMapper.selectByPrimaryKey(brandShowDetailId.intValue());
+		Long stock = 0l;
+		if(null == bsd.getShowBalance() || bsd.getShowBalance() <= 0) {
+			bsd.setShowBalance(0l);
+			stock = 0l;
+		} else if (null == bsd.getSaleAmount() || bsd.getSaleAmount() <= 0) {
+			bsd.setSaleAmount(0l);
+			stock = bsd.getShowBalance();
+		} else {
+			stock = bsd.getShowBalance() - bsd.getSaleAmount();
+		}
+		try {
+			String strStock = this.redisTemplate.opsForValue().get(ProductConstants.CACHE_PERFIX_INVENTORY + bsd.getbSDId());
+			if(StringUtils.isBlank(strStock) || "null".equals(strStock)) {
+				strStock = stock + "";
+				this.redisTemplate.opsForValue().set(ProductConstants.CACHE_PERFIX_INVENTORY + bsd.getbSDId(), strStock);
+			} else {
+				stock = Long.parseLong(strStock);
+				Long saleAmount = bsd.getShowBalance() - stock;
+				if(saleAmount >= 0) {
+					bsd.setSaleAmount(saleAmount);
+				}
+			}
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+		return bsd;
 	}
 
 	@Override
