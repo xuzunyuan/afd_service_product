@@ -22,11 +22,6 @@
        <property name="maxWaitMillis" value="${redis.pool.maxWaitMillis}" />
        <property name="testOnBorrow" value="${redis.pool.testOnBorrow}" />  
     </bean>
-
-    <bean id="jdkSerializer" class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer" />
-	<redis:listener-container>
-        <redis:listener ref="brandShowService" serializer="jdkSerializer" method="addStock" topic="brandShowStock"/>
-    </redis:listener-container>
 	
     <beans profile="develop">
 		<bean id="sentinelConfig" class="org.springframework.data.redis.connection.RedisSentinelConfigurationEX">  
