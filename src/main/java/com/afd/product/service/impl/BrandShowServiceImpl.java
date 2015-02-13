@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -16,19 +13,16 @@ import org.springframework.stereotype.Service;
 
 import com.afd.common.mybatis.Page;
 import com.afd.common.util.DateUtils;
-import com.afd.constants.product.ProductConstants;
 import com.afd.constants.product.ProductConstants.BrandShow$Status;
 import com.afd.model.product.BrandShow;
 import com.afd.model.product.BrandShowDetail;
 import com.afd.product.dao.BrandShowDetailMapper;
 import com.afd.product.dao.BrandShowMapper;
 import com.afd.service.product.IBrandShowService;
+import com.google.common.collect.Lists;
 
 @Service("brandShowService")
 public class BrandShowServiceImpl implements IBrandShowService {
-
-	private static final Logger log = LoggerFactory
-			.getLogger(BrandShowServiceImpl.class);
 
 	@Autowired
 	private BrandShowMapper brandShowMapper;
@@ -39,62 +33,61 @@ public class BrandShowServiceImpl implements IBrandShowService {
 	private RedisTemplate<String, String> redisTemplate;
 
 	@Override
-	public BrandShow getBrandShowById(Long brandShowId) {
-		return this.brandShowMapper.selectByPrimaryKey(brandShowId.intValue());
+	public BrandShow getBrandShowById(int brandShowId) {
+		return this.brandShowMapper.selectByPrimaryKey(brandShowId);
 	}
 
 	@Override
-	public BrandShowDetail getBrandShowDetailById(Long brandShowDetailId) {
-		return this.brandShowDetailMapper.selectByPrimaryKey(brandShowDetailId
-				.intValue());
+	public BrandShowDetail getBrandShowDetailById(int brandShowDetailId) {
+		return null;
 	}
 
 	@Override
-	public List<BrandShow> getBrandShowByIds(List<Long> brandShowIds) {
-		return this.brandShowMapper.getBrandShowByIds(brandShowIds);
+	public List<BrandShow> getBrandShowByIds(List<Integer> brandShowIds) {
+		return null;
 	}
 
 	@Override
 	public List<BrandShowDetail> getBrandShowDetailsByIds(
-			List<Long> brandShowDetailIds) {
-		List<BrandShowDetail> bsds = this.brandShowDetailMapper
-				.getBrandShowDetailsByIds(brandShowDetailIds);
-		if (null != bsds && bsds.size() != 0) {
-			for (BrandShowDetail bsd : bsds) {
-				Long stock = 0l;
-				if (null == bsd.getShowBalance() || bsd.getShowBalance() <= 0) {
-					bsd.setShowBalance(0l);
-					stock = 0l;
-				} else if (null == bsd.getSaleAmount()
-						|| bsd.getSaleAmount() <= 0) {
-					bsd.setSaleAmount(0l);
-					stock = bsd.getShowBalance();
-				} else {
-					stock = bsd.getShowBalance() - bsd.getSaleAmount();
-				}
-				try {
-					String strStock = this.redisTemplate.opsForValue().get(
-							ProductConstants.CACHE_PERFIX_INVENTORY
-									+ bsd.getbSDId());
-					if (StringUtils.isBlank(strStock)
-							|| "null".equals(strStock)) {
-						strStock = stock + "";
-						this.redisTemplate.opsForValue().set(
-								ProductConstants.CACHE_PERFIX_INVENTORY
-										+ bsd.getbSDId(), strStock);
-					} else {
-						stock = Long.parseLong(strStock);
-						Long saleAmount = bsd.getShowBalance() - stock;
-						if (saleAmount >= 0) {
-							bsd.setSaleAmount(saleAmount);
-						}
-					}
-				} catch (Exception e) {
-					log.error(e.getMessage(), e);
-				}
-			}
-		}
-		return bsds;
+			List<Integer> brandShowDetailIds) {
+		// List<BrandShowDetail> bsds = this.brandShowDetailMapper
+		// .getBrandShowDetailsByIds(brandShowDetailIds);
+		// if (null != bsds && bsds.size() != 0) {
+		// for (BrandShowDetail bsd : bsds) {
+		// int stock;
+		// if (null == bsd.getShowBalance() || bsd.getShowBalance() <= 0) {
+		// bsd.setShowBalance(0);
+		// stock = 0;
+		// } else if (null == bsd.getSaleAmount()
+		// || bsd.getSaleAmount() <= 0) {
+		// bsd.setSaleAmount(0);
+		// stock = bsd.getShowBalance();
+		// } else {
+		// stock = bsd.getShowBalance() - bsd.getSaleAmount();
+		// }
+		// try {
+		// String strStock = this.redisTemplate.opsForValue().get(
+		// ProductConstants.CACHE_PERFIX_INVENTORY
+		// + bsd.getbSDId());
+		// if (StringUtils.isBlank(strStock)
+		// || "null".equals(strStock)) {
+		// strStock = stock + "";
+		// this.redisTemplate.opsForValue().set(
+		// ProductConstants.CACHE_PERFIX_INVENTORY
+		// + bsd.getbSDId(), strStock);
+		// } else {
+		// stock = Integer.parseInt(strStock);
+		// int saleAmount = bsd.getShowBalance() - stock;
+		// if (saleAmount >= 0) {
+		// bsd.setSaleAmount(saleAmount);
+		// }
+		// }
+		// } catch (Exception e) {
+		// log.error(e.getMessage(), e);
+		// }
+		// }
+		// }
+		return null;
 	}
 
 	@Override
@@ -103,8 +96,9 @@ public class BrandShowServiceImpl implements IBrandShowService {
 	}
 
 	@Override
-	public BigDecimal getLowestPrice(Long bsid) {
-		return this.brandShowDetailMapper.getLowestPrice(bsid);
+	public BigDecimal getLowestPrice(int bsid) {
+		// return this.brandShowDetailMapper.getLowestPrice(bsid);
+		return null;
 	}
 
 	@Override
@@ -132,7 +126,7 @@ public class BrandShowServiceImpl implements IBrandShowService {
 	}
 
 	@Override
-	public long newBrandShow(BrandShow brandShow) {
+	public int newBrandShow(BrandShow brandShow) {
 		brandShow.setStatus(BrandShow$Status.EDITING);
 		brandShow.setCreateByDate(DateUtils.currentDate());
 
@@ -142,7 +136,7 @@ public class BrandShowServiceImpl implements IBrandShowService {
 	}
 
 	@Override
-	public long submitNewBrandShow(long brandShowId, BrandShowDetail[] details) {
+	public int submitNewBrandShow(int brandShowId, BrandShowDetail[] details) {
 		// BrandShow brandShow =
 		// brandShowMapper.selectByPrimaryKey(brandShowId);
 
@@ -150,14 +144,13 @@ public class BrandShowServiceImpl implements IBrandShowService {
 	}
 
 	@Override
-	public long modifyBrandShow(BrandShow brandShow) {
+	public int modifyBrandShow(BrandShow brandShow) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public long submitModifyBrandShow(long brandShowId,
-			BrandShowDetail[] details) {
+	public int submitModifyBrandShow(int brandShowId, BrandShowDetail[] details) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -177,34 +170,39 @@ public class BrandShowServiceImpl implements IBrandShowService {
 	}
 
 	@Override
-	public long passAuditBrandShow(long brandShowId, Date startDate,
+	public int passAuditBrandShow(int brandShowId, Date startDate,
 			Date endDate, String auditor, String opinion) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public long rejectAuditBrandShow(long brandShowId, String auditor,
+	public int rejectAuditBrandShow(int brandShowId, String auditor,
 			String opinion) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public long startBrandShow(long brandShowId) {
+	public int startBrandShow(int brandShowId) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public long endBrandSow(long brandShowId) {
+	public int endBrandSow(int brandShowId) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public List<BrandShowDetail> getDetailsOfBrandShow(long brandShowId) {
+	public List<BrandShowDetail> getDetailsOfBrandShow(int brandShowId) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<BrandShow> getOnlineBrandShowsOfSeller(int sellerId) {
+		return Lists.newArrayList();
 	}
 }
