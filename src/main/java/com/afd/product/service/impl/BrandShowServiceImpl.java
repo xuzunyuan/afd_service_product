@@ -115,6 +115,7 @@ public class BrandShowServiceImpl implements IBrandShowService {
 	 * 
 	 * @param stockMap
 	 */
+	@Override
 	public void addStock(Map<Long, Long> stockMap) {
 		if (null != stockMap && stockMap.size() > 0) {
 			for (Entry<Long, Long> entry : stockMap.entrySet()) {
@@ -202,7 +203,7 @@ public class BrandShowServiceImpl implements IBrandShowService {
 	}
 
 	@Override
-	public List<BrandShow> getOnlineBrandShowsOfSeller(int sellerId) {
+	public List<BrandShow> getOnlinedBrandShowsOfSeller(int sellerId) {
 		return Lists.newArrayList();
 	}
 }
