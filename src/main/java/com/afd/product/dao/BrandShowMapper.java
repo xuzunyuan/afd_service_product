@@ -20,7 +20,7 @@ public interface BrandShowMapper {
 	int updateByPrimaryKey(BrandShow record);
 
 	List<BrandShow> getBrandShowByIds(
-			@Param("brandShowIds") List<Long> brandShowIds);
+			@Param("brandShowIds") List<Integer> brandShowIds);
 
 	List<BrandShow> getValidBrandShows(BrandShow record);
 }

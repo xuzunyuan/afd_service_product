@@ -303,7 +303,7 @@
 	</foreach>
   </select>
   
-  <select id="getLowestPrice" parameterType="java.lang.Long" resultType="java.math.BigDecimal">
+  <select id="getLowestPrice" parameterType="java.lang.Integer" resultType="java.math.BigDecimal">
   select
 	min(show_price)
 	from t_brand_show_detail

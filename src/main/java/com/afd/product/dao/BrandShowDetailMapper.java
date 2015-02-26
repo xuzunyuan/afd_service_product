@@ -23,13 +23,13 @@ public interface BrandShowDetailMapper {
 	int updateByPrimaryKey(BrandShowDetail record);
 
 	List<BrandShowDetail> getBrandShowDetailsByIds(
-			@Param("brandShowDetailIds") List<Long> brandShowDetailIds);
+			@Param("brandShowDetailIds") List<Integer> brandShowDetailIds);
 
-	BigDecimal getLowestPrice(@Param("bsid") Long bsid);
+	BigDecimal getLowestPrice(@Param("bsid") Integer bsid);
 
 	List<BrandShowDetail> getBrandShowDetailByPage(
 			@Param("cond") Map<?, ?> map,
 			@Param(value = "page") Page<BrandShowDetail> page);
 
-	void addStock(@Param("bsdId") Long bsdId, @Param("stock") Long stock);
+	void addStock(@Param("bsdId") Integer bsdId, @Param("stock") Integer stock);
 }
