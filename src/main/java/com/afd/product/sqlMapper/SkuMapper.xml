@@ -24,7 +24,7 @@
 		<result column="update_by_name" property="updateByName"
 			jdbcType="VARCHAR" />
 	</resultMap>
-	<resultMap type="com.afd.model.product.Sku" id="BaseResultMap2">
+	<resultMap type="com.afd.model.product.Sku" id="BaseResultMap2" extends="BaseResultMap">
 		<association property="product" javaType="com.afd.model.product.Product" resultMap="com.afd.product.dao.ProductMapper.BaseResultMap"></association>
 	</resultMap>
 	<sql id="Base_Column_List">
