@@ -141,10 +141,17 @@ public class BrandShowServiceImpl implements IBrandShowService {
 
 	@Override
 	public int submitNewBrandShow(int brandShowId, BrandShowDetail[] details) {
-		// BrandShow brandShow =
-		// brandShowMapper.selectByPrimaryKey(brandShowId);
+		int result = brandShowMapper.updateStatus(brandShowId,
+				BrandShow$Status.WAIT_AUDIT);
 
-		return 0;
+		if (result == 0)
+			return 0;
+
+		for (BrandShowDetail detail : details) {
+
+		}
+
+		return result;
 	}
 
 	@Override
