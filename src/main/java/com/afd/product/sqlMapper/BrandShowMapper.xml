@@ -1,252 +1,310 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.afd.product.dao.BrandShowMapper" >
-  <resultMap id="BaseResultMap" type="com.afd.model.product.BrandShow" >
-    <id column="brand_show_id" property="brandShowId" jdbcType="INTEGER" />
-    <result column="seller_id" property="sellerId" jdbcType="INTEGER" />
-    <result column="brand_id" property="brandId" jdbcType="INTEGER" />
-    <result column="title" property="title" jdbcType="VARCHAR" />
-    <result column="banner_img" property="bannerImg" jdbcType="VARCHAR" />
-    <result column="bg_color" property="bgColor" jdbcType="VARCHAR" />
-    <result column="type" property="type" jdbcType="CHAR" />
-    <result column="status" property="status" jdbcType="CHAR" />
-    <result column="create_by_date" property="createByDate" jdbcType="TIMESTAMP" />
-    <result column="audit_date" property="auditDate" jdbcType="TIMESTAMP" />
-    <result column="audit_by_name" property="auditByName" jdbcType="VARCHAR" />
-    <result column="audit_content" property="auditContent" jdbcType="VARCHAR" />
-    <result column="start_date" property="startDate" jdbcType="TIMESTAMP" />
-    <result column="end_date" property="endDate" jdbcType="TIMESTAMP" />
-    <result column="end_by_date" property="endByDate" jdbcType="TIMESTAMP" />
-    <result column="end_by_name" property="endByName" jdbcType="VARCHAR" />
-    <result column="end_by_id" property="endById" jdbcType="INTEGER" />
-    <result column="buy_limit" property="buyLimit" jdbcType="SMALLINT" />
-    <result column="s_r_a_id" property="sRAId" jdbcType="INTEGER" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.afd.product.dao.BrandShowMapper">
+  <resultMap id="BaseResultMap" type="com.afd.model.product.BrandShow">
+    <id column="brand_show_id" jdbcType="INTEGER" property="brandShowId" />
+    <result column="seller_id" jdbcType="INTEGER" property="sellerId" />
+    <result column="brand_id" jdbcType="INTEGER" property="brandId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="show_banner_img" jdbcType="VARCHAR" property="showBannerImg" />
+    <result column="bg_color" jdbcType="VARCHAR" property="bgColor" />
+    <result column="type" jdbcType="CHAR" property="type" />
+    <result column="status" jdbcType="CHAR" property="status" />
+    <result column="create_by_date" jdbcType="TIMESTAMP" property="createByDate" />
+    <result column="audit_date" jdbcType="TIMESTAMP" property="auditDate" />
+    <result column="audit_by_name" jdbcType="VARCHAR" property="auditByName" />
+    <result column="audit_content" jdbcType="VARCHAR" property="auditContent" />
+    <result column="start_date" jdbcType="TIMESTAMP" property="startDate" />
+    <result column="end_date" jdbcType="TIMESTAMP" property="endDate" />
+    <result column="end_by_date" jdbcType="TIMESTAMP" property="endByDate" />
+    <result column="end_by_name" jdbcType="VARCHAR" property="endByName" />
+    <result column="end_by_id" jdbcType="INTEGER" property="endById" />
+    <result column="buy_limit" jdbcType="SMALLINT" property="buyLimit" />
+    <result column="s_r_a_id" jdbcType="INTEGER" property="sRAId" />
+    <result column="home_banner_img" jdbcType="VARCHAR" property="homeBannerImg" />
+    <result column="service_qq" jdbcType="VARCHAR" property="serviceQq" />
+    <result column="service_tel" jdbcType="VARCHAR" property="serviceTel" />
+    <result column="deliver_province" jdbcType="INTEGER" property="deliverProvince" />
+    <result column="deliver_city" jdbcType="INTEGER" property="deliverCity" />
+    <result column="logistics_comp_ids" jdbcType="VARCHAR" property="logisticsCompIds" />
   </resultMap>
-  
-  <sql id="Base_Column_List" >
-    brand_show_id, seller_id, brand_id, title, banner_img, bg_color, type,status, create_by_date, 
-    audit_date, audit_by_name, audit_content, start_date, end_date, end_by_date, end_by_name, 
-    end_by_id, buy_limit, s_r_a_id
+  <sql id="Base_Column_List">
+    brand_show_id, seller_id, brand_id, title, show_banner_img, bg_color, type, status, 
+    create_by_date, audit_date, audit_by_name, audit_content, start_date, end_date, end_by_date, 
+    end_by_name, end_by_id, buy_limit, s_r_a_id, home_banner_img, service_qq, service_tel, 
+    deliver_province, deliver_city, logistics_comp_ids
   </sql>
-  
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from t_brand_show
     where brand_show_id = #{brandShowId,jdbcType=INTEGER}
   </select>
-  
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_brand_show
     where brand_show_id = #{brandShowId,jdbcType=INTEGER}
   </delete>
-  
-  <insert id="insert" parameterType="com.afd.model.product.BrandShow" useGeneratedKeys="true" keyProperty="brandShowId" >
-    insert into t_brand_show (seller_id, brand_id, 
-      title, banner_img, bg_color, 
-      type,status, create_by_date, audit_date, 
-      audit_by_name, audit_content, start_date, 
-      end_date, end_by_date, end_by_name, 
-      end_by_id, buy_limit, s_r_a_id
-      )
-    values (#{sellerId,jdbcType=INTEGER}, #{brandId,jdbcType=INTEGER}, 
-      #{title,jdbcType=VARCHAR}, #{bannerImg,jdbcType=VARCHAR}, #{bgColor,jdbcType=VARCHAR}, 
-      #{type,jdbcType=CHAR},#{status,jdbcType=CHAR}, #{createByDate,jdbcType=TIMESTAMP}, #{auditDate,jdbcType=TIMESTAMP}, 
-      #{auditByName,jdbcType=VARCHAR}, #{auditContent,jdbcType=VARCHAR}, #{startDate,jdbcType=TIMESTAMP}, 
-      #{endDate,jdbcType=TIMESTAMP}, #{endByDate,jdbcType=TIMESTAMP}, #{endByName,jdbcType=VARCHAR}, 
-      #{endById,jdbcType=INTEGER}, #{buyLimit,jdbcType=SMALLINT}, #{sRAId,jdbcType=INTEGER}
-      )
+  <insert id="insert" parameterType="com.afd.model.product.BrandShow">
+    insert into t_brand_show (brand_show_id, seller_id, brand_id, 
+      title, show_banner_img, bg_color, 
+      type, status, create_by_date, 
+      audit_date, audit_by_name, audit_content, 
+      start_date, end_date, end_by_date, 
+      end_by_name, end_by_id, buy_limit, 
+      s_r_a_id, home_banner_img, service_qq, 
+      service_tel, deliver_province, deliver_city, 
+      logistics_comp_ids)
+    values (#{brandShowId,jdbcType=INTEGER}, #{sellerId,jdbcType=INTEGER}, #{brandId,jdbcType=INTEGER}, 
+      #{title,jdbcType=VARCHAR}, #{showBannerImg,jdbcType=VARCHAR}, #{bgColor,jdbcType=VARCHAR}, 
+      #{type,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{createByDate,jdbcType=TIMESTAMP}, 
+      #{auditDate,jdbcType=TIMESTAMP}, #{auditByName,jdbcType=VARCHAR}, #{auditContent,jdbcType=VARCHAR}, 
+      #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}, #{endByDate,jdbcType=TIMESTAMP}, 
+      #{endByName,jdbcType=VARCHAR}, #{endById,jdbcType=INTEGER}, #{buyLimit,jdbcType=SMALLINT}, 
+      #{sRAId,jdbcType=INTEGER}, #{homeBannerImg,jdbcType=VARCHAR}, #{serviceQq,jdbcType=VARCHAR}, 
+      #{serviceTel,jdbcType=VARCHAR}, #{deliverProvince,jdbcType=INTEGER}, #{deliverCity,jdbcType=INTEGER}, 
+      #{logisticsCompIds,jdbcType=VARCHAR})
   </insert>
-  
-  <insert id="insertSelective" parameterType="com.afd.model.product.BrandShow" >
+  <insert id="insertSelective" parameterType="com.afd.model.product.BrandShow">
     insert into t_brand_show
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="brandShowId != null" >
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="brandShowId != null">
         brand_show_id,
       </if>
-      <if test="sellerId != null" >
+      <if test="sellerId != null">
         seller_id,
       </if>
-      <if test="brandId != null" >
+      <if test="brandId != null">
         brand_id,
       </if>
-      <if test="title != null" >
+      <if test="title != null">
         title,
       </if>
-      <if test="bannerImg != null" >
-        banner_img,
+      <if test="showBannerImg != null">
+        show_banner_img,
       </if>
-      <if test="bgColor != null" >
+      <if test="bgColor != null">
         bg_color,
       </if>
-      <if test="type != null" >
+      <if test="type != null">
         type,
       </if>
-       <if test="status != null" >
+      <if test="status != null">
         status,
       </if>
-      <if test="createByDate != null" >
+      <if test="createByDate != null">
         create_by_date,
       </if>
-      <if test="auditDate != null" >
+      <if test="auditDate != null">
         audit_date,
       </if>
-      <if test="auditByName != null" >
+      <if test="auditByName != null">
         audit_by_name,
       </if>
-      <if test="auditContent != null" >
+      <if test="auditContent != null">
         audit_content,
       </if>
-      <if test="startDate != null" >
+      <if test="startDate != null">
         start_date,
       </if>
-      <if test="endDate != null" >
+      <if test="endDate != null">
         end_date,
       </if>
-      <if test="endByDate != null" >
+      <if test="endByDate != null">
         end_by_date,
       </if>
-      <if test="endByName != null" >
+      <if test="endByName != null">
         end_by_name,
       </if>
-      <if test="endById != null" >
+      <if test="endById != null">
         end_by_id,
       </if>
-      <if test="buyLimit != null" >
+      <if test="buyLimit != null">
         buy_limit,
       </if>
-      <if test="sRAId != null" >
+      <if test="sRAId != null">
         s_r_a_id,
       </if>
+      <if test="homeBannerImg != null">
+        home_banner_img,
+      </if>
+      <if test="serviceQq != null">
+        service_qq,
+      </if>
+      <if test="serviceTel != null">
+        service_tel,
+      </if>
+      <if test="deliverProvince != null">
+        deliver_province,
+      </if>
+      <if test="deliverCity != null">
+        deliver_city,
+      </if>
+      <if test="logisticsCompIds != null">
+        logistics_comp_ids,
+      </if>
     </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="brandShowId != null" >
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="brandShowId != null">
         #{brandShowId,jdbcType=INTEGER},
       </if>
-      <if test="sellerId != null" >
+      <if test="sellerId != null">
         #{sellerId,jdbcType=INTEGER},
       </if>
-      <if test="brandId != null" >
+      <if test="brandId != null">
         #{brandId,jdbcType=INTEGER},
       </if>
-      <if test="title != null" >
+      <if test="title != null">
         #{title,jdbcType=VARCHAR},
       </if>
-      <if test="bannerImg != null" >
-        #{bannerImg,jdbcType=VARCHAR},
+      <if test="showBannerImg != null">
+        #{showBannerImg,jdbcType=VARCHAR},
       </if>
-      <if test="bgColor != null" >
+      <if test="bgColor != null">
         #{bgColor,jdbcType=VARCHAR},
       </if>
-      <if test="type != null" >
+      <if test="type != null">
         #{type,jdbcType=CHAR},
       </if>
-       <if test="status != null" >
+      <if test="status != null">
         #{status,jdbcType=CHAR},
       </if>
-      <if test="createByDate != null" >
+      <if test="createByDate != null">
         #{createByDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="auditDate != null" >
+      <if test="auditDate != null">
         #{auditDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="auditByName != null" >
+      <if test="auditByName != null">
         #{auditByName,jdbcType=VARCHAR},
       </if>
-      <if test="auditContent != null" >
+      <if test="auditContent != null">
         #{auditContent,jdbcType=VARCHAR},
       </if>
-      <if test="startDate != null" >
+      <if test="startDate != null">
         #{startDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="endDate != null" >
+      <if test="endDate != null">
         #{endDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="endByDate != null" >
+      <if test="endByDate != null">
         #{endByDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="endByName != null" >
+      <if test="endByName != null">
         #{endByName,jdbcType=VARCHAR},
       </if>
-      <if test="endById != null" >
+      <if test="endById != null">
         #{endById,jdbcType=INTEGER},
       </if>
-      <if test="buyLimit != null" >
+      <if test="buyLimit != null">
         #{buyLimit,jdbcType=SMALLINT},
       </if>
-      <if test="sRAId != null" >
+      <if test="sRAId != null">
         #{sRAId,jdbcType=INTEGER},
+      </if>
+      <if test="homeBannerImg != null">
+        #{homeBannerImg,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceQq != null">
+        #{serviceQq,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceTel != null">
+        #{serviceTel,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverProvince != null">
+        #{deliverProvince,jdbcType=INTEGER},
+      </if>
+      <if test="deliverCity != null">
+        #{deliverCity,jdbcType=INTEGER},
+      </if>
+      <if test="logisticsCompIds != null">
+        #{logisticsCompIds,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  
-  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.BrandShow" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.afd.model.product.BrandShow">
     update t_brand_show
-    <set >
-      <if test="sellerId != null" >
+    <set>
+      <if test="sellerId != null">
         seller_id = #{sellerId,jdbcType=INTEGER},
       </if>
-      <if test="brandId != null" >
+      <if test="brandId != null">
         brand_id = #{brandId,jdbcType=INTEGER},
       </if>
-      <if test="title != null" >
+      <if test="title != null">
         title = #{title,jdbcType=VARCHAR},
       </if>
-      <if test="bannerImg != null" >
-        banner_img = #{bannerImg,jdbcType=VARCHAR},
+      <if test="showBannerImg != null">
+        show_banner_img = #{showBannerImg,jdbcType=VARCHAR},
       </if>
-      <if test="bgColor != null" >
+      <if test="bgColor != null">
         bg_color = #{bgColor,jdbcType=VARCHAR},
       </if>
-      <if test="type != null" >
+      <if test="type != null">
         type = #{type,jdbcType=CHAR},
       </if>
-      <if test="status != null" >
+      <if test="status != null">
         status = #{status,jdbcType=CHAR},
       </if>
-      <if test="createByDate != null" >
+      <if test="createByDate != null">
         create_by_date = #{createByDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="auditDate != null" >
+      <if test="auditDate != null">
         audit_date = #{auditDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="auditByName != null" >
+      <if test="auditByName != null">
         audit_by_name = #{auditByName,jdbcType=VARCHAR},
       </if>
-      <if test="auditContent != null" >
+      <if test="auditContent != null">
         audit_content = #{auditContent,jdbcType=VARCHAR},
       </if>
-      <if test="startDate != null" >
+      <if test="startDate != null">
         start_date = #{startDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="endDate != null" >
+      <if test="endDate != null">
         end_date = #{endDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="endByDate != null" >
+      <if test="endByDate != null">
         end_by_date = #{endByDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="endByName != null" >
+      <if test="endByName != null">
         end_by_name = #{endByName,jdbcType=VARCHAR},
       </if>
-      <if test="endById != null" >
+      <if test="endById != null">
         end_by_id = #{endById,jdbcType=INTEGER},
       </if>
-      <if test="buyLimit != null" >
+      <if test="buyLimit != null">
         buy_limit = #{buyLimit,jdbcType=SMALLINT},
       </if>
-      <if test="sRAId != null" >
+      <if test="sRAId != null">
         s_r_a_id = #{sRAId,jdbcType=INTEGER},
+      </if>
+      <if test="homeBannerImg != null">
+        home_banner_img = #{homeBannerImg,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceQq != null">
+        service_qq = #{serviceQq,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceTel != null">
+        service_tel = #{serviceTel,jdbcType=VARCHAR},
+      </if>
+      <if test="deliverProvince != null">
+        deliver_province = #{deliverProvince,jdbcType=INTEGER},
+      </if>
+      <if test="deliverCity != null">
+        deliver_city = #{deliverCity,jdbcType=INTEGER},
+      </if>
+      <if test="logisticsCompIds != null">
+        logistics_comp_ids = #{logisticsCompIds,jdbcType=VARCHAR},
       </if>
     </set>
     where brand_show_id = #{brandShowId,jdbcType=INTEGER}
   </update>
-  
-  <update id="updateByPrimaryKey" parameterType="com.afd.model.product.BrandShow" >
+  <update id="updateByPrimaryKey" parameterType="com.afd.model.product.BrandShow">
     update t_brand_show
     set seller_id = #{sellerId,jdbcType=INTEGER},
       brand_id = #{brandId,jdbcType=INTEGER},
       title = #{title,jdbcType=VARCHAR},
-      banner_img = #{bannerImg,jdbcType=VARCHAR},
+      show_banner_img = #{showBannerImg,jdbcType=VARCHAR},
       bg_color = #{bgColor,jdbcType=VARCHAR},
       type = #{type,jdbcType=CHAR},
       status = #{status,jdbcType=CHAR},
@@ -260,16 +318,22 @@
       end_by_name = #{endByName,jdbcType=VARCHAR},
       end_by_id = #{endById,jdbcType=INTEGER},
       buy_limit = #{buyLimit,jdbcType=SMALLINT},
-      s_r_a_id = #{sRAId,jdbcType=INTEGER}
+      s_r_a_id = #{sRAId,jdbcType=INTEGER},
+      home_banner_img = #{homeBannerImg,jdbcType=VARCHAR},
+      service_qq = #{serviceQq,jdbcType=VARCHAR},
+      service_tel = #{serviceTel,jdbcType=VARCHAR},
+      deliver_province = #{deliverProvince,jdbcType=INTEGER},
+      deliver_city = #{deliverCity,jdbcType=INTEGER},
+      logistics_comp_ids = #{logisticsCompIds,jdbcType=VARCHAR}
     where brand_show_id = #{brandShowId,jdbcType=INTEGER}
   </update>
-  
-  <select id="getBrandShowByIds"  parameterType="com.afd.model.product.BrandShow"  resultMap="BaseResultMap">
+    
+  <select id="getBrandShowByIds" parameterType="com.afd.model.product.BrandShow" resultMap="BaseResultMap">
 	select 
 	<include refid="Base_Column_List" />
 	from t_brand_show
 	where brand_show_id in 
-	<foreach collection="brandShowIds" item="brandShowId" open="(" separator="," close=")">
+	<foreach close=")" collection="brandShowIds" item="brandShowId" open="(" separator=",">
 		#{brandShowId}
 	</foreach>
   </select>
@@ -279,7 +343,7 @@
 	<include refid="Base_Column_List" />
 	from t_brand_show
 	<where>
-	<if test="status != null" >
+	<if test="status != null">
         status = #{status,jdbcType=CHAR}
     </if>
 	</where>

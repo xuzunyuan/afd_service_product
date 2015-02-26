@@ -7,19 +7,20 @@ import org.apache.ibatis.annotations.Param;
 import com.afd.model.product.BrandShow;
 
 public interface BrandShowMapper {
-    int deleteByPrimaryKey(Integer brandShowId);
+	int deleteByPrimaryKey(Integer brandShowId);
 
-    int insert(BrandShow record);
+	int insert(BrandShow record);
 
-    int insertSelective(BrandShow record);
+	int insertSelective(BrandShow record);
 
-    BrandShow selectByPrimaryKey(Integer brandShowId);
+	BrandShow selectByPrimaryKey(Integer brandShowId);
 
-    int updateByPrimaryKeySelective(BrandShow record);
+	int updateByPrimaryKeySelective(BrandShow record);
 
-    int updateByPrimaryKey(BrandShow record);
-    
-    List<BrandShow> getBrandShowByIds(@Param("brandShowIds") List<Long> brandShowIds);
-    
-    List<BrandShow> getValidBrandShows(BrandShow record);
+	int updateByPrimaryKey(BrandShow record);
+
+	List<BrandShow> getBrandShowByIds(
+			@Param("brandShowIds") List<Long> brandShowIds);
+
+	List<BrandShow> getValidBrandShows(BrandShow record);
 }
