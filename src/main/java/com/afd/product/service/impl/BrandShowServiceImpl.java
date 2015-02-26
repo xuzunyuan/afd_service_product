@@ -17,10 +17,12 @@ import com.afd.common.mybatis.Page;
 import com.afd.common.util.DateUtils;
 import com.afd.constants.product.ProductConstants;
 import com.afd.constants.product.ProductConstants.BrandShow$Status;
+import com.afd.model.order.LogisticsCompany;
 import com.afd.model.product.BrandShow;
 import com.afd.model.product.BrandShowDetail;
 import com.afd.product.dao.BrandShowDetailMapper;
 import com.afd.product.dao.BrandShowMapper;
+import com.afd.service.order.ILogisticsCompanyService;
 import com.afd.service.product.IBrandShowService;
 import com.google.common.collect.Lists;
 
@@ -32,6 +34,9 @@ public class BrandShowServiceImpl implements IBrandShowService {
 	private BrandShowMapper brandShowMapper;
 	@Autowired
 	private BrandShowDetailMapper brandShowDetailMapper;
+
+	private ILogisticsCompanyService logicticsCompanyService;
+
 	@Autowired
 	@Qualifier("redisTemplate")
 	private RedisTemplate<String, String> redisTemplate;
@@ -215,5 +220,26 @@ public class BrandShowServiceImpl implements IBrandShowService {
 	@Override
 	public List<BrandShow> getOnlinedBrandShowsOfSeller(int sellerId) {
 		return Lists.newArrayList();
+	}
+
+	@Override
+	public List<LogisticsCompany> getLogisticsCompanyListOfBrandShow(
+			int brandShowId) {
+		BrandShow brandShow = this.getBrandShowById(brandShowId);
+
+		if (brandShow == null
+				|| StringUtils.isEmpty(brandShow.getLogisticsCompIds()))
+			return null;
+
+		String[] arr = brandShow.getLogisticsCompIds().split("\\,");
+		List<Long> list = Lists.newArrayList();
+
+		for (String id : arr) {
+			if (StringUtils.isNotEmpty(id)) {
+				list.add(Long.parseLong(id));
+			}
+		}
+
+		return logicticsCompanyService.getLogisticsCompanyByIds(list);
 	}
 }
