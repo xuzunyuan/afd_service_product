@@ -328,7 +328,7 @@
     where brand_show_id = #{brandShowId,jdbcType=INTEGER}
   </update>
     
-  <select id="getBrandShowByIds" parameterType="com.afd.model.product.BrandShow" resultMap="BaseResultMap">
+  <select id="getBrandShowByIds" resultMap="BaseResultMap">
 	select 
 	<include refid="Base_Column_List" />
 	from t_brand_show
