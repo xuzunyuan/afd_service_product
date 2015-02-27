@@ -17,6 +17,7 @@ import com.afd.common.mybatis.Page;
 import com.afd.common.util.DateUtils;
 import com.afd.constants.product.ProductConstants;
 import com.afd.constants.product.ProductConstants.BrandShow$Status;
+import com.afd.constants.product.ProductConstants.BrandShowDetail$Status;
 import com.afd.model.order.LogisticsCompany;
 import com.afd.model.product.BrandShow;
 import com.afd.model.product.BrandShowDetail;
@@ -153,7 +154,9 @@ public class BrandShowServiceImpl implements IBrandShowService {
 			return 0;
 
 		for (BrandShowDetail detail : details) {
-
+			detail.setBrandShowId(brandShowId);
+			detail.setStatus(BrandShowDetail$Status.VALID);
+			brandShowDetailMapper.insert(detail);
 		}
 
 		return result;
@@ -161,27 +164,46 @@ public class BrandShowServiceImpl implements IBrandShowService {
 
 	@Override
 	public int modifyBrandShow(BrandShow brandShow) {
-		// TODO Auto-generated method stub
-		return 0;
+		brandShow.setStatus(BrandShow$Status.EDITING);
+		return brandShowMapper.updateByPrimaryKeySelective(brandShow);
 	}
 
 	@Override
 	public int submitModifyBrandShow(int brandShowId, BrandShowDetail[] details) {
-		// TODO Auto-generated method stub
-		return 0;
+		int result = brandShowMapper.updateStatus(brandShowId,
+				BrandShow$Status.WAIT_AUDIT);
+
+		if (result > 0) {
+			for (BrandShowDetail detail : details) {
+				if (detail.getbSDId() != null && detail.getbSDId() != 0) {
+					if (detail.getRemoved() != 0) {
+						brandShowDetailMapper.updateStatus(detail.getbSDId(),
+								BrandShowDetail$Status.REMOVED);
+					} else {
+						brandShowDetailMapper
+								.updateByPrimaryKeySelective(detail);
+					}
+				} else {
+					detail.setStatus(BrandShowDetail$Status.VALID);
+					brandShowDetailMapper.insert(detail);
+				}
+			}
+		}
+
+		return result;
 	}
 
 	@Override
 	public Page<BrandShow> queryMyBrandShowByPage(int sellerId,
 			Map<String, ?> cond, int... page) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
 	@Override
 	public Page<BrandShow> queryWaitAuditBrandShowByPage(Map<String, ?> cond,
 			int... page) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 

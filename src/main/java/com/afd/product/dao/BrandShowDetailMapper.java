@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Update;
 
 import com.afd.common.mybatis.Page;
 import com.afd.model.product.BrandShowDetail;
@@ -32,4 +33,7 @@ public interface BrandShowDetailMapper {
 			@Param(value = "page") Page<BrandShowDetail> page);
 
 	void addStock(@Param("bsdId") Integer bsdId, @Param("stock") Integer stock);
+
+	@Update("update t_brand_show_detail set status = #{1} where b_s_d_id = #{0} ")
+	int updateStatus(Integer bsdId, String status);
 }
