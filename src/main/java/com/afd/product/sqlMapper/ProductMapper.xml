@@ -47,8 +47,8 @@
   </sql>
   
   <sql id="Search_Column_List">
-	 p.prod_id,p.prod_code,p.title,p.brand_name,
-	 p.art_no, p.bc_id,p.bc_code ,p.create_date,p.img_url
+	 p.prod_id,p.prod_code,p.title,p.brand_name,p.art_no,p.status,p.audit_status,
+	 p.bc_id,p.bc_code ,p.create_date,p.last_audit_date,p.img_url
   </sql>
  
   <sql id="Blob_Column_List" >
@@ -517,6 +517,9 @@
 		<if test="productCondition.sellerId !=null">
 			and p.SELLER_ID = #{productCondition.sellerId}
 		</if>
+		<if test="productCondition.brandId !=null and productCondition.brandId !=''">
+			and p.BRAND_ID = #{productCondition.brandId}
+		</if>
 		<if test="productCondition.title !=null and productCondition.title !=''">
 			and  LOWER(p.title) like LOWER(CONCAT('%',#{productCondition.title},'%'))
 		</if>
@@ -546,6 +549,9 @@
 		 p.prod_id = s.prod_id 
 		<if test="productCondition.sellerId !=null">
 			and p.SELLER_ID = #{productCondition.sellerId} and p.STATUS = 0 and p.AUDIT_STATUS &lt; 2
+		</if>
+		<if test="productCondition.brandId !=null and productCondition.brandId !=''">
+			and p.BRAND_ID = #{productCondition.brandId}
 		</if>
 		<if test="productCondition.title !=null and productCondition.title !=''">
 			and  LOWER(p.title) like LOWER(CONCAT('%',#{productCondition.title},'%'))
