@@ -1,6 +1,7 @@
 package com.afd.product.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +24,8 @@ import com.afd.service.product.IProductService;
 @Service("productService")
 public class ProductServiceImpl implements IProductService {
 
+	private static final String AUDIT_PASS_COMMENT = "审核通过";
+	
 	@Autowired
 	ProductMapper productMapper;
 	@Autowired
@@ -177,7 +180,8 @@ public class ProductServiceImpl implements IProductService {
 	public boolean downawayProductByProdId(Integer prodId, String optName) {
 		Product product = new Product();
 		product.setProdId(prodId);
-		product.setAuditStatus(ProductConstants.PROD_STATUS_DOWN);
+		product.setStatus(ProductConstants.PROD_STATUS_DOWN);
+		product.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_NO_PASS);
 		product.setLastUpdateDate(DateUtils.currentDate());
 		int i = this.productMapper.updateByPrimaryKeySelective(product);
 		return i > 0 ? true : false;
@@ -186,13 +190,14 @@ public class ProductServiceImpl implements IProductService {
 	@Override
 	public boolean batchDownawayProduct(List<Integer> idList, String optName) {
 		Product product = new Product();
-		product.setAuditStatus(ProductConstants.PROD_STATUS_DOWN);
+		product.setStatus(ProductConstants.PROD_STATUS_DOWN);
+		product.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_NO_PASS);
 		product.setLastUpdateDate(DateUtils.currentDate());
 		return this.productMapper.updateProdByCondition(idList,product);
 	}
 
 	@Override
-	public boolean putawayProductByBoss(Integer prodId, String auditName) {
+	public boolean putawayProductByBoss(Integer prodId, String optName) {
 		Product product = new Product();
 		product.setProdId(prodId);
 		product.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_PASS);
@@ -204,7 +209,7 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public boolean batchPutawayProductByBoss(List<Integer> idList,
-			String auditName) {
+			String optName) {
 		Product product = new Product();
 		product.setAuditStatus(ProductConstants.PROD_STATUS_DOWN);
 		product.setLastUpdateDate(DateUtils.currentDate());
@@ -245,6 +250,56 @@ public class ProductServiceImpl implements IProductService {
 		return false;
 	}
 
+	@Override
+	public boolean auditProduct(Integer prodId, String auditStatus,
+			String auditContent, String auditName) {
+	
+		Date currentDate = DateUtils.currentDate();
+		Product product = new Product();
+		product.setProdId(prodId);
+		product.setAuditStatus(auditStatus);
+		if (ProductConstants.PROD_AUDIT_STATUS_PASS.equals(auditStatus)) {// 审核通过
+			product.setStatus(ProductConstants.PROD_STATUS_ON);
+			product.setAuditContent(AUDIT_PASS_COMMENT);
+			product.setLastUpdateDate(currentDate);
+			product.setLastAuditName(auditName);
+			product.setLastAuditDate(currentDate);
+		} else if (ProductConstants.PROD_AUDIT_STATUS_NO_PASS
+				.equals(auditStatus)) {// 审核驳回
+			product.setStatus(ProductConstants.PROD_STATUS_DOWN);
+			product.setAuditContent(auditContent);
+			product.setLastUpdateDate(currentDate);
+			product.setLastAuditName(auditName);
+			product.setLastAuditDate(currentDate);
+		}
+
+		int i = productMapper.updateByPrimaryKeySelective(product);
+		return i > 0 ? true : false ;
+	}
+	@Override
+	public boolean batchAuditProduct(List<Integer> prodIds, String auditStatus,
+			String auditContent, String auditName) {
+		
+		Date currentDate = DateUtils.currentDate();
+		Product product = new Product();
+		product.setAuditStatus(auditStatus);
+		if (ProductConstants.PROD_AUDIT_STATUS_PASS.equals(auditStatus)) {// 审核通过
+			product.setStatus(ProductConstants.PROD_STATUS_ON);
+			product.setAuditContent(AUDIT_PASS_COMMENT);
+			product.setLastUpdateDate(currentDate);
+			product.setLastAuditName(auditName);
+			product.setLastAuditDate(currentDate);
+		} else if (ProductConstants.PROD_AUDIT_STATUS_NO_PASS
+				.equals(auditStatus)) {// 审核驳回
+			product.setStatus(ProductConstants.PROD_STATUS_DOWN);
+			product.setAuditContent(auditContent);
+			product.setLastUpdateDate(currentDate);
+			product.setLastAuditName(auditName);
+			product.setLastAuditDate(currentDate);
+		}
+		return productMapper.updateProdByCondition(prodIds, product);
+	}
+	
 	@Override
 	public Product getProductById(Integer prodId) {
 		Product product = this.productMapper.selectByPrimaryKey(prodId);
@@ -298,5 +353,6 @@ public class ProductServiceImpl implements IProductService {
 	public List<Product> getProductsByProdIds(List<Integer> prodIds) {
 		return this.productMapper.getProductsByProdIds(prodIds);
 	}
+
 
 }

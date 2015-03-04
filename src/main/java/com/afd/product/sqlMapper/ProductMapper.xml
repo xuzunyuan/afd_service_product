@@ -29,6 +29,7 @@
     <result column="material" property="material" jdbcType="VARCHAR" />
     <result column="source_area" property="sourceArea" jdbcType="VARCHAR" />
     <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="audit_content" property="auditContent" jdbcType="VARCHAR" />
   </resultMap>
   <resultMap id="ResultMapWithBLOBs" type="com.afd.model.product.Product" extends="BaseResultMap" >
     <result column="detail" property="detail" jdbcType="LONGVARCHAR" />
@@ -38,19 +39,26 @@
 	<result column="SALE_PRICE" property="salePrice" jdbcType="VARCHAR" />
 	<result column="MARKET_PRICE" property="marketPrice" jdbcType="VARCHAR" />
   </resultMap>
+  
+  <resultMap type="com.afd.model.product.Product" id="ResultMapWithStockBalance" extends="BaseResultMap">
+	<result column="SALE_PRICE" property="salePrice" jdbcType="VARCHAR" />
+	<result column="MARKET_PRICE" property="marketPrice" jdbcType="VARCHAR" />
+	<result column="STOCK_BALANCE" property="stockBalance" jdbcType="VARCHAR" />
+  </resultMap>
+  
  
   <sql id="Base_Column_List" >
     prod_id, prod_code, bc_code, name, title, subtitle, bc_id, seller_id, art_no, brand_id, 
     brand_name, type, status, brief, weight, volume, attr_value_id, attr_value_name, 
     expire_date, create_date, last_update_date, audit_status, last_audit_name, last_audit_date, 
-    material, source_area,img_url
+    material, source_area,img_url,audit_content
   </sql>
   
   <sql id="Search_Column_List">
-	 p.prod_id,p.prod_code,p.title,p.brand_name,p.art_no,p.status,p.audit_status,
-	 p.bc_id,p.bc_code ,p.create_date,p.last_audit_date,p.img_url
+	 p.seller_id,p.prod_id,p.prod_code,p.title,p.brand_name,p.art_no,p.status,p.audit_status,
+	 p.bc_id,p.bc_code ,p.create_date,p.last_audit_date,p.img_url,p.last_update_date
   </sql>
- 
+  
   <sql id="Blob_Column_List" >
     detail
   </sql>
@@ -75,7 +83,7 @@
       volume, attr_value_id, attr_value_name, 
       expire_date, create_date, last_update_date, 
       audit_status, last_audit_name, last_audit_date, 
-      material, source_area,img_url, detail
+      material, source_area,img_url,audit_content, detail
       )
     values (#{prodId,jdbcType=VARCHAR}, #{bcCode,jdbcType=VARCHAR}, 
       #{name,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{subtitle,jdbcType=VARCHAR}, 
@@ -85,7 +93,7 @@
       #{volume,jdbcType=VARCHAR}, #{attrValueId,jdbcType=VARCHAR}, #{attrValueName,jdbcType=VARCHAR}, 
       #{expireDate,jdbcType=TIMESTAMP}, #{createDate,jdbcType=TIMESTAMP}, #{lastUpdateDate,jdbcType=TIMESTAMP}, 
       #{auditStatus,jdbcType=CHAR}, #{lastAuditName,jdbcType=VARCHAR}, #{lastAuditDate,jdbcType=TIMESTAMP}, 
-      #{material,jdbcType=VARCHAR}, #{sourceArea,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, #{detail,jdbcType=LONGVARCHAR}
+      #{material,jdbcType=VARCHAR}, #{sourceArea,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR},#{auditContent,jdbcType=VARCHAR}, #{detail,jdbcType=LONGVARCHAR}
       )
   </insert>
   
@@ -171,6 +179,9 @@
       <if test="imgUrl != null" >
         img_url,
       </if>
+      <if test="auditContent != null" >
+        audit_content,
+      </if>
       <if test="detail != null" >
         detail,
       </if>
@@ -253,6 +264,9 @@
       </if>
       <if test="imgUrl != null" >
         #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="auditContent != null" >
+        #{auditContent,jdbcType=VARCHAR},
       </if>
       <if test="detail != null" >
         #{detail,jdbcType=LONGVARCHAR},
@@ -340,6 +354,9 @@
       <if test="imgUrl != null" >
         img_url = #{imgUrl,jdbcType=VARCHAR},
       </if>
+      <if test="auditContent != null" >
+        audit_content = #{auditContent,jdbcType=VARCHAR},
+      </if>
       <if test="detail != null" >
         detail = #{detail,jdbcType=LONGVARCHAR},
       </if>
@@ -374,6 +391,7 @@
       material = #{material,jdbcType=VARCHAR},
       source_area = #{sourceArea,jdbcType=VARCHAR},
       img_url = #{imgUrl,jdbcType=VARCHAR},
+      audit_content = #{auditContent,jdbcType=VARCHAR},
       detail = #{detail,jdbcType=LONGVARCHAR}
     where prod_id = #{prodId,jdbcType=INTEGER}
   </update>
@@ -405,6 +423,7 @@
       material = #{material,jdbcType=VARCHAR},
       source_area = #{sourceArea,jdbcType=VARCHAR},
       img_url = #{imgUrl,jdbcType=VARCHAR},
+      audit_content = #{auditContent,jdbcType=VARCHAR},
     where prod_id = #{prodId,jdbcType=INTEGER}
   </update>
   
@@ -489,6 +508,9 @@
       <if test="imgUrl != null" >
         img_url = #{product.imgUrl,jdbcType=VARCHAR},
       </if>
+      <if test="auditContent != null" >
+        audit_content = #{product.auditContent,jdbcType=VARCHAR},
+      </if>
       <if test="detail != null" >
         detail = #{product.detail,jdbcType=LONGVARCHAR},
       </if>
@@ -508,31 +530,40 @@
 	    where prod_id = #{prodId,jdbcType=VARCHAR}
    </select>
    
-   <select id="searchProductByConditionPage" resultMap="ResultMapWithPrice" >
+   <select id="searchProductByConditionPage" resultMap="ResultMapWithStockBalance" >
 	select <include refid="Search_Column_List" />, concat(min(s.market_price),' ~ ',max(s.market_price)) as market_price,
-		concat (min(s.sale_price),' ~ ',max(s.sale_price)) as sale_price
+		concat (min(s.sale_price),' ~ ',max(s.sale_price)) as sale_price, sum(s.stock_balance) stock_balance
 	from t_product p ,t_sku s
 	<where>
 		 p.prod_id = s.prod_id 
 		<if test="productCondition.sellerId !=null">
 			and p.SELLER_ID = #{productCondition.sellerId}
 		</if>
+		<if test="productCondition.prodId !=null">
+			and p.PROD_ID = #{productCondition.prodId}
+		</if>
+		<if test="productCondition.prodCode !=null and productCondition.prodCode !=''">
+			and p.PROD_CODE = #{productCondition.prodCode}
+		</if>
 		<if test="productCondition.brandId !=null and productCondition.brandId !=''">
 			and p.BRAND_ID = #{productCondition.brandId}
+		</if>
+		<if test="productCondition.brandName !=null and productCondition.brandName !=''">
+			and  LOWER(p.BRAND_NAME) like LOWER(CONCAT('%',#{productCondition.brandName},'%'))
 		</if>
 		<if test="productCondition.title !=null and productCondition.title !=''">
 			and  LOWER(p.title) like LOWER(CONCAT('%',#{productCondition.title},'%'))
 		</if>
 		<if test="productCondition.startDate != null">
-			and p.CREATE_DATE &gt;= #{productCondition.startDate,jdbcType=TIMESTAMP}
+			and p.last_update_date &gt;= #{productCondition.startDate,jdbcType=TIMESTAMP}
 		</if>
 		<if test="productCondition.endDate != null">
-			and p.CREATE_DATE &lt;= #{productCondition.endDate,jdbcType=TIMESTAMP}
+			and p.last_update_date &lt;= #{productCondition.endDate,jdbcType=TIMESTAMP}
 		</if>
-		<if test="productCondition.status !=null">
+		<if test="productCondition.status !=null and productCondition.status !=''">
 			and p.STATUS = #{productCondition.status}
 		</if>
-		<if test="productCondition.auditStatus !=null">
+		<if test="productCondition.auditStatus !=null and productCondition.auditStatus !=''">
 			and p.AUDIT_STATUS = #{productCondition.auditStatus}
 		</if>
 		group by <include refid="Search_Column_List" />
