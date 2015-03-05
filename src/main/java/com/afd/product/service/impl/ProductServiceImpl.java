@@ -163,7 +163,7 @@ public class ProductServiceImpl implements IProductService {
 		Product product = new Product();
 		product.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_WAIT);
 		product.setLastUpdateDate(DateUtils.currentDate());
-		return this.productMapper.updateProdByCondition(idList,product);
+		return this.productMapper.batchUpdateProdByCondition(idList,product);
 	}
 
 	@Override
@@ -193,7 +193,7 @@ public class ProductServiceImpl implements IProductService {
 		product.setStatus(ProductConstants.PROD_STATUS_DOWN);
 		product.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_NO_PASS);
 		product.setLastUpdateDate(DateUtils.currentDate());
-		return this.productMapper.updateProdByCondition(idList,product);
+		return this.productMapper.batchUpdateProdByCondition(idList,product);
 	}
 
 	@Override
@@ -213,7 +213,7 @@ public class ProductServiceImpl implements IProductService {
 		Product product = new Product();
 		product.setAuditStatus(ProductConstants.PROD_STATUS_DOWN);
 		product.setLastUpdateDate(DateUtils.currentDate());
-		return this.productMapper.updateProdByCondition(idList,product);
+		return this.productMapper.batchUpdateProdByCondition(idList,product);
 	}
 
 	@Override
@@ -233,7 +233,7 @@ public class ProductServiceImpl implements IProductService {
 		product.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_WAIT);
 		product.setStatus(ProductConstants.PROD_STATUS_REMOVE);
 		product.setLastUpdateDate(DateUtils.currentDate());
-		return this.productMapper.updateProdByCondition(idList,product);
+		return this.productMapper.batchUpdateProdByCondition(idList,product);
 	}
 
 	@Override
@@ -297,7 +297,7 @@ public class ProductServiceImpl implements IProductService {
 			product.setLastAuditName(auditName);
 			product.setLastAuditDate(currentDate);
 		}
-		return productMapper.updateProdByCondition(prodIds, product);
+		return productMapper.batchUpdateProdByCondition(prodIds, product);
 	}
 	
 	@Override
@@ -326,8 +326,7 @@ public class ProductServiceImpl implements IProductService {
 			ProductCondition productCondition, String sortField,
 			String sortDirection, Page<Product> page) {
 		productCondition.setStatus(ProductConstants.PROD_STATUS_DOWN);
-		productCondition.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_NO_PASS);
-		page.setResult(this.productMapper.searchProductByConditionPage(productCondition,sortField,sortDirection,page));
+		page.setResult(this.productMapper.searchAuditProductByConditionPage(productCondition,sortField,sortDirection,page));
 		return page;
 	}
 

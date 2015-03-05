@@ -23,7 +23,7 @@ public interface ProductMapper {
 
     int updateByPrimaryKey(Product record);
 
-	boolean updateProdByCondition(@Param("idList") List<Integer> idList,@Param("product")  Product product);
+	boolean batchUpdateProdByCondition(@Param("idList") List<Integer> idList,@Param("product")  Product product);
 
 	Product getProductByProdCode(String prodCode);
 
@@ -44,6 +44,13 @@ public interface ProductMapper {
 	List<Integer> getProductIdsBySellerId(Integer sellerId);
 
 	List<Product> getProductsByProdIds(@Param("idList")List<Integer> idList);
+
+	List<Product> searchAuditProductByConditionPage(
+			@Param("productCondition") ProductCondition productCondition,
+			@Param("sortField") String sortField,
+			@Param("sortDirection") String sortDirection,
+			@Param("page") Page<Product> page);
+	
 
 
 

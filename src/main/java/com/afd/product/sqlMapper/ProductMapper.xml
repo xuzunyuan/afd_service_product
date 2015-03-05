@@ -427,91 +427,91 @@
     where prod_id = #{prodId,jdbcType=INTEGER}
   </update>
   
-   <update id="updateProdByCondition">
+   <update id="batchUpdateProdByCondition">
     update t_product
     <set >
-      <if test="prodCode != null" >
+      <if test="product.prodCode != null" >
         prod_code = #{product.prodCode,jdbcType=VARCHAR},
       </if>
-      <if test="bcCode != null" >
+      <if test="product.bcCode != null" >
         bc_code = #{product.bcCode,jdbcType=VARCHAR},
       </if>
-      <if test="name != null" >
+      <if test="product.name != null" >
         name = #{product.name,jdbcType=VARCHAR},
       </if>
-      <if test="title != null" >
+      <if test="product.title != null" >
         title = #{product.title,jdbcType=VARCHAR},
       </if>
-      <if test="subtitle != null" >
+      <if test="product.subtitle != null" >
         subtitle = #{product.subtitle,jdbcType=VARCHAR},
       </if>
-      <if test="bcId != null" >
+      <if test="product.bcId != null" >
         bc_id = #{product.bcId,jdbcType=INTEGER},
       </if>
-      <if test="sellerId != null" >
+      <if test="product.sellerId != null" >
         seller_id = #{product.sellerId,jdbcType=INTEGER},
       </if>
-      <if test="artNo != null" >
+      <if test="product.artNo != null" >
         art_no = #{product.artNo,jdbcType=VARCHAR},
       </if>
-      <if test="brandId != null" >
+      <if test="product.brandId != null" >
         brand_id = #{product.brandId,jdbcType=INTEGER},
       </if>
-      <if test="brandName != null" >
+      <if test="product.brandName != null" >
         brand_name = #{product.brandName,jdbcType=VARCHAR},
       </if>
-      <if test="type != null" >
+      <if test="product.type != null" >
         type = #{product.type,jdbcType=CHAR},
       </if>
-      <if test="status != null" >
+      <if test="product.status != null" >
         status = #{product.status,jdbcType=CHAR},
       </if>
-      <if test="brief != null" >
+      <if test="product.brief != null" >
         brief = #{brief,jdbcType=VARCHAR},
       </if>
-      <if test="weight != null" >
+      <if test="product.weight != null" >
         weight = #{product.weight,jdbcType=DECIMAL},
       </if>
-      <if test="volume != null" >
+      <if test="product.volume != null" >
         volume = #{product.volume,jdbcType=VARCHAR},
       </if>
-      <if test="attrValueId != null" >
+      <if test="product.attrValueId != null" >
         attr_value_id = #{product.attrValueId,jdbcType=VARCHAR},
       </if>
-      <if test="attrValueName != null" >
+      <if test="product.attrValueName != null" >
         attr_value_name = #{product.attrValueName,jdbcType=VARCHAR},
       </if>
-      <if test="expireDate != null" >
+      <if test="product.expireDate != null" >
         expire_date = #{product.expireDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="createDate != null" >
+      <if test="product.createDate != null" >
         create_date = #{product.createDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="lastUpdateDate != null" >
+      <if test="product.lastUpdateDate != null" >
         last_update_date = #{product.lastUpdateDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="auditStatus != null" >
+      <if test="product.auditStatus != null" >
         audit_status = #{product.auditStatus,jdbcType=CHAR},
       </if>
-      <if test="lastAuditName != null" >
+      <if test="product.lastAuditName != null" >
         last_audit_name = #{product.lastAuditName,jdbcType=VARCHAR},
       </if>
-      <if test="lastAuditDate != null" >
+      <if test="product.lastAuditDate != null" >
         last_audit_date = #{product.lastAuditDate,jdbcType=TIMESTAMP},
       </if>
-      <if test="material != null" >
+      <if test="product.material != null" >
         material = #{product.material,jdbcType=VARCHAR},
       </if>
-      <if test="sourceArea != null" >
+      <if test="product.sourceArea != null" >
         source_area = #{product.sourceArea,jdbcType=VARCHAR},
       </if>
-      <if test="imgUrl != null" >
+      <if test="product.imgUrl != null" >
         img_url = #{product.imgUrl,jdbcType=VARCHAR},
       </if>
-      <if test="auditContent != null" >
+      <if test="product.auditContent != null" >
         audit_content = #{product.auditContent,jdbcType=VARCHAR},
       </if>
-      <if test="detail != null" >
+      <if test="product.detail != null" >
         detail = #{product.detail,jdbcType=LONGVARCHAR},
       </if>
     </set>
@@ -566,6 +566,42 @@
 		<if test="productCondition.auditStatus !=null and productCondition.auditStatus !=''">
 			and p.AUDIT_STATUS = #{productCondition.auditStatus}
 		</if>
+		group by <include refid="Search_Column_List" />
+		order by
+		p.CREATE_DATE desc
+	</where>
+   </select>
+   <select id="searchAuditProductByConditionPage" resultMap="ResultMapWithStockBalance" >
+	select <include refid="Search_Column_List" />, concat(min(s.market_price),' ~ ',max(s.market_price)) as market_price,
+		concat (min(s.sale_price),' ~ ',max(s.sale_price)) as sale_price, sum(s.stock_balance) stock_balance
+	from t_product p ,t_sku s
+	<where>
+		 p.prod_id = s.prod_id 
+		<if test="productCondition.sellerId !=null">
+			and p.SELLER_ID = #{productCondition.sellerId}
+		</if>
+		<if test="productCondition.prodId !=null">
+			and p.PROD_ID = #{productCondition.prodId}
+		</if>
+		<if test="productCondition.prodCode !=null and productCondition.prodCode !=''">
+			and p.PROD_CODE = #{productCondition.prodCode}
+		</if>
+		<if test="productCondition.brandId !=null and productCondition.brandId !=''">
+			and p.BRAND_ID = #{productCondition.brandId}
+		</if>
+		<if test="productCondition.brandName !=null and productCondition.brandName !=''">
+			and  LOWER(p.BRAND_NAME) like LOWER(CONCAT('%',#{productCondition.brandName},'%'))
+		</if>
+		<if test="productCondition.title !=null and productCondition.title !=''">
+			and  LOWER(p.title) like LOWER(CONCAT('%',#{productCondition.title},'%'))
+		</if>
+		<if test="productCondition.startDate != null">
+			and p.last_update_date &gt;= #{productCondition.startDate,jdbcType=TIMESTAMP}
+		</if>
+		<if test="productCondition.endDate != null">
+			and p.last_update_date &lt;= #{productCondition.endDate,jdbcType=TIMESTAMP}
+		</if>
+			and p.AUDIT_STATUS > 0
 		group by <include refid="Search_Column_List" />
 		order by
 		p.CREATE_DATE desc
