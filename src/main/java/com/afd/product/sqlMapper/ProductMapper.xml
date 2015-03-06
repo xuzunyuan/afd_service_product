@@ -56,7 +56,7 @@
   
   <sql id="Search_Column_List">
 	 p.seller_id,p.prod_id,p.prod_code,p.title,p.brand_name,p.art_no,p.status,p.audit_status,
-	 p.bc_id,p.bc_code ,p.create_date,p.last_audit_date,p.img_url,p.last_update_date
+	 p.bc_id,p.bc_code ,p.create_date,p.last_audit_date,p.audit_content,p.img_url,p.last_update_date
   </sql>
   
   <sql id="Blob_Column_List" >
