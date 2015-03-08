@@ -629,6 +629,15 @@
 	</where>
    </select>
    
+    <select id="getOnlineProductBySellerIdAndBrandId" resultMap="BaseResultMap">
+   		select 
+	    <include refid="Base_Column_List" />
+	    from t_product
+	    where seller_id = #{0}
+	    	and BRAND_ID = #{1}
+	    	and STATUS = 0 and AUDIT_STATUS = 0
+   </select>
+   
    <select id="getOnlineProductBySellerId" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
    		select 
 	    <include refid="Base_Column_List" />

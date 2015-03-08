@@ -44,8 +44,8 @@
     delete from t_brand_show
     where brand_show_id = #{brandShowId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.afd.model.product.BrandShow">
-    insert into t_brand_show (brand_show_id, seller_id, brand_id, 
+  <insert id="insert" parameterType="com.afd.model.product.BrandShow" useGeneratedKeys="true" keyProperty="brandShowId">
+    insert into t_brand_show (seller_id, brand_id, 
       title, show_banner_img, bg_color, 
       type, status, create_by_date, 
       audit_date, audit_by_name, audit_content, 
@@ -54,7 +54,7 @@
       s_r_a_id, home_banner_img, service_qq, 
       service_tel, deliver_province, deliver_city, 
       logistics_comp_ids)
-    values (#{brandShowId,jdbcType=INTEGER}, #{sellerId,jdbcType=INTEGER}, #{brandId,jdbcType=INTEGER}, 
+    values (#{sellerId,jdbcType=INTEGER}, #{brandId,jdbcType=INTEGER}, 
       #{title,jdbcType=VARCHAR}, #{showBannerImg,jdbcType=VARCHAR}, #{bgColor,jdbcType=VARCHAR}, 
       #{type,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{createByDate,jdbcType=TIMESTAMP}, 
       #{auditDate,jdbcType=TIMESTAMP}, #{auditByName,jdbcType=VARCHAR}, #{auditContent,jdbcType=VARCHAR}, 
@@ -64,12 +64,9 @@
       #{serviceTel,jdbcType=VARCHAR}, #{deliverProvince,jdbcType=INTEGER}, #{deliverCity,jdbcType=INTEGER}, 
       #{logisticsCompIds,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.afd.model.product.BrandShow">
+  <insert id="insertSelective" parameterType="com.afd.model.product.BrandShow" useGeneratedKeys="true" keyProperty="brandShowId">
     insert into t_brand_show
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="brandShowId != null">
-        brand_show_id,
-      </if>
+    <trim prefix="(" suffix=")" suffixOverrides=",">     
       <if test="sellerId != null">
         seller_id,
       </if>
@@ -144,9 +141,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="brandShowId != null">
-        #{brandShowId,jdbcType=INTEGER},
-      </if>
       <if test="sellerId != null">
         #{sellerId,jdbcType=INTEGER},
       </if>
@@ -336,6 +330,24 @@
 	<foreach close=")" collection="brandShowIds" item="brandShowId" open="(" separator=",">
 		#{brandShowId}
 	</foreach>
+  </select>
+  
+  <select id="queryBrandShowOfSellerByPage" resultMap="BaseResultMap">
+	select 
+	<include refid="Base_Column_List" />
+	from t_brand_show
+	where seller_id = #{sellerId,jdbcType=INTEGER}
+		<if test="cond.startDt != null" >
+    		and create_by_date &gt;= #{cond.startDt,jdbcType=TIMESTAMP}
+    	</if>
+    	<if test="cond.endDt != null" >
+    		and create_by_date &lt; #{cond.endDt,jdbcType=TIMESTAMP}
+    	</if>
+    	<if test="cond.title != null and cond.title != ''" >
+     		<bind name="title" value="'%' + cond.title + '%'" />
+		 	and title like #{title,jdbcType=VARCHAR}
+		</if>
+	order by brand_show_id desc
   </select>
   
   <select id="getValidBrandShows" parameterType="com.afd.model.product.BrandShow" resultMap="BaseResultMap">

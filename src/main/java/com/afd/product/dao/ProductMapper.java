@@ -9,21 +9,22 @@ import com.afd.model.product.Product;
 import com.afd.param.product.ProductCondition;
 
 public interface ProductMapper {
-    int deleteByPrimaryKey(Integer prodId);
+	int deleteByPrimaryKey(Integer prodId);
 
-    int insert(Product record);
+	int insert(Product record);
 
-    int insertSelective(Product record);
+	int insertSelective(Product record);
 
-    Product selectByPrimaryKey(Integer prodId);
+	Product selectByPrimaryKey(Integer prodId);
 
-    int updateByPrimaryKeySelective(Product record);
+	int updateByPrimaryKeySelective(Product record);
 
-    int updateByPrimaryKeyWithBLOBs(Product record);
+	int updateByPrimaryKeyWithBLOBs(Product record);
 
-    int updateByPrimaryKey(Product record);
+	int updateByPrimaryKey(Product record);
 
-	boolean batchUpdateProdByCondition(@Param("idList") List<Integer> idList,@Param("product")  Product product);
+	boolean batchUpdateProdByCondition(@Param("idList") List<Integer> idList,
+			@Param("product") Product product);
 
 	Product getProductByProdCode(String prodCode);
 
@@ -32,7 +33,7 @@ public interface ProductMapper {
 			@Param("sortField") String sortField,
 			@Param("sortDirection") String sortDirection,
 			@Param("page") Page<Product> page);
-	
+
 	List<Product> searchProductByConditionPage(
 			@Param("productCondition") ProductCondition productCondition,
 			@Param("sortField") String sortField,
@@ -41,17 +42,17 @@ public interface ProductMapper {
 
 	List<Product> getOnlineProductBySellerId(Integer sellerId);
 
+	List<Product> getOnlineProductBySellerIdAndBrandId(Integer sellerId,
+			Integer brandId);
+
 	List<Integer> getProductIdsBySellerId(Integer sellerId);
 
-	List<Product> getProductsByProdIds(@Param("idList")List<Integer> idList);
+	List<Product> getProductsByProdIds(@Param("idList") List<Integer> idList);
 
 	List<Product> searchAuditProductByConditionPage(
 			@Param("productCondition") ProductCondition productCondition,
 			@Param("sortField") String sortField,
 			@Param("sortDirection") String sortDirection,
 			@Param("page") Page<Product> page);
-	
-
-
 
 }

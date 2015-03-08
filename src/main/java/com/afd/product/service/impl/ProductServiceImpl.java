@@ -25,14 +25,14 @@ import com.afd.service.product.IProductService;
 public class ProductServiceImpl implements IProductService {
 
 	private static final String AUDIT_PASS_COMMENT = "审核通过";
-	
+
 	@Autowired
 	ProductMapper productMapper;
 	@Autowired
 	SkuMapper skuMapper;
 	@Autowired
 	ProductImgMapper productImgMapper;
-	
+
 	@Override
 	public boolean addSku(Sku sku) {
 		int i = this.skuMapper.insertSelective(sku);
@@ -46,7 +46,8 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public boolean removeSkuById(Integer skuId) {
-		return this.skuMapper.removeSkuById(skuId,ProductConstants.SKU_STATUS_DELETE);
+		return this.skuMapper.removeSkuById(skuId,
+				ProductConstants.SKU_STATUS_DELETE);
 	}
 
 	@Override
@@ -57,7 +58,7 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public boolean batchEditSkus(List<Sku> skus, List<Integer> increaseNum) {
-		
+
 		return this.skuMapper.batchEditSkus(skus);
 	}
 
@@ -103,7 +104,7 @@ public class ProductServiceImpl implements IProductService {
 	public List<Sku> getSkusBySkuIds(List<Integer> skuIds) {
 		return this.skuMapper.getSkusBySkuIds(skuIds);
 	}
-	
+
 	@Override
 	public Integer addProductImg(ProductImg productImg) {
 		this.productImgMapper.insertSelective(productImg);
@@ -118,12 +119,14 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public boolean delProductImgById(Integer prodImgId) {
-		return this.productImgMapper.delProductImgById(prodImgId,ProductConstants.PROD_IMG_STATUS_REMOVE);
+		return this.productImgMapper.delProductImgById(prodImgId,
+				ProductConstants.PROD_IMG_STATUS_REMOVE);
 	}
 
 	@Override
 	public boolean delProductImgByProdId(Integer prodId) {
-		return this.productImgMapper.delProductImgByProdId(prodId,ProductConstants.PROD_IMG_STATUS_REMOVE);
+		return this.productImgMapper.delProductImgByProdId(prodId,
+				ProductConstants.PROD_IMG_STATUS_REMOVE);
 	}
 
 	@Override
@@ -133,7 +136,8 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public List<ProductImg> getProductImgByProdId(Integer prodId) {
-		return  this.productImgMapper.selectProductImgByProdId(prodId,ProductConstants.PROD_IMG_STATUS_NORMAL);
+		return this.productImgMapper.selectProductImgByProdId(prodId,
+				ProductConstants.PROD_IMG_STATUS_NORMAL);
 	}
 
 	@Override
@@ -163,7 +167,7 @@ public class ProductServiceImpl implements IProductService {
 		Product product = new Product();
 		product.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_WAIT);
 		product.setLastUpdateDate(DateUtils.currentDate());
-		return this.productMapper.batchUpdateProdByCondition(idList,product);
+		return this.productMapper.batchUpdateProdByCondition(idList, product);
 	}
 
 	@Override
@@ -193,7 +197,7 @@ public class ProductServiceImpl implements IProductService {
 		product.setStatus(ProductConstants.PROD_STATUS_DOWN);
 		product.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_NO_PASS);
 		product.setLastUpdateDate(DateUtils.currentDate());
-		return this.productMapper.batchUpdateProdByCondition(idList,product);
+		return this.productMapper.batchUpdateProdByCondition(idList, product);
 	}
 
 	@Override
@@ -213,7 +217,7 @@ public class ProductServiceImpl implements IProductService {
 		Product product = new Product();
 		product.setAuditStatus(ProductConstants.PROD_STATUS_DOWN);
 		product.setLastUpdateDate(DateUtils.currentDate());
-		return this.productMapper.batchUpdateProdByCondition(idList,product);
+		return this.productMapper.batchUpdateProdByCondition(idList, product);
 	}
 
 	@Override
@@ -233,7 +237,7 @@ public class ProductServiceImpl implements IProductService {
 		product.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_WAIT);
 		product.setStatus(ProductConstants.PROD_STATUS_REMOVE);
 		product.setLastUpdateDate(DateUtils.currentDate());
-		return this.productMapper.batchUpdateProdByCondition(idList,product);
+		return this.productMapper.batchUpdateProdByCondition(idList, product);
 	}
 
 	@Override
@@ -253,7 +257,7 @@ public class ProductServiceImpl implements IProductService {
 	@Override
 	public boolean auditProduct(Integer prodId, String auditStatus,
 			String auditContent, String auditName) {
-	
+
 		Date currentDate = DateUtils.currentDate();
 		Product product = new Product();
 		product.setProdId(prodId);
@@ -274,12 +278,13 @@ public class ProductServiceImpl implements IProductService {
 		}
 
 		int i = productMapper.updateByPrimaryKeySelective(product);
-		return i > 0 ? true : false ;
+		return i > 0 ? true : false;
 	}
+
 	@Override
 	public boolean batchAuditProduct(List<Integer> prodIds, String auditStatus,
 			String auditContent, String auditName) {
-		
+
 		Date currentDate = DateUtils.currentDate();
 		Product product = new Product();
 		product.setAuditStatus(auditStatus);
@@ -299,7 +304,7 @@ public class ProductServiceImpl implements IProductService {
 		}
 		return productMapper.batchUpdateProdByCondition(prodIds, product);
 	}
-	
+
 	@Override
 	public Product getProductById(Integer prodId) {
 		Product product = this.productMapper.selectByPrimaryKey(prodId);
@@ -314,10 +319,12 @@ public class ProductServiceImpl implements IProductService {
 	}
 
 	@Override
-	public Page<Product> searchOnlineProductPage(ProductCondition productCondition,
-			String sortField, String sortDirection, Page<Product> page) {
+	public Page<Product> searchOnlineProductPage(
+			ProductCondition productCondition, String sortField,
+			String sortDirection, Page<Product> page) {
 		productCondition.setStatus(ProductConstants.PROD_STATUS_ON);
-		page.setResult(this.productMapper.searchOnlineProductPage(productCondition,sortField,sortDirection,page));
+		page.setResult(this.productMapper.searchOnlineProductPage(
+				productCondition, sortField, sortDirection, page));
 		return page;
 	}
 
@@ -326,7 +333,8 @@ public class ProductServiceImpl implements IProductService {
 			ProductCondition productCondition, String sortField,
 			String sortDirection, Page<Product> page) {
 		productCondition.setStatus(ProductConstants.PROD_STATUS_DOWN);
-		page.setResult(this.productMapper.searchAuditProductByConditionPage(productCondition,sortField,sortDirection,page));
+		page.setResult(this.productMapper.searchAuditProductByConditionPage(
+				productCondition, sortField, sortDirection, page));
 		return page;
 	}
 
@@ -334,7 +342,8 @@ public class ProductServiceImpl implements IProductService {
 	public Page<Product> searchProductByConditionPage(
 			ProductCondition productCondition, String sortField,
 			String sortDirection, Page<Product> page) {
-		page.setResult(this.productMapper.searchProductByConditionPage(productCondition,sortField,sortDirection,page));
+		page.setResult(this.productMapper.searchProductByConditionPage(
+				productCondition, sortField, sortDirection, page));
 		return page;
 	}
 
@@ -353,5 +362,11 @@ public class ProductServiceImpl implements IProductService {
 		return this.productMapper.getProductsByProdIds(prodIds);
 	}
 
+	@Override
+	public List<Product> getOnlineProductBySellerIdAndBrandId(Integer sellerId,
+			Integer brandId) {
+		return productMapper.getOnlineProductBySellerIdAndBrandId(sellerId,
+				brandId);
+	}
 
 }

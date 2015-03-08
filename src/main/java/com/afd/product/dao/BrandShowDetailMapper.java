@@ -23,6 +23,8 @@ public interface BrandShowDetailMapper {
 
 	int updateByPrimaryKey(BrandShowDetail record);
 
+	List<BrandShowDetail> getValidDetailsOfBrandShow(Integer brandShowId);
+
 	List<BrandShowDetail> getBrandShowDetailsByIds(
 			@Param("brandShowDetailIds") List<Integer> brandShowDetailIds);
 

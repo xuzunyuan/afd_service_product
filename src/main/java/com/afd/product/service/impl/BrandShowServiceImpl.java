@@ -49,32 +49,36 @@ public class BrandShowServiceImpl implements IBrandShowService {
 
 	@Override
 	public BrandShowDetail getBrandShowDetailById(int brandShowDetailId) {
-		BrandShowDetail bsd = this.brandShowDetailMapper.selectByPrimaryKey(brandShowDetailId);
+		BrandShowDetail bsd = this.brandShowDetailMapper
+				.selectByPrimaryKey(brandShowDetailId);
 		int stock;
-		 if (null == bsd.getShowBalance() || bsd.getShowBalance() <= 0) {
-			 bsd.setShowBalance(0);
-			 stock = 0;
-		 } else if (null == bsd.getSaleAmount()|| bsd.getSaleAmount() <= 0) {
-			 bsd.setSaleAmount(0);
-			 stock = bsd.getShowBalance();
-		 } else {
-			 stock = bsd.getShowBalance() - bsd.getSaleAmount();
-		 }
-		 try {
-			 String strStock = this.redisTemplate.opsForValue().get(ProductConstants.CACHE_PERFIX_INVENTORY + bsd.getbSDId());
-			 if (StringUtils.isEmpty(strStock)|| "null".equals(strStock)) {
-			 strStock = stock + "";
-				 this.redisTemplate.opsForValue().set(ProductConstants.CACHE_PERFIX_INVENTORY + bsd.getbSDId(), strStock);
-			 } else {
-				 stock = Integer.parseInt(strStock);
-				 int saleAmount = bsd.getShowBalance() - stock;
-				 if (saleAmount >= 0) {
-					 bsd.setSaleAmount(saleAmount);
-				 }
-			 }
-		 } catch (Exception e) {
-			 logger.error(e.getMessage(), e);
-		 }
+		if (null == bsd.getShowBalance() || bsd.getShowBalance() <= 0) {
+			bsd.setShowBalance(0);
+			stock = 0;
+		} else if (null == bsd.getSaleAmount() || bsd.getSaleAmount() <= 0) {
+			bsd.setSaleAmount(0);
+			stock = bsd.getShowBalance();
+		} else {
+			stock = bsd.getShowBalance() - bsd.getSaleAmount();
+		}
+		try {
+			String strStock = this.redisTemplate.opsForValue().get(
+					ProductConstants.CACHE_PERFIX_INVENTORY + bsd.getbSDId());
+			if (StringUtils.isEmpty(strStock) || "null".equals(strStock)) {
+				strStock = stock + "";
+				this.redisTemplate.opsForValue().set(
+						ProductConstants.CACHE_PERFIX_INVENTORY
+								+ bsd.getbSDId(), strStock);
+			} else {
+				stock = Integer.parseInt(strStock);
+				int saleAmount = bsd.getShowBalance() - stock;
+				if (saleAmount >= 0) {
+					bsd.setSaleAmount(saleAmount);
+				}
+			}
+		} catch (Exception e) {
+			logger.error(e.getMessage(), e);
+		}
 		return bsd;
 	}
 
@@ -172,43 +176,40 @@ public class BrandShowServiceImpl implements IBrandShowService {
 	}
 
 	@Override
-	public int submitNewBrandShow(int brandShowId, BrandShowDetail[] details) {
-		int result = brandShowMapper.updateStatus(brandShowId,
-				BrandShow$Status.WAIT_AUDIT);
-
-		if (result == 0)
-			return 0;
-
-		for (BrandShowDetail detail : details) {
-			detail.setBrandShowId(brandShowId);
-			detail.setStatus(BrandShowDetail$Status.VALID);
-			brandShowDetailMapper.insert(detail);
-		}
-
-		return result;
-	}
-
-	@Override
 	public int modifyBrandShow(BrandShow brandShow) {
 		brandShow.setStatus(BrandShow$Status.EDITING);
 		return brandShowMapper.updateByPrimaryKeySelective(brandShow);
 	}
 
 	@Override
-	public int submitModifyBrandShow(int brandShowId, BrandShowDetail[] details) {
+	public int submitBrandShow(int brandShowId, BrandShowDetail[] details) {
 		int result = brandShowMapper.updateStatus(brandShowId,
 				BrandShow$Status.WAIT_AUDIT);
 
 		if (result > 0) {
+			List<BrandShowDetail> oldBrandShowDetailList = this
+					.getDetailsOfBrandShow(brandShowId);
+
+			for (BrandShowDetail oldBrandShow : oldBrandShowDetailList) {
+				boolean found = false;
+
+				for (BrandShowDetail detail : details) {
+					if (oldBrandShow.getbSDId().equals(detail.getbSDId())) {
+						found = true;
+						break;
+					}
+				}
+
+				if (!found) {
+					brandShowDetailMapper.updateStatus(oldBrandShow.getbSDId(),
+							BrandShowDetail$Status.REMOVED);
+				}
+			}
+
 			for (BrandShowDetail detail : details) {
 				if (detail.getbSDId() != null && detail.getbSDId() != 0) {
-					if (detail.getRemoved() != 0) {
-						brandShowDetailMapper.updateStatus(detail.getbSDId(),
-								BrandShowDetail$Status.REMOVED);
-					} else {
-						brandShowDetailMapper
-								.updateByPrimaryKeySelective(detail);
-					}
+					brandShowDetailMapper.updateByPrimaryKeySelective(detail);
+
 				} else {
 					detail.setStatus(BrandShowDetail$Status.VALID);
 					brandShowDetailMapper.insert(detail);
@@ -223,7 +224,22 @@ public class BrandShowServiceImpl implements IBrandShowService {
 	public Page<BrandShow> queryMyBrandShowByPage(int sellerId,
 			Map<String, ?> cond, int... page) {
 
-		return null;
+		Page<BrandShow> brandShowPage = new Page<BrandShow>();
+
+		if (page != null) {
+			if (page.length > 0) {
+				brandShowPage.setCurrentPageNo(page[0]);
+			}
+
+			if (page.length > 1) {
+				brandShowPage.setPageSize(page[1]);
+			}
+		}
+
+		brandShowPage.setResult(brandShowMapper.queryBrandShowOfSellerByPage(
+				sellerId, cond, brandShowPage));
+
+		return brandShowPage;
 	}
 
 	@Override
@@ -261,8 +277,7 @@ public class BrandShowServiceImpl implements IBrandShowService {
 
 	@Override
 	public List<BrandShowDetail> getDetailsOfBrandShow(int brandShowId) {
-		// TODO Auto-generated method stub
-		return null;
+		return brandShowDetailMapper.getValidDetailsOfBrandShow(brandShowId);
 	}
 
 	@Override
