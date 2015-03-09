@@ -190,6 +190,8 @@ public class BrandShowServiceImpl implements IBrandShowService {
 				BrandShow$Status.WAIT_AUDIT);
 
 		if (result > 0) {
+			BrandShow brandShow = brandShowMapper
+					.selectByPrimaryKey(brandShowId);
 			List<BrandShowDetail> oldBrandShowDetailList = this
 					.getDetailsOfBrandShow(brandShowId);
 
@@ -210,6 +212,8 @@ public class BrandShowServiceImpl implements IBrandShowService {
 			}
 
 			for (BrandShowDetail detail : details) {
+				detail.setBrandName(brandShow.getBrandName());
+
 				if (detail.getbSDId() != null && detail.getbSDId() != 0) {
 					brandShowDetailMapper.updateByPrimaryKeySelective(detail);
 
