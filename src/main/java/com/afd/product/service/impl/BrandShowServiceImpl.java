@@ -133,6 +133,7 @@ public class BrandShowServiceImpl implements IBrandShowService {
 
 	@Override
 	public List<BrandShow> getValidBrandShows(BrandShow record) {
+		record.setStatus(BrandShow$Status.ONLINE);
 		return this.brandShowMapper.getValidBrandShows(record);
 	}
 
