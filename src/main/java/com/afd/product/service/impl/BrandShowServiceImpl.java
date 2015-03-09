@@ -33,9 +33,11 @@ public class BrandShowServiceImpl implements IBrandShowService {
 
 	@Autowired
 	private BrandShowMapper brandShowMapper;
+
 	@Autowired
 	private BrandShowDetailMapper brandShowDetailMapper;
 
+	@Autowired
 	private ILogisticsCompanyService logicticsCompanyService;
 
 	@Autowired
@@ -283,7 +285,7 @@ public class BrandShowServiceImpl implements IBrandShowService {
 
 	@Override
 	public List<BrandShow> getOnlinedBrandShowsOfSeller(int sellerId) {
-		return Lists.newArrayList();
+		return brandShowMapper.getOnlinedBrandShowsOfSeller(sellerId);
 	}
 
 	@Override

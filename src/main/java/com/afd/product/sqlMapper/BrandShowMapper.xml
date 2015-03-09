@@ -360,4 +360,13 @@
     </if>
 	</where>
   </select>
+  
+  <select id="getOnlinedBrandShowsOfSeller" resultMap="BaseResultMap">
+	select 
+	<include refid="Base_Column_List" />
+	from t_brand_show
+	where seller_id = #{sellerId,jdbcType=INTEGER}
+		  and (status = '1' or status = '2')	
+	order by brand_show_id desc
+  </select>
 </mapper>

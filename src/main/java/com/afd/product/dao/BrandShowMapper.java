@@ -22,6 +22,7 @@ public interface BrandShowMapper {
 
 	int updateByPrimaryKey(BrandShow record);
 
+	// 扩展
 	List<BrandShow> getBrandShowByIds(
 			@Param("brandShowIds") List<Integer> brandShowIds);
 
@@ -34,4 +35,6 @@ public interface BrandShowMapper {
 			@Param("sellerId") int sellerId,
 			@Param("cond") Map<String, ?> cond,
 			@Param("page") Page<BrandShow> page);
+
+	List<BrandShow> getOnlinedBrandShowsOfSeller(@Param("sellerId") int sellerId);
 }
