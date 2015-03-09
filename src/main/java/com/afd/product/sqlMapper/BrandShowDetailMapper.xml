@@ -25,12 +25,13 @@
     <result column="org_price" jdbcType="DECIMAL" property="orgPrice" />
     <result column="discount" jdbcType="DECIMAL" property="discount" />
     <result column="art_no" jdbcType="VARCHAR" property="artNo" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
   </resultMap>
   <sql id="Base_Column_List">
     b_s_d_id, brand_show_id, prod_id, prod_code, sku_code, sku_id, prod_name, prod_title, 
     prod_img, sku_spec_name, show_price, show_balance, sale_amount, purchase_count_limit, 
     start_date, end_date, status, create_by_date, create_by_name, remove_date, org_price, 
-    discount, art_no
+    discount, art_no, brand_name
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -42,30 +43,27 @@
     delete from t_brand_show_detail
     where b_s_d_id = #{bSDId,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.afd.model.product.BrandShowDetail">
-    insert into t_brand_show_detail (b_s_d_id, brand_show_id, prod_id, 
+  <insert id="insert" parameterType="com.afd.model.product.BrandShowDetail" useGeneratedKeys="true" keyProperty="bSDId">
+    insert into t_brand_show_detail (brand_show_id, prod_id, 
       prod_code, sku_code, sku_id, 
       prod_name, prod_title, prod_img, 
       sku_spec_name, show_price, show_balance, 
       sale_amount, purchase_count_limit, start_date, 
       end_date, status, create_by_date, 
       create_by_name, remove_date, org_price, 
-      discount, art_no)
-    values (#{bSDId,jdbcType=INTEGER}, #{brandShowId,jdbcType=INTEGER}, #{prodId,jdbcType=INTEGER}, 
+      discount, art_no, brand_name)
+    values (#{brandShowId,jdbcType=INTEGER}, #{prodId,jdbcType=INTEGER}, 
       #{prodCode,jdbcType=VARCHAR}, #{skuCode,jdbcType=VARCHAR}, #{skuId,jdbcType=INTEGER}, 
       #{prodName,jdbcType=VARCHAR}, #{prodTitle,jdbcType=VARCHAR}, #{prodImg,jdbcType=VARCHAR}, 
       #{skuSpecName,jdbcType=VARCHAR}, #{showPrice,jdbcType=DECIMAL}, #{showBalance,jdbcType=INTEGER}, 
       #{saleAmount,jdbcType=INTEGER}, #{purchaseCountLimit,jdbcType=SMALLINT}, #{startDate,jdbcType=TIMESTAMP}, 
       #{endDate,jdbcType=TIMESTAMP}, #{status,jdbcType=CHAR}, #{createByDate,jdbcType=TIMESTAMP}, 
       #{createByName,jdbcType=VARCHAR}, #{removeDate,jdbcType=TIMESTAMP}, #{orgPrice,jdbcType=DECIMAL}, 
-      #{discount,jdbcType=DECIMAL}, #{artNo,jdbcType=VARCHAR})
+      #{discount,jdbcType=DECIMAL}, #{artNo,jdbcType=VARCHAR}, #{brandName,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.afd.model.product.BrandShowDetail">
+  <insert id="insertSelective" parameterType="com.afd.model.product.BrandShowDetail" useGeneratedKeys="true" keyProperty="bSDId">
     insert into t_brand_show_detail
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="bSDId != null">
-        b_s_d_id,
-      </if>
+    <trim prefix="(" suffix=")" suffixOverrides=",">      
       <if test="brandShowId != null">
         brand_show_id,
       </if>
@@ -132,11 +130,11 @@
       <if test="artNo != null">
         artNo,
       </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="bSDId != null">
-        #{bSDId,jdbcType=INTEGER},
+      <if test="brandName != null">
+        brand_name,
       </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">     
       <if test="brandShowId != null">
         #{brandShowId,jdbcType=INTEGER},
       </if>
@@ -202,6 +200,9 @@
       </if>
       <if test="artNo != null">
         #{artNo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null">
+        #{brandName,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -271,8 +272,11 @@
       <if test="discount != null">
         discount = #{discount,jdbcType=DECIMAL},
       </if>
-       <if test="artNo != null">
+      <if test="artNo != null">
         art_no = #{artNo,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null">
+        brand_name = #{brandName,jdbcType=VARCHAR},
       </if>
     </set>
     where b_s_d_id = #{bSDId,jdbcType=INTEGER}
@@ -300,7 +304,8 @@
       remove_date = #{removeDate,jdbcType=TIMESTAMP},
       org_price = #{orgPrice,jdbcType=DECIMAL},
       discount = #{discount,jdbcType=DECIMAL},
-      art_no = #{artNo,jdbcType=VARCHAR}
+      art_no = #{artNo,jdbcType=VARCHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR}
     where b_s_d_id = #{bSDId,jdbcType=INTEGER}
   </update>
     

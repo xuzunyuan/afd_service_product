@@ -27,12 +27,14 @@
     <result column="deliver_province" jdbcType="INTEGER" property="deliverProvince" />
     <result column="deliver_city" jdbcType="INTEGER" property="deliverCity" />
     <result column="logistics_comp_ids" jdbcType="VARCHAR" property="logisticsCompIds" />
+    <result column="co_name" jdbcType="VARCHAR" property="coName" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
   </resultMap>
   <sql id="Base_Column_List">
     brand_show_id, seller_id, brand_id, title, show_banner_img, bg_color, type, status, 
     create_by_date, audit_date, audit_by_name, audit_content, start_date, end_date, end_by_date, 
     end_by_name, end_by_id, buy_limit, s_r_a_id, home_banner_img, service_qq, service_tel, 
-    deliver_province, deliver_city, logistics_comp_ids
+    deliver_province, deliver_city, logistics_comp_ids, co_name, brand_name
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
@@ -53,7 +55,7 @@
       end_by_name, end_by_id, buy_limit, 
       s_r_a_id, home_banner_img, service_qq, 
       service_tel, deliver_province, deliver_city, 
-      logistics_comp_ids)
+      logistics_comp_ids, co_name, brand_name)
     values (#{sellerId,jdbcType=INTEGER}, #{brandId,jdbcType=INTEGER}, 
       #{title,jdbcType=VARCHAR}, #{showBannerImg,jdbcType=VARCHAR}, #{bgColor,jdbcType=VARCHAR}, 
       #{type,jdbcType=CHAR}, #{status,jdbcType=CHAR}, #{createByDate,jdbcType=TIMESTAMP}, 
@@ -62,7 +64,7 @@
       #{endByName,jdbcType=VARCHAR}, #{endById,jdbcType=INTEGER}, #{buyLimit,jdbcType=SMALLINT}, 
       #{sRAId,jdbcType=INTEGER}, #{homeBannerImg,jdbcType=VARCHAR}, #{serviceQq,jdbcType=VARCHAR}, 
       #{serviceTel,jdbcType=VARCHAR}, #{deliverProvince,jdbcType=INTEGER}, #{deliverCity,jdbcType=INTEGER}, 
-      #{logisticsCompIds,jdbcType=VARCHAR})
+      #{logisticsCompIds,jdbcType=VARCHAR}, #{coName,jdbcType=VARCHAR}, #{brandName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.afd.model.product.BrandShow" useGeneratedKeys="true" keyProperty="brandShowId">
     insert into t_brand_show
@@ -139,6 +141,12 @@
       <if test="logisticsCompIds != null">
         logistics_comp_ids,
       </if>
+      <if test="coName != null">
+        co_name,
+      </if>
+      <if test="brandName != null">
+        brand_name,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="sellerId != null">
@@ -212,6 +220,12 @@
       </if>
       <if test="logisticsCompIds != null">
         #{logisticsCompIds,jdbcType=VARCHAR},
+      </if>
+      <if test="coName != null">
+        #{coName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null">
+        #{brandName,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -290,6 +304,12 @@
       <if test="logisticsCompIds != null">
         logistics_comp_ids = #{logisticsCompIds,jdbcType=VARCHAR},
       </if>
+      <if test="coName != null">
+        co_name = #{coName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandName != null">
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
     </set>
     where brand_show_id = #{brandShowId,jdbcType=INTEGER}
   </update>
@@ -318,7 +338,9 @@
       service_tel = #{serviceTel,jdbcType=VARCHAR},
       deliver_province = #{deliverProvince,jdbcType=INTEGER},
       deliver_city = #{deliverCity,jdbcType=INTEGER},
-      logistics_comp_ids = #{logisticsCompIds,jdbcType=VARCHAR}
+      logistics_comp_ids = #{logisticsCompIds,jdbcType=VARCHAR},
+      co_name = #{coName,jdbcType=VARCHAR},
+      brand_name = #{brandName,jdbcType=VARCHAR}
     where brand_show_id = #{brandShowId,jdbcType=INTEGER}
   </update>
     
