@@ -390,4 +390,25 @@ public class BrandShowServiceImpl implements IBrandShowService {
 
 		return logicticsCompanyService.getLogisticsCompanyByIds(list);
 	}
+
+	@Override
+	public Page<BrandShow> queryBrandShowByPage(Map<String, ?> cond,
+			int... page) {
+		Page<BrandShow> brandShowPage = new Page<BrandShow>();
+
+		if (page != null) {
+			if (page.length > 0) {
+				brandShowPage.setCurrentPageNo(page[0]);
+			}
+
+			if (page.length > 1) {
+				brandShowPage.setPageSize(page[1]);
+			}
+		}
+
+		brandShowPage.setResult(brandShowMapper.queryBrandShowByPage(cond,
+				brandShowPage));
+
+		return brandShowPage;
+	}
 }

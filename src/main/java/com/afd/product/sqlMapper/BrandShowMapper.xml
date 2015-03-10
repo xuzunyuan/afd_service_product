@@ -398,6 +398,35 @@
 	order by brand_show_id desc
   </select>
   
+  <select id="queryBrandShowByPage" resultMap="BaseResultMap">
+	select 
+	<include refid="Base_Column_List" />
+	from t_brand_show
+	where 1 = 1
+		<if test="cond.status != null" >
+    		and status = #{cond.status,jdbcType=VARCHAR}
+    	</if>
+		<if test="cond.startDt != null" >
+    		and start_date &gt;= #{cond.startDt,jdbcType=TIMESTAMP}
+    	</if>
+    	<if test="cond.endDt != null" >
+    		and end_date &lt; #{cond.endDt,jdbcType=TIMESTAMP}
+    	</if>
+    	<if test="cond.title != null and cond.title != ''" >
+     		<bind name="title" value="'%' + cond.title + '%'" />
+		 	and title like #{title,jdbcType=VARCHAR}
+		</if>
+		<if test="cond.brandName != null and cond.brandName != ''" >
+     		<bind name="brandName" value="'%' + cond.brandName + '%'" />
+		 	and brand_name like #{brandName,jdbcType=VARCHAR}
+		</if>
+		<if test="cond.coName != null and cond.coName != ''" >
+     		<bind name="coName" value="'%' + cond.coName + '%'" />
+		 	and co_name like #{coName,jdbcType=VARCHAR}
+		</if>
+	order by brand_show_id desc
+  </select>
+  
   <select id="getValidBrandShows" parameterType="com.afd.model.product.BrandShow" resultMap="BaseResultMap">
 	select 
 	<include refid="Base_Column_List" />

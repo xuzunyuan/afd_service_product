@@ -40,5 +40,8 @@ public interface BrandShowMapper {
 			@Param("cond") Map<String, ?> cond,
 			@Param("page") Page<BrandShow> page);
 
+	List<BrandShow> queryBrandShowByPage(@Param("cond") Map<String, ?> cond,
+			@Param("page") Page<BrandShow> page);
+
 	List<BrandShow> getOnlinedBrandShowsOfSeller(@Param("sellerId") int sellerId);
 }
