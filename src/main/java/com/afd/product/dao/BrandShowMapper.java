@@ -36,5 +36,9 @@ public interface BrandShowMapper {
 			@Param("cond") Map<String, ?> cond,
 			@Param("page") Page<BrandShow> page);
 
+	List<BrandShow> queryWaitAuditBrandShowByPage(
+			@Param("cond") Map<String, ?> cond,
+			@Param("page") Page<BrandShow> page);
+
 	List<BrandShow> getOnlinedBrandShowsOfSeller(@Param("sellerId") int sellerId);
 }

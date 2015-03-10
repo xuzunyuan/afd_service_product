@@ -253,21 +253,72 @@ public class BrandShowServiceImpl implements IBrandShowService {
 	public Page<BrandShow> queryWaitAuditBrandShowByPage(Map<String, ?> cond,
 			int... page) {
 
-		return null;
+		Page<BrandShow> brandShowPage = new Page<BrandShow>();
+
+		if (page != null) {
+			if (page.length > 0) {
+				brandShowPage.setCurrentPageNo(page[0]);
+			}
+
+			if (page.length > 1) {
+				brandShowPage.setPageSize(page[1]);
+			}
+		}
+
+		brandShowPage.setResult(brandShowMapper.queryWaitAuditBrandShowByPage(
+				cond, brandShowPage));
+
+		return brandShowPage;
 	}
 
 	@Override
 	public int passAuditBrandShow(int brandShowId, Date startDate,
 			Date endDate, String auditor, String opinion) {
-		// TODO Auto-generated method stub
-		return 0;
+
+		BrandShow brandShow = this.getBrandShowById(brandShowId);
+		if (brandShow == null)
+			return 0;
+
+		if (!BrandShow$Status.WAIT_AUDIT.equals(brandShow.getStatus())
+				&& !BrandShow$Status.AUDITING.equals(brandShow.getStatus())) {
+			return -1;
+		}
+
+		BrandShow instance = new BrandShow();
+
+		instance.setBrandShowId(brandShowId);
+		instance.setStartDate(startDate);
+		instance.setEndDate(endDate);
+		instance.setAuditByName(auditor);
+		instance.setAuditContent(opinion);
+		instance.setAuditDate(DateUtils.currentDate());
+		instance.setStatus(BrandShow$Status.WAIT_ONLINE);
+
+		return brandShowMapper.updateByPrimaryKeySelective(instance);
 	}
 
 	@Override
 	public int rejectAuditBrandShow(int brandShowId, String auditor,
 			String opinion) {
-		// TODO Auto-generated method stub
-		return 0;
+
+		BrandShow brandShow = this.getBrandShowById(brandShowId);
+		if (brandShow == null)
+			return 0;
+
+		if (!BrandShow$Status.WAIT_AUDIT.equals(brandShow.getStatus())
+				&& !BrandShow$Status.AUDITING.equals(brandShow.getStatus())) {
+			return -1;
+		}
+
+		BrandShow instance = new BrandShow();
+
+		instance.setBrandShowId(brandShowId);
+		instance.setAuditByName(auditor);
+		instance.setAuditContent(opinion);
+		instance.setAuditDate(DateUtils.currentDate());
+		instance.setStatus(BrandShow$Status.REJECTED);
+
+		return brandShowMapper.updateByPrimaryKeySelective(instance);
 	}
 
 	@Override
