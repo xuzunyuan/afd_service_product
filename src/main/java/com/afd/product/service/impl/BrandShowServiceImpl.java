@@ -25,6 +25,7 @@ import com.afd.product.dao.BrandShowDetailMapper;
 import com.afd.product.dao.BrandShowMapper;
 import com.afd.service.order.ILogisticsCompanyService;
 import com.afd.service.product.IBrandShowService;
+import com.afd.service.schedule.IBrandShowScheduleService;
 import com.google.common.collect.Lists;
 
 @Service("brandShowService")
@@ -43,6 +44,9 @@ public class BrandShowServiceImpl implements IBrandShowService {
 	@Autowired
 	@Qualifier("redisTemplate")
 	private RedisTemplate<String, String> redisTemplate;
+
+	@Autowired
+	private IBrandShowScheduleService scheduleService;
 
 	@Override
 	public BrandShow getBrandShowById(int brandShowId) {
@@ -294,7 +298,14 @@ public class BrandShowServiceImpl implements IBrandShowService {
 		instance.setAuditDate(DateUtils.currentDate());
 		instance.setStatus(BrandShow$Status.WAIT_ONLINE);
 
-		return brandShowMapper.updateByPrimaryKeySelective(instance);
+		int result = brandShowMapper.updateByPrimaryKeySelective(instance);
+
+		if (result > 0) {
+			scheduleService.registerBrandShowStartJob(brandShowId, startDate);
+			scheduleService.registerBrandShowEndJob(brandShowId, endDate);
+		}
+
+		return result;
 	}
 
 	@Override
@@ -323,14 +334,30 @@ public class BrandShowServiceImpl implements IBrandShowService {
 
 	@Override
 	public int startBrandShow(int brandShowId) {
-		// TODO Auto-generated method stub
-		return 0;
+		BrandShow brandShow = this.getBrandShowById(brandShowId);
+		if (brandShow == null)
+			return 0;
+
+		if (!BrandShow$Status.WAIT_ONLINE.equals(brandShow.getStatus())) {
+			return -1;
+		}
+
+		return brandShowMapper.updateStatus(brandShowId,
+				BrandShow$Status.ONLINE);
 	}
 
 	@Override
 	public int endBrandSow(int brandShowId) {
-		// TODO Auto-generated method stub
-		return 0;
+		BrandShow brandShow = this.getBrandShowById(brandShowId);
+		if (brandShow == null)
+			return 0;
+
+		if (!BrandShow$Status.ONLINE.equals(brandShow.getStatus())) {
+			return -1;
+		}
+
+		return brandShowMapper.updateStatus(brandShowId,
+				BrandShow$Status.FINISHED);
 	}
 
 	@Override
