@@ -351,4 +351,18 @@
    								end
 		where t.b_s_d_id = #{bsdId,jdbcType=DECIMAL}
   </update>
+  
+<select id="getBrandShowDetailBySku" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+	from t_brand_show_detail
+	<where>
+	<if test="brandShowId != null">
+			 brand_show_id = #{brandShowId,jdbcType=DECIMAL}
+    </if>
+    <if test="skuId != null">
+		and	 sku_id = #{skuId,jdbcType=DECIMAL}
+    </if>
+	</where>
+  </select>  
 </mapper>

@@ -411,4 +411,11 @@ public class BrandShowServiceImpl implements IBrandShowService {
 
 		return brandShowPage;
 	}
+
+	@Override
+	public BrandShowDetail getBrandShowDetailBySkuId(Integer brandShowId,
+			Integer skuId) {
+		BrandShowDetail ret = this.brandShowDetailMapper.getBrandShowDetailBySkuId(brandShowId, skuId);
+		return ret;
+	}
 }

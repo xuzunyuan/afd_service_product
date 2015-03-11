@@ -38,4 +38,7 @@ public interface BrandShowDetailMapper {
 
 	@Update("update t_brand_show_detail set status = #{1} where b_s_d_id = #{0} ")
 	int updateStatus(Integer bsdId, String status);
+	
+	public BrandShowDetail getBrandShowDetailBySkuId(@Param("brandShowId")Integer brandShowId,
+			@Param("skuId")Integer skuId);
 }
