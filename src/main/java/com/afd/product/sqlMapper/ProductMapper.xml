@@ -664,4 +664,12 @@
 	  			#{item}
 	  		</foreach>
    </select>
+   
+   <select id="getValidProductCountOfSeller" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+      	select 
+   			count(*)
+   		from t_product
+	    where seller_id = #{sellerId,jdbcType=INTEGER}
+	    	and status in ('0', '1', '3')
+   </select>
 </mapper>

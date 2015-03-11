@@ -44,4 +44,7 @@ public interface BrandShowMapper {
 			@Param("page") Page<BrandShow> page);
 
 	List<BrandShow> getOnlinedBrandShowsOfSeller(@Param("sellerId") int sellerId);
+
+	int getBrandShowCountOfSellerByStatus(@Param("sellerId") int sellerId,
+			@Param("status") String status);
 }

@@ -55,4 +55,5 @@ public interface ProductMapper {
 			@Param("sortDirection") String sortDirection,
 			@Param("page") Page<Product> page);
 
+	int getValidProductCountOfSeller(@Param("sellerId") int sellerId);
 }

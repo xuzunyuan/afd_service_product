@@ -415,7 +415,14 @@ public class BrandShowServiceImpl implements IBrandShowService {
 	@Override
 	public BrandShowDetail getBrandShowDetailBySkuId(Integer brandShowId,
 			Integer skuId) {
-		BrandShowDetail ret = this.brandShowDetailMapper.getBrandShowDetailBySkuId(brandShowId, skuId);
+		BrandShowDetail ret = this.brandShowDetailMapper
+				.getBrandShowDetailBySkuId(brandShowId, skuId);
 		return ret;
+	}
+
+	@Override
+	public int getBrandShowCountOfSellerByStatus(int sellerId, String status) {
+		return brandShowMapper.getBrandShowCountOfSellerByStatus(sellerId,
+				status);
 	}
 }

@@ -446,4 +446,12 @@
 		  and (status = '1' or status = '2')	
 	order by brand_show_id desc
   </select>
+  
+  <select id="getBrandShowCountOfSellerByStatus" resultType="java.lang.Integer">
+	select 
+	count(*)
+	from t_brand_show
+	where seller_id = #{sellerId,jdbcType=INTEGER}
+		  and status = #{status,jdbcType=VARCHAR}
+  </select>
 </mapper>

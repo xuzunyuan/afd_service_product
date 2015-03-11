@@ -369,4 +369,9 @@ public class ProductServiceImpl implements IProductService {
 				brandId);
 	}
 
+	@Override
+	public int getValidProductCountOfSeller(int sellerId) {
+		return productMapper.getValidProductCountOfSeller(sellerId);
+	}
+
 }
