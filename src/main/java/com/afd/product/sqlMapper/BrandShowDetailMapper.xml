@@ -352,7 +352,7 @@
 		where t.b_s_d_id = #{bsdId,jdbcType=DECIMAL}
   </update>
   
-<select id="getBrandShowDetailBySku" resultMap="BaseResultMap">
+<select id="getBrandShowDetailBySkuId" resultMap="BaseResultMap">
   select
 	<include refid="Base_Column_List" />
 	from t_brand_show_detail
