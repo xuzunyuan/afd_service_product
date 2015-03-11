@@ -34,7 +34,7 @@ public interface BrandShowDetailMapper {
 			@Param("cond") Map<?, ?> map,
 			@Param(value = "page") Page<BrandShowDetail> page);
 
-	void addStock(@Param("bsdId") Integer bsdId, @Param("stock") Integer stock);
+	void addStock(@Param("bsdId") Long bsdId, @Param("stock") Long stock);
 
 	@Update("update t_brand_show_detail set status = #{1} where b_s_d_id = #{0} ")
 	int updateStatus(Integer bsdId, String status);

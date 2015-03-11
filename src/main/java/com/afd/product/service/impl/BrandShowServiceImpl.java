@@ -162,11 +162,11 @@ public class BrandShowServiceImpl implements IBrandShowService {
 	 * @param stockMap
 	 */
 	@Override
-	public void addStock(Map<Integer, Integer> stockMap) {
+	public void addStock(Map<Long, Long> stockMap) {
 		if (null != stockMap && stockMap.size() > 0) {
-			for (Entry<Integer, Integer> entry : stockMap.entrySet()) {
-				Integer bsdId = entry.getKey();
-				Integer stock = entry.getValue();
+			for (Entry<Long, Long> entry : stockMap.entrySet()) {
+				Long bsdId = entry.getKey();
+				Long stock = entry.getValue();
 				this.brandShowDetailMapper.addStock(bsdId, stock);
 			}
 		}
