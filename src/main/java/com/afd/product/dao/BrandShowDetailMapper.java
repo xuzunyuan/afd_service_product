@@ -41,4 +41,7 @@ public interface BrandShowDetailMapper {
 	
 	public BrandShowDetail getBrandShowDetailBySkuId(@Param("brandShowId")Integer brandShowId,
 			@Param("skuId")Integer skuId);
+	
+	public List<BrandShowDetail> getBrandShowDetailsByProdId(@Param("brandShowId")Integer brandShowId,
+			@Param("prodId")Integer prodId);
 }

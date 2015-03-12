@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -424,5 +425,11 @@ public class BrandShowServiceImpl implements IBrandShowService {
 	public int getBrandShowCountOfSellerByStatus(int sellerId, String status) {
 		return brandShowMapper.getBrandShowCountOfSellerByStatus(sellerId,
 				status);
+	}
+	
+	@Override
+	public List<BrandShowDetail> getBrandShowDetailsByProdId(@Param("brandShowId")Integer brandShowId,
+			@Param("prodId")Integer prodId){
+		return this.brandShowDetailMapper.getBrandShowDetailsByProdId(brandShowId, prodId);
 	}
 }
