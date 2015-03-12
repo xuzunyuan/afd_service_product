@@ -374,7 +374,7 @@
 	<if test="brandShowId != null">
 			 brand_show_id = #{brandShowId,jdbcType=DECIMAL}
     </if>
-    <if test="skuId != null">
+    <if test="prodId != null">
 		and	 prod_id = #{ProdId,jdbcType=DECIMAL}
     </if>
 	</where>
