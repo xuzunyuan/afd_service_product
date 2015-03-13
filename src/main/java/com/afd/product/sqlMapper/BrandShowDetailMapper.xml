@@ -364,5 +364,19 @@
 		and	 sku_id = #{skuId,jdbcType=DECIMAL}
     </if>
 	</where>
-  </select>  
+  </select> 
+  
+  <select id="getBrandShowDetailsByProdId" resultMap="BaseResultMap">
+  select
+	<include refid="Base_Column_List" />
+	from t_brand_show_detail
+	<where>
+	<if test="brandShowId != null">
+			 brand_show_id = #{brandShowId,jdbcType=DECIMAL}
+    </if>
+    <if test="prodId != null">
+		and	 prod_id = #{prodId,jdbcType=DECIMAL}
+    </if>
+	</where>
+  </select> 
 </mapper>
