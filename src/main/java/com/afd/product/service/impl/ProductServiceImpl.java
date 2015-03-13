@@ -1,12 +1,16 @@
 package com.afd.product.service.impl;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import com.afd.common.mybatis.Page;
@@ -32,6 +36,9 @@ public class ProductServiceImpl implements IProductService {
 	SkuMapper skuMapper;
 	@Autowired
 	ProductImgMapper productImgMapper;
+	
+	@Resource(name="redisTemplate")
+	private RedisTemplate<String, Serializable> redisTemplate;
 
 	@Override
 	public boolean addSku(Sku sku) {
@@ -148,7 +155,10 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public int editProductById(Product product) {
-		this.productMapper.updateByPrimaryKeySelective(product);
+		int i = this.productMapper.updateByPrimaryKeySelective(product);
+		if(i > 0){
+			this.redisTemplate.opsForValue().getOperations().delete(ProductConstants.PROD_ + product.getProdId());;
+		}
 		return product.getProdId();
 	}
 
@@ -159,6 +169,9 @@ public class ProductServiceImpl implements IProductService {
 		product.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_WAIT);
 		product.setLastUpdateDate(DateUtils.currentDate());
 		int i = this.productMapper.updateByPrimaryKeySelective(product);
+		if(i > 0){
+			this.redisTemplate.opsForValue().getOperations().delete(ProductConstants.PROD_ + product.getProdId());;
+		}
 		return i > 0 ? true : false;
 	}
 
@@ -167,7 +180,14 @@ public class ProductServiceImpl implements IProductService {
 		Product product = new Product();
 		product.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_WAIT);
 		product.setLastUpdateDate(DateUtils.currentDate());
-		return this.productMapper.batchUpdateProdByCondition(idList, product);
+		boolean b = this.productMapper.batchUpdateProdByCondition(idList, product);
+		
+		if(b){
+			for (Integer prodId : idList) { 
+				this.redisTemplate.opsForValue().getOperations().delete(ProductConstants.PROD_ + prodId);;
+			}
+		}
+		return b;
 	}
 
 	@Override
@@ -177,6 +197,9 @@ public class ProductServiceImpl implements IProductService {
 		product.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_WAIT);
 		product.setLastUpdateDate(DateUtils.currentDate());
 		int i = this.productMapper.updateByPrimaryKeySelective(product);
+		if(i > 0){
+			this.redisTemplate.opsForValue().getOperations().delete(ProductConstants.PROD_ + product.getProdId());;
+		}
 		return i > 0 ? true : false;
 	}
 
@@ -188,6 +211,9 @@ public class ProductServiceImpl implements IProductService {
 		product.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_NO_PASS);
 		product.setLastUpdateDate(DateUtils.currentDate());
 		int i = this.productMapper.updateByPrimaryKeySelective(product);
+		if(i > 0){
+			this.redisTemplate.opsForValue().getOperations().delete(ProductConstants.PROD_ + product.getProdId());;
+		}
 		return i > 0 ? true : false;
 	}
 
@@ -197,7 +223,13 @@ public class ProductServiceImpl implements IProductService {
 		product.setStatus(ProductConstants.PROD_STATUS_DOWN);
 		product.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_NO_PASS);
 		product.setLastUpdateDate(DateUtils.currentDate());
-		return this.productMapper.batchUpdateProdByCondition(idList, product);
+		boolean b = this.productMapper.batchUpdateProdByCondition(idList, product);
+		if(b){
+			for (Integer prodId : idList) { 
+				this.redisTemplate.opsForValue().getOperations().delete(ProductConstants.PROD_ + prodId);;
+			}
+		}
+		return b;
 	}
 
 	@Override
@@ -208,6 +240,9 @@ public class ProductServiceImpl implements IProductService {
 		product.setStatus(ProductConstants.PROD_STATUS_ON);
 		product.setLastUpdateDate(DateUtils.currentDate());
 		int i = this.productMapper.updateByPrimaryKeySelective(product);
+		if(i > 0){
+			this.redisTemplate.opsForValue().getOperations().delete(ProductConstants.PROD_ + product.getProdId());;
+		}
 		return i > 0 ? true : false;
 	}
 
@@ -217,7 +252,14 @@ public class ProductServiceImpl implements IProductService {
 		Product product = new Product();
 		product.setAuditStatus(ProductConstants.PROD_STATUS_DOWN);
 		product.setLastUpdateDate(DateUtils.currentDate());
-		return this.productMapper.batchUpdateProdByCondition(idList, product);
+		boolean b = this.productMapper.batchUpdateProdByCondition(idList, product);
+		if(b){
+			for (Integer prodId : idList) { 
+				this.redisTemplate.opsForValue().getOperations().delete(ProductConstants.PROD_ + prodId);;
+			}
+		}
+		
+		return b;
 	}
 
 	@Override
@@ -228,6 +270,9 @@ public class ProductServiceImpl implements IProductService {
 		product.setStatus(ProductConstants.PROD_STATUS_REMOVE);
 		product.setLastUpdateDate(DateUtils.currentDate());
 		int i = this.productMapper.updateByPrimaryKeySelective(product);
+		if(i > 0){
+			this.redisTemplate.opsForValue().getOperations().delete(ProductConstants.PROD_ + product.getProdId());;
+		}
 		return i > 0 ? true : false;
 	}
 
@@ -237,7 +282,14 @@ public class ProductServiceImpl implements IProductService {
 		product.setAuditStatus(ProductConstants.PROD_AUDIT_STATUS_WAIT);
 		product.setStatus(ProductConstants.PROD_STATUS_REMOVE);
 		product.setLastUpdateDate(DateUtils.currentDate());
-		return this.productMapper.batchUpdateProdByCondition(idList, product);
+		
+		boolean b = this.productMapper.batchUpdateProdByCondition(idList, product);
+		if(b){
+			for (Integer prodId : idList) { 
+				this.redisTemplate.opsForValue().getOperations().delete(ProductConstants.PROD_ + prodId);;
+			}
+		}
+		return b;
 	}
 
 	@Override
@@ -278,6 +330,9 @@ public class ProductServiceImpl implements IProductService {
 		}
 
 		int i = productMapper.updateByPrimaryKeySelective(product);
+		if(i > 0){
+			this.redisTemplate.opsForValue().getOperations().delete(ProductConstants.PROD_ + product.getProdId());;
+		}
 		return i > 0 ? true : false;
 	}
 
@@ -302,14 +357,26 @@ public class ProductServiceImpl implements IProductService {
 			product.setLastAuditName(auditName);
 			product.setLastAuditDate(currentDate);
 		}
-		return productMapper.batchUpdateProdByCondition(prodIds, product);
+		
+		boolean b = productMapper.batchUpdateProdByCondition(prodIds, product);
+		if(b){
+			this.redisTemplate.opsForValue().getOperations().delete(ProductConstants.PROD_ + product.getProdId());;
+		}
+		return b;
 	}
 
 	@Override
 	public Product getProductById(Integer prodId) {
-		Product product = this.productMapper.selectByPrimaryKey(prodId);
-		List<Sku> skus = this.skuMapper.getSkusByProdId(prodId);
-		product.setSkus(skus);
+		Product product = (Product) this.redisTemplate.opsForValue().get(ProductConstants.PROD_ + prodId);
+		if(product == null){
+			product = this.productMapper.selectByPrimaryKey(prodId);
+			List<Sku> skus = this.skuMapper.getSkusByProdId(prodId);
+			if(null != product){
+				product.setSkus(skus);
+				this.redisTemplate.opsForValue().set(ProductConstants.PROD_ + product.getProdId(), product);
+			}
+		}
+
 		return product;
 	}
 
@@ -359,7 +426,16 @@ public class ProductServiceImpl implements IProductService {
 
 	@Override
 	public List<Product> getProductsByProdIds(List<Integer> prodIds) {
-		return this.productMapper.getProductsByProdIds(prodIds);
+		List<Product> list = new ArrayList<Product>();
+		for (Integer prodId : prodIds) {
+			Product product= (Product) this.redisTemplate.opsForValue().get(ProductConstants.PROD_ + prodId);
+			list.add(product);
+		}
+		if (null != list && !list.isEmpty()) {
+			list = this.productMapper.getProductsByProdIds(prodIds);
+		}
+		
+		return list;
 	}
 
 	@Override
