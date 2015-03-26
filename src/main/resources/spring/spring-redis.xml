@@ -84,10 +84,17 @@
 		        </set>
 			</property>
 	    </bean> 
+	    
 	    <bean id="redisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" >  
+	        <property name="hostName" value="${product.redis.ip}"/>  
+	        <property name="port" value="${product.redis.port}"/> 
+	        <property name="poolConfig" ref="jedisPoolConfig" />  
+		</bean>  
+		
+	    <!-- <bean id="redisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" >  
 	        <constructor-arg index="0"  ref="sentinelConfigUnion" />
 		    <constructor-arg index="1" ref="jedisPoolConfig" /> 
-		</bean>  
+		</bean>   -->
 	</beans>
 	
 	<beans profile="beta">
