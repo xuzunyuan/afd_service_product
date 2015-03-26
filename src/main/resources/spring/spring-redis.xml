@@ -69,7 +69,7 @@
 	</beans>
 	
 	<beans profile="product">
-		<bean id="sentinelConfigUnion" class="org.springframework.data.redis.connection.RedisSentinelConfigurationEX">  
+		<!-- <bean id="sentinelConfigUnion" class="org.springframework.data.redis.connection.RedisSentinelConfigurationEX">  
 		   <property name="masterName" value="${product.union.master.name}" />
 	       <property name="sentinels">
 		        <set>
@@ -83,7 +83,7 @@
 			        </bean>
 		        </set>
 			</property>
-	    </bean> 
+	    </bean>  -->
 	    
 	    <bean id="redisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" >  
 	        <property name="hostName" value="${product.redis.ip}"/>  
