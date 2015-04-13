@@ -48,7 +48,7 @@
 		    <property name="filters" value="mergeStat,config" /> 		 		   
 		</bean>		
 	</beans>
-	<beans profile="develop">
+	<beans profile="product">
 		<bean id="ds" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close"> 
 		    <!-- 基本属性 url、user、password -->
 		    <property name="driverClassName" value="com.alibaba.cobar.jdbc.Driver" /> 
