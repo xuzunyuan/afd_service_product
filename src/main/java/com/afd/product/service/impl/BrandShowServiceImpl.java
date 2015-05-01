@@ -43,7 +43,7 @@ public class BrandShowServiceImpl implements IBrandShowService {
 	private ILogisticsCompanyService logicticsCompanyService;
 
 	@Autowired
-	@Qualifier("redisTemplate")
+	@Qualifier("redisNumber")
 	private RedisTemplate<String, String> redisTemplate;
 
 	@Autowired

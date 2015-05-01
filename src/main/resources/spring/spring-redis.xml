@@ -15,6 +15,13 @@
 	    <property name="hashKeySerializer" ref="stringSerializer" />
 	</bean> 
 	
+	<bean id="redisNumber" class="org.springframework.data.redis.core.RedisTemplate">  
+	    <property name="connectionFactory" ref="redisConnectionFactory"/> 
+	    <property name="keySerializer" ref="stringSerializer" />  
+	    <property name="hashKeySerializer" ref="stringSerializer" />
+	    <property name="valueSerializer" ref="stringSerializer" />
+	</bean>
+	
 	<bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">  
        <property name="maxTotal" value="${redis.pool.maxTotal}" />  
        <property name="maxIdle" value="${redis.pool.maxIdle}" />  
