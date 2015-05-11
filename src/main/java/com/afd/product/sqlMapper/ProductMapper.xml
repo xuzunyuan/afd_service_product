@@ -586,6 +586,9 @@
 		<if test="productCondition.prodCode !=null and productCondition.prodCode !=''">
 			and p.PROD_CODE = #{productCondition.prodCode}
 		</if>
+		<if test="productCondition.status !=null and productCondition.status !=''">
+			and p.STATUS = #{productCondition.status}
+		</if>
 		<if test="productCondition.brandId !=null and productCondition.brandId !=''">
 			and p.BRAND_ID = #{productCondition.brandId}
 		</if>
