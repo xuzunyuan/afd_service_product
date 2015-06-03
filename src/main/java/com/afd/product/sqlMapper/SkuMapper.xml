@@ -331,7 +331,7 @@
 		t_sku
 		WHERE
 		prod_id = #{prodId,jdbcType=INTEGER}
-		AND sku_status = 1 order by sku_spec_id
+		AND sku_status = 1 order by sku_id
 	</select>
 
 	<select id="getSkuBySkuCode" resultMap="BaseResultMap">
